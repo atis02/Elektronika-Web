@@ -1,0 +1,78 @@
+{
+  "navbar": {
+    "categories": "Categories",
+    "delivery": "Delivery",
+    "service": "Service",
+    "return_exchange": "Return and Exchange",
+    "how_to_order": "How to Order",
+    "serviceCenter": "Service center",
+    "embassy": "Embassy",
+    "auction": "Auction"
+  },
+
+  "header": {
+    "header_subtitle": "Electronics and Household Appliances",
+    "work_time": "Working Hours",
+    "work_hours": "Monday - Friday: 09:00 AM - 06:00 PM; Saturday: 09:00 AM - 01:00 PM",
+    "address_title": "Our Address",
+    "our_address": "Ashgabat, Bitarap Turkmenistan Street 183",
+    "pageDoesntExist":"Oops! The page you`re looking for doesn`t exist.",
+    "how_to_register":"How to register"
+  },
+  "home":{
+    "discountedGoods":"All Sale",
+    "offeredProducts":"Offered Products",
+    "seeAll":"See all",
+    "sale":"Sale",
+    "addToCart":"Add To Cart",
+    "compare":"compare",
+    "favourite":"Favourite",
+    "barcode":"Barcode",
+    "mainPage":"Main Page",
+    "delivery":"Delivery"
+  },
+  "footer":{
+    "footerFastHelp":"Fast help",
+    "contacts":"Contacts",
+    "apps":"Mobile Apps",
+    "socialLinks":"Social links"
+
+  },
+  "aboutDelivery":"About Delivery",
+  "descDelivery":"Our online store offers delivery services for any goods purchased from us.  <1/>If you decide to use our delivery service, we kindly ask you to familiarize yourself with the terms of delivery and receipt:  <1/>All orders priced above 150 TMT are delivered free of charge!  <1/>Orders under 150 TMT are subject to a delivery fee of 20 TMT.  <1/>You can use the 'Express Delivery' service, which ensures delivery within 2 hours from the time of order. The cost of the 'Express Delivery' service, regardless of the type of goods, is 20 TMT.  <1/>Order acceptance hours: <1/>Monday - Friday: 09:00 - 18:00  <1/> Saturday: 09:00 - 13:00  <1/>Delivery speed:<1/> 'Standard Delivery' is carried out on the same day if the order is placed before 16:00.  <1/> Orders placed after 16:00 will be delivered the next day.  <1/> Goods will be delivered on the agreed day and at a convenient time for you.  <1/> The goods will be delivered to the address you specify.",
+  "service": {
+    "serviceTitle": "Service Center",
+    "serviceDesc": "Your comfort is our concern! '<1/>«World of Technology»<1/>We are a true team of professionals and the leading household appliance repair service in the country!<1/>Our service center provides high-quality repair services to extend the life of your appliances. Our technicians are experts you can trust to repair household appliances from any manufacturer.<1/>At the service center, you submit a request.<1/>We identify and determine the causes of the breakdown, agree on the repair time and cost.<1/>We notify you when the product is ready.<1/>We deliver the repaired equipment and handle the payment.<1/>The entire list of services provided is guaranteed.<1/>Service Center<1/>Our address: Neutral Turkmenistan Avenue 183, Ashgabat.<1/>Tel.: 142254, 142255"
+  },
+  "returnPolicy":{
+    "returnPolicyTitle":"Return and Exchange Product",
+    "returnPolicyDesc":"Return before payment:<1/>The customer can refuse/return all or part of the ordered goods before deciding to purchase and before paying their total cost and delivery service fee.<1/>Return conditions after payment:<1/>The customer can return the goods after payment if there are quality defects, obvious manufacturing defects, or shortcomings in the goods (shortcomings – failure to meet mandatory requirements for the goods).<1/>If the provided goods do not match the described ones, the customer can return them within 7 days.<1/>The return of goods in good condition is possible only under the following conditions:<1/>The goods have not been used<1/>The goods are in their original condition<1/>All consumer properties are preserved<1/>When returning the goods, all items in the set, packaging, and labels must be in place and in new/unused condition."
+  },
+  "orderProcess": {
+  "orderProcessTitle": "How to order",
+  "orderProcessDesc":  "1) Add the selected products to your cart. Click on 'Add to Cart' or 'Buy Now' to the right of the product image.<1/>By adding the product to your cart, you can continue browsing and adding other products. By choosing the 'Buy Now' function, you can proceed directly to checkout.<1/>2) Once your cart is full, click on the 'Cart' link in the top-right corner of the page.<1/>3) Click 'Proceed to Checkout'.<1/>4) A window will appear for you to fill in your order delivery details. Then click 'Continue'.<1/>5) Choose a delivery method, then click 'Continue'.<1/>6) Choose a payment method, then click 'Continue'.<1/>7) In the window that appears, click 'Confirm Order'.<1/>8) Finally, a window will appear with the following text:<1/>Thank you for your order! Order number #.......<1/>Our operator will contact you shortly."
+  
+},
+"order":{
+  "orderComplete":"Complete order",
+  "orderAddress":"Delivery address",
+  "name":"Name",
+"surname":"Surname",
+"adress":"Address",
+"velayat":"Region",
+"city/district":"City / District",
+"phone":"Phone",
+"deliveryTypeTitle":"Choose delivery type",
+"express":"Express service",
+"expressDesc":"Delivery in 2 hours",
+"turkmenPochta":"Turkmen pochta",
+"turkmenPochtaDesc":"Turkmen pochta service",
+"curer":"Courier",
+"curerDesc":"Free in Ashgabat",
+"selfDeliver":"Pickup",
+"selfDeliverDesc":"182, Bitarap Türkmenistan street, “Elektonika dünýäsi”"
+
+}
+
+
+}

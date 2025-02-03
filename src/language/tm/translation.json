@@ -1,0 +1,80 @@
+{
+  "navbar": {
+    "categories": "Kategoriyalar",
+    "delivery": "Eltip bermek",
+    "service": "Hyzmat",
+    "serviceCenter": "Hyzmat merkezi",
+    "return_exchange": "Çalyşmak we gaýtarmak",
+    "how_to_order": "Nädip sargyt etmeli",
+    "embassy": "Ilçihanalar",
+    "auction": "Auksion"
+  },
+
+  "header": {
+    "header_subtitle": "Elektronika we öý enjamlary",
+    "work_time": "Iş wagty",
+    "work_hours": "Duşenbe - Anna: 09:00 - 18:00; Şenbe: 09:00 - 13:00",
+    "address_title": "Salgymyz",
+    "our_address": "Aşgabat, Bitarap Türkmenistan şaýoly 183",
+    "pageDoesntExist":"Gözleýan sahypaňyz ýok.",
+
+    "how_to_register":"Nädip hasaba alynmaly"
+
+  },
+  "footer":{
+    "footerFastHelp":"Tiz kömek",
+    "contacts":"Habarlaşmak üçin",
+    "apps":"Mobil goşundylar",
+    "socialLinks":"Sosial ulgam"
+
+  },
+  "home":{
+    "discountedGoods":"Aksiýadaky harytlar",
+    "offeredProducts":"Hödürlenýän harytlar",
+
+    "seeAll":"Hemmesini görmek",
+    "sale":"Aksiýa",
+    "addToCart":"Sebede goş",
+    "compare":"Deňeşdirmek",
+    "favourite":"Saýlanan",
+    "barcode":"Barkody",
+    "mainPage":"Baş sahypa",
+    "delivery":"Eltip berme"
+  },
+  "aboutDelivery":"Eltip berme hyzmaty barada",
+  "descDelivery":"Biziň onlaýn dükanymyz, bizden satyn alnan islendik haryda özüniň eltip berme hyzmatyny hödürleýär.<1/>Eger-de Siz biziň eltip berme hyzmatymyzdan peýdalanmak kararyna gelseňiz – harytlary eltmegiň we gowşurmagyň şertleri bilen tanyşmagyňyzy haýyş edýäris:<1/>Bahasy 150 TMT ýokary ähli sargytlar eltip bermesi mugt amala aşyrylýar! 150 TMT ýetmedik sargyt gowşurmagyň bahasy 20 TMT.<1/>Tizligi sargyt berlen pursadyndan 2 sagadyň dowamynda amala aşyrylýan 'Ekspress eltip berme' hyzmatyny ulanyp bilersiňiz. Harytlaryň görnüşine garamazdan 'Express eltip berme' hyzmatynyň bahasy 20 TMT bolar<1/>Sargytlaryň kabul edilýän wagty:<1/>Duşenbe - Anna: 09:00 - 18:00<1/>Şenbe: 09:00 - 13:00<1/>Eltip bermegiň tizligi:“Standart gowşuryş” 16:00-dan öň sargyt edilse şol gün amala aşyrylýar.<1/>Sagat 16:00-dan soň edilen sargytlar ertesi güne geçirilýär.<1/>Haryt Siz bilen ylalaşylan günde we Size amatly wagtda gowşurylar<1/>Haryt Siz tarapyndan görkezilen salga eltip beriler<1/>Size gowşurylýan harytlary barlanyňyzda üns beriň!<1/>Görünýän mehaniki zeperleriň ýokdugyna we toplumyň içine girýän zatlaryň hemmesiniň ýerbe-ýerdigine göz ýetiriň.<1/>Harydyň daş görnüşinde kemçilik ýoklugy, toplumda ähli zatlaryň ýerbe-ýerdigi we resminamalaryň bardygy, harydy gowşuryş zaýawkasyndaky/resminamasynda Siziň goluňyz bilen tassyklanýar we eltip berilen haryda Siziň hiç hili arz-şikaýatyňyz ýoklugynyň subutnamasy bolup durýar.<1/>Eger-de getirilen harydyň zeperi bar bolsa, ony kabul etmezlige Siziň hakyňyz bar.<1/>Türkmenistanyň “Sarp ediji hukuklaryny goramak” kanunyna laýyklykda, satyn alnan harytlary kanunlarda göz öňünde tutulan möhletlerde çalyşyp ýa-da gaýtaryp bilersiňiz.",
+  "service":{
+    "serviceTitle":"Hyzmat merkezi",
+    "serviceDesc":"Siziň rahatlygyňyz - biziň aladamyz'<1/>«Tehnika dünýäsi»<1/>Biz hakyky hünärmenler topary we ýurtda öňdebaryjy öý enjamlaryny abatlaýyş hyzmaty!<1/>Hyzmat merkezimiz enjamlaryňyzyň ömrüni uzaltmak üçin ýokary hilli abatlaýyş hyzmatlaryny hödürleýär. Biziň tehniklerimiz, öý enjamlaryny islendik öndürijiden bejermek üçin ynanyp boljak öý enjamlaryny abatlamak boýunça hünärmenlerdir.<1/>Hyzmat merkezinde biz bilen haýyş goýýarsyňyz.<1/>Döwülmegiň sebäplerini anyklaýarys we kesgitleýäris, abatlaýyş wagty we bahasy barada ylalaşýarys.<1/>Önümiň taýýarlygy barada size habar berýäris.<1/>Taýýar enjamlary berýäris we hasaplaýarys.<1/>Berilýän hyzmatlaryň ähli sanawy kepillik bilen üpjün edilýär.<1/>Hyzmat merkezi<1/>Salgymyz: Bitarap Türkmenistan şaýoly 183,  Aşgabat.<1/>Tel.: 142254, 142255"
+    
+  },
+  "returnPolicy":{
+    "returnPolicyTitle":"Harydy yzyna gaýtarmak we çalyşmak",
+    "returnPolicyDesc": "Tölege çenli harydy gaýtaryp bermek:<1/>Müşderi satyn almak kararyna gelýänçä sargyt eden harytlarynyň ählisini ýada bir bölegini olaryň umumy bahasynyň we eltip berme hyzmatynyň tölegini etmezden öň ret edip/yzyna gaýtaryp biler.<1/>Tölegden soň harydy yzyna gaýtarmak şertleri:<1/>Müşderi töleg edeninden soňra harydy yzyna gaýtaryp biler, eger-de haryt hilinde kemçilik bar bolsa, has takyky önüm kemçiligi ýa-da harydyň ýetmezçiligi bar bolsa (ýetmezçilik – haryda bolan hökmany talaplarynyň bozulmasy)<1/>Görkezilen haryt gabat gelmeýän bolsa onda Müşderi harydy 7 günüň dowamynda yzyna gaýtaryp biler.<1/>Hili gowy harydyň yzyna gaýtarylmagy diňe aşakda görkezilen ýagdaýlarda amala aşyrylýar:<1/>Ulanylmadyk ýagdaýda<1/>Haryt görnüşi çykyş ýagdaýynda bolsa<1/>Sarp edijilik alamatlaryny saklan bolsa<1/>Haryt yzyna gaýtarylanda toplumdaky ähli zatlary, ähli gaplamalary we etiketkalary ýerbe-ýer bolmaly we täze/ulanylmadyk görnüşde bolmaly."
+  },
+  "orderProcess": {
+  "orderProcessTitle": "Nädip sargyt etmeli",
+  "orderProcessDesc":  "1) Saýlanan harytlary sebetiňize goşuň. Haryt suratynyň sag tarapynda «Sebede goş» ýa-da «Häzir satyn al» düwmesine basyň.<1/>Harydy sebediňize goşmak bilen, siz başga harytlary gözden geçirip, sebediňize goşup bilersiňiz. «Häzir satyn al» funksiýasyny saýlap, siz derrew sargyt etmek prosesine geçip bilersiňiz.<1/>2) Sebedi dolduranyňyzdan soň, sahypanyň sag ýokarky burçunda «Sebet» baglanyşygyny saýlaň.<1/>3) «Sargyt etmäge geç» düwmesine basyň.<1/>4) Sargyt üçin maglumatlaryňyzy doldurmak üçin bir penjirä peýda bolar. Soňra «Dowam et» düwmesine basyň.<1/>5) Eltip bermek usulyny saýlaň, soňra «Dowam et» düwmesine basyň.<1/>6) Töleg usulyny saýlaň, soňra «Dowam et» düwmesine basyň.<1/>7) Döreden penjiräde «Sargydy tassykla» düwmesine basyň.<1/>8) Ahyrsoňy, aşakdaky tekst bilen penjirä peýda bolar:<1/>Sargydyňyz üçin sag boluň! Sargyt belgisi #.......<1/>Operatorymyz gysga wagtda siziň bilen habarlaşar."
+  
+},
+"order":{
+  "orderComplete":"Sargyt tamamlamak",
+  "orderAddress":"Eltip berme adresi",
+"name":"Ady",
+"surname":"Familiýasy",
+"adress":"Adres",
+"velayat":"Welaýat",
+"city/district":"Şäher / Etrap",
+"phone":"Telefon",
+"deliveryTypeTitle":"Eltip bermegiň görnüşini saýlaň",
+"express":"Ekspress hyzmat",
+"expressDesc":"Eltip berme hyzmaty 2 sagadyň dowamynda",
+"turkmenPochta":"Türkmen poçta",
+"turkmenPochtaDesc":"Türkmen poçta hyzmaty",
+"curer":"Kurýer hyzmaty",
+"curerDesc":"Aşgabat şäher içinde mugt",
+"selfDeliver":"Baryp almak",
+"selfDeliverDesc":"182, Bitarap Türkmenistan şaýoly, “Elektonika dünýäsi”"
+}
+
+}

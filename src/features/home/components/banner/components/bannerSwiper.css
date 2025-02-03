@@ -1,0 +1,11 @@
+.gallery-thumbs-small {
+  padding: 0;
+}
+@media (max-width: 768px) {
+  .gallery-thumbs-small {
+    display: flex;
+  }
+  .gallery-thumbs-small .slick-slide {
+    width: 100% !important;
+  }
+}
