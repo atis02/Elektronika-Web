@@ -29,7 +29,7 @@ const MultiLang: React.FC<MultiLangTypographyProps> = ({
   };
 
   return (
-    <Typography fontFamily="Open Sans" fontSize={12} component="div">
+    <Typography fontSize={12} component="div">
       {getTitle()}
     </Typography>
   );

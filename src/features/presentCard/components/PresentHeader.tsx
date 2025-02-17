@@ -35,7 +35,6 @@ const PresentHeader: FC = () => {
           width: { lg: "60%", md: "60%", sm: "100%", xs: "100%" },
           fontWeight: 700,
           textTransform: "uppercase",
-          fontFamily: "Open Sans",
         }}
       >
         Подарочный сертификать - лучщий подарок современному человеку

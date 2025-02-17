@@ -1,6 +1,7 @@
 export const auctionBox = {
   position: "relative", // For positioning child elements
   padding: "20px",
+  width:'108%',
   border: "1px solid #C3000E", // Main border for the box
   borderTop: "none", // Remove the top border to replace it with custom pseudo-elements
   "::before": {
@@ -26,7 +27,7 @@ export const auctionBox = {
 export const autioncardBox = {
   border: "1px solid #D2D2D2",
   borderRadius: "2px",
-  width: "100%",
+  width: "110%",
   padding: "10px",
 };
 
@@ -173,7 +174,7 @@ export const auctionDetailIconButton = {
   height: { lg: "35px", md: "30px", sm: "25px", xs: "20px" },
   borderRadius: "5px",
   border: "1px solid #2E2F38",
-  opacity: 0.5,
+  // opacity: 0.5,
   display: "flex",
   alignItems: "center",
   justifyContent: "center",

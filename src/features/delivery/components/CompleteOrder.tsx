@@ -1,5 +1,16 @@
-import { Box, Button, CircularProgress, Container, Stack } from "@mui/material";
-import { ChangeEvent, FC, useState } from "react";
+import {
+  Box,
+  Button,
+  CircularProgress,
+  Container,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+  SelectChangeEvent,
+  Stack,
+} from "@mui/material";
+import { ChangeEvent, FC, useEffect, useState } from "react";
 import CompleteTitle from "./CompleteTitle";
 import DeliveryAddress from "./DeliveryAddress";
 import DeliveryType from "./DeliveryType";
@@ -7,16 +18,31 @@ import PaymentOptionSelector from "./PaymentOptionSelector";
 import { auctionParticipateButton } from "../../auction/styles/auctionStyles";
 import { v4 as uuidv4 } from "uuid";
 import { Product } from "../../../components/redux/interface";
-import dayjs from "dayjs";
+import dayjs, { Dayjs } from "dayjs";
 import axios from "axios";
 import { BASE_URL } from "../../../api/instance";
 import toast from "react-hot-toast";
 import BasketViewModel from "../../../store/basket/BasketViewModel";
 import { useNavigate } from "react-router-dom";
+import MuiDatePicker from "./DatePicker";
 
+interface orderStatus {
+  id: string;
+}
+
+interface OrderCity {
+  id: string;
+  nameTm: string;
+  deliveryPrice: number;
+}
 const CompleteOrder: FC = () => {
+  const [selectedCity, setSelectedCity] = useState<string>("");
   const [selectedCard, setSelectedCard] = useState<number | null>(null);
   const [hasError, setHasError] = useState<boolean>(false);
+  const [orderStatus, setOrderStatus] = useState<orderStatus[]>([]);
+  const [orderDeliveryCity, setDeliveryCity] = useState<OrderCity[]>([]);
+  const [selectedDate, setSelectedDate] = useState<Dayjs | null>(null);
+
   const [formData, setFormData] = useState({
     customerName: "",
     customerSurname: "",
@@ -32,6 +58,8 @@ const CompleteOrder: FC = () => {
     orderRegion: false,
     orderCity: false,
     customerPhoneNumber: false,
+    selectedCity: false,
+    deliveryDate: false,
   });
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
   const [showError, setShowError] = useState<boolean>(false);
@@ -42,6 +70,36 @@ const CompleteOrder: FC = () => {
   });
   const navigate = useNavigate();
   console.log(products);
+
+  useEffect(() => {
+    const orderStatuses = async () => {
+      try {
+        const response = await axios.get(`${BASE_URL}order/status/all`);
+        const filtered = response.data?.status.filter(
+          (status: any) => status.nameTm == "Barlagda"
+        );
+        setOrderStatus(filtered);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    orderStatuses();
+  }, []);
+  useEffect(() => {
+    const orderDeliveryCity = async () => {
+      try {
+        const response = await axios.get(`${BASE_URL}order/deliveryCity/all`);
+        // const filtered = response.data?.status.filter(
+        //   (status: any) => status.nameTm == "Barlagda"
+        // );
+        setDeliveryCity(response.data.deliveryPrice);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    orderDeliveryCity();
+  }, []);
+  console.log(orderDeliveryCity);
 
   const handleCheckboxChange = (cardId: number) => {
     setSelectedCard((prev) => (prev === cardId ? null : cardId));
@@ -55,6 +113,8 @@ const CompleteOrder: FC = () => {
       orderRegion: !formData.orderRegion.trim(),
       orderCity: !formData.orderCity.trim(),
       customerPhoneNumber: !formData.customerPhoneNumber.trim(),
+      selectedCity: !selectedCity.trim(),
+      deliveryDate: selectedDate == null || selectedDate == undefined,
     };
 
     setErrors(newErrors);
@@ -85,7 +145,23 @@ const CompleteOrder: FC = () => {
     }
     return userId;
   };
+  const handleChange = (event: SelectChangeEvent) => {
+    setSelectedCity(event.target.value as string);
+    setErrors((prevErrors) => ({
+      ...prevErrors,
+      [event.target.name]: event.target.value.trim() === "",
+    }));
+  };
 
+  const handleDateChange = (date: Dayjs | null) => {
+    setSelectedDate(date);
+
+    // if (date) {
+    //   console.log("Selected Date:", date.format("YYYY-MM-DD")); // Example formatting
+    // } else {
+    //   console.log("Date cleared");
+    // }
+  };
   const handleSubmit = async () => {
     validateForm();
     if (selectedCard === null || selectedCard === 0) {
@@ -96,12 +172,12 @@ const CompleteOrder: FC = () => {
       const body = {
         userId: getUserId(),
 
-        deliveryDate: dayjs().format("YYYY-MM-DD"),
+        deliveryDate: dayjs(selectedDate).format("YYYY-MM-DD"),
         // orderStatusId: "f55eb54a-094e-44a6-ae34-f607456d2b08",
-        orderStatusId: "a05eb8f2-f688-4277-98e2-b522eaa95269",
+        orderStatusId: orderStatus[0]?.id,
         shippingAddress: formData.shippingAddress,
         paymentMethod: selectedOption,
-        notes: "çalt getirmeli",
+        notes: "",
         deliveryType:
           selectedCard == 1
             ? "Express"
@@ -116,10 +192,10 @@ const CompleteOrder: FC = () => {
         customerSurname: formData.customerSurname,
         customerPhoneNumber: formData.customerPhoneNumber,
         orderRegion: formData.orderRegion,
-        orderCity: formData.orderCity,
+        orderDeliveryCityPaymentId: selectedCity,
         items: products.map((elem) => ({
           productId: elem.product?.id,
-          quantity: elem.product?.productQuantity,
+          quantity: elem.productQuantity,
         })),
       };
       console.log(body);
@@ -149,7 +225,7 @@ const CompleteOrder: FC = () => {
     }
   };
   // console.log(selectedOption);
-  console.log(formData);
+  console.log(selectedCity);
   // console.log(selectedCard);
 
   return (
@@ -172,6 +248,59 @@ const CompleteOrder: FC = () => {
             handleOptionChange={handleOptionChange}
             selectedOption={selectedOption ?? ""}
           />
+          <Stack
+            mt={2}
+            spacing={2}
+            direction="row"
+            justifyContent="space-between"
+          >
+            <FormControl
+              fullWidth
+              sx={{
+                "& .MuiOutlinedInput-root": {
+                  "& fieldset": {
+                    borderColor: "lightgray",
+                  },
+                  "&:hover fieldset": {
+                    borderColor: "lightgray",
+                  },
+                  "&.Mui-focused fieldset": {
+                    borderColor: "lightgray",
+                  },
+                },
+                "& .MuiInputLabel-root": {
+                  color: "#2E2F38",
+                },
+                "& .MuiInputLabel-root.Mui-focused": {
+                  color: "#2E2F38",
+                },
+              }}
+            >
+              <InputLabel id="demo-simple-select-label">
+                Eltip bermeli salgy
+              </InputLabel>
+              <Select
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                value={selectedCity}
+                label="Eltip bermeli salgy"
+                name="selectedCity"
+                onChange={handleChange}
+                error={errors.selectedCity}
+              >
+                {orderDeliveryCity.map((option) => (
+                  <MenuItem key={option.id} value={option.id}>
+                    {option.nameTm} / {option.deliveryPrice}TMT
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+            <MuiDatePicker
+              onChange={handleDateChange}
+              setErrors={setErrors}
+              errors={errors}
+            />
+          </Stack>
           <Stack direction="row" justifyContent="flex-end">
             <Button
               onClick={handleSubmit}

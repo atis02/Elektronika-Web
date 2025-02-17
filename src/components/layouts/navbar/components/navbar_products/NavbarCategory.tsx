@@ -188,7 +188,7 @@ const NavbarCategory: FC = () => {
                             selectedCategoryId === category.id
                               ? "red"
                               : "black",
-                          fontFamily: "Open Sans",
+                          // fontFamily: "Montserrat",
                           fontSize: 12,
                         }}
                       >
@@ -229,7 +229,7 @@ const NavbarCategory: FC = () => {
                                 fontSize: "14px",
                                 fontWeight: "600",
                                 color: "#2E2F38",
-                                fontFamily: "Open Sans",
+                                // fontFamily: "Open Sans",
                               }}
                             >
                               {sub?.nameTm}
@@ -249,7 +249,7 @@ const NavbarCategory: FC = () => {
                                 sx={{
                                   cursor: "pointer",
                                   mb: 1,
-                                  fontFamily: "Open Sans",
+                                  // fontFamily: "Open Sans",
                                   // pl: 1,
                                   fontSize: "14px",
                                   textAlign: "start",

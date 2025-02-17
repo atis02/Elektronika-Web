@@ -1,8 +1,14 @@
-import { Box, Paper, Stack, Typography, Skeleton } from "@mui/material";
-import { FC, useState, useEffect } from "react";
+import {
+  Box,
+  Paper,
+  Stack,
+  Typography,
+  Skeleton,
+  IconButton,
+} from "@mui/material";
+import { FC, useEffect, useState } from "react";
 import {
   auctionCost,
-  auctionDateBox,
   auctionSubtitle,
   auctionTitle,
 } from "../styles/auctionStyles";
@@ -10,8 +16,12 @@ import { sideLinkBox } from "../../sidebar/components/sidelinksStyle";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import "react-lazy-load-image-component/src/effects/blur.css";
 import { decode } from "blurhash";
-import { motion, AnimatePresence } from "framer-motion";
-
+import AuctionTimer from "./CountDown";
+import axios from "axios";
+import { BASE_URL, BASE_URL_IMG } from "../../../../../api/instance";
+import dayjs from "dayjs";
+import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
+import { useNavigate } from "react-router-dom";
 // Function to convert blurhash to base64
 const blurHashToBase64 = (
   blurhash?: string,
@@ -40,58 +50,67 @@ interface AuctionDetailsProps {
   isLoading: boolean;
   blurhash?: string;
 }
+interface Product {
+  imageOne: string;
+  nameTm: string;
+  // ... other product properties
+}
+
+interface MyData {
+  product: Product;
+  createdAt: string;
+  auctionID: string;
+  auctionProductPriceCurrent: number;
+  startDateAuction: string;
+  endDateAuction: string;
+  // ... other properties of your data item
+}
+
 const AuctionDetails: FC<AuctionDetailsProps> = ({ isLoading, blurhash }) => {
-  const [timeRemaining, setTimeRemaining] = useState({
-    Gün: 2,
-    Sagat: 12,
-    Minut: 3,
-    Sekunt: 2,
-  });
-
+  const [data, setData] = useState<MyData[]>([]);
+  const [loading, setLoading] = useState(true); // Add loading state
+  const [error, setError] = useState(null); // Add error state
+  const [showEndDate, setShowEndDate] = useState(false);
+  console.log(showEndDate);
+  const navigate = useNavigate();
   useEffect(() => {
-    if (!isLoading) {
-      const timer = setInterval(() => {
-        setTimeRemaining((prevTime) => {
-          let { Gün, Sagat, Minut, Sekunt } = prevTime;
+    const fetchData = async () => {
+      setLoading(true); // Set loading to true before fetching
+      setError(null); // Clear any previous errors
 
-          if (Sekunt > 0) {
-            Sekunt--;
-          } else {
-            Sekunt = 59;
-            if (Minut > 0) {
-              Minut--;
-            } else {
-              Minut = 59;
-              if (Sagat > 0) {
-                Sagat--;
-              } else {
-                Sagat = 23;
-                if (Gün > 0) {
-                  Gün--;
-                } else {
-                  clearInterval(timer);
-                  return prevTime; // Stop counter
-                }
-              }
-            }
-          }
+      try {
+        await axios.get(`${BASE_URL}auction/all`).then((resp) => {
+          const currentDate = new Date(); // Current date and time
 
-          return { Gün, Sagat, Minut, Sekunt };
+          const activeAuctions = resp.data?.auctions?.filter((auction: any) => {
+            const endDate = new Date(auction.endDateAuction); // Convert endDateAuction to Date object
+            return endDate > currentDate; // If endDateAuction is in the past, the auction has ended
+          });
+          const startDate = new Date(resp.data?.auctions[0]?.startDateAuction);
+
+          setShowEndDate(startDate < currentDate);
+          setData(activeAuctions);
         });
-      }, 1000);
+      } catch (err: any) {
+        console.error("Error fetching data:", err);
+        setError(err.message || "An error occurred while fetching data."); // Set the error message
+      } finally {
+        setLoading(false); // Set loading to false regardless of success or failure
+      }
+    };
 
-      return () => clearInterval(timer);
-    }
-  }, [isLoading]);
+    fetchData();
+  }, []);
 
-  const timerVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: { duration: 0.3, ease: "easeInOut" },
-    },
-  };
+  if (loading) {
+    return <div>Loading...</div>; // Display a loading message
+  }
+
+  if (error) {
+    return <div>Error: {error}</div>; // Display an error message
+  }
+  console.log(data);
+
   if (isLoading) {
     return (
       <>
@@ -157,7 +176,8 @@ const AuctionDetails: FC<AuctionDetailsProps> = ({ isLoading, blurhash }) => {
         }}
       >
         <LazyLoadImage
-          src="/images/nout.jpg"
+          src={`${BASE_URL_IMG}public/${data[0]?.product.imageOne}`}
+          // src={data[0]?.product.imageOne}
           placeholderSrc={blurHashToBase64(blurhash) || ""}
           effect="blur"
           style={{
@@ -168,15 +188,26 @@ const AuctionDetails: FC<AuctionDetailsProps> = ({ isLoading, blurhash }) => {
         />
       </Box>
       <Stack mt={{ lg: 2, md: 2, sm: 0, xs: 0 }} mb={3} spacing={2}>
-        <Typography sx={auctionTitle}>
-          Noutbuk Deli Alienware m16 R2(1006663238)
+        <Stack
+          direction="row"
+          alignItems="center"
+          justifyContent="space-between"
+        >
+          <Typography sx={auctionTitle}>{data[0]?.product.nameTm}</Typography>
+          <IconButton onClick={() => navigate("/auction")}>
+            <VisibilityOutlinedIcon />
+          </IconButton>
+        </Stack>
+        <Typography sx={auctionSubtitle}>
+          Goýulan wagty: {dayjs(data[0]?.createdAt).format("DD.MM.YYYY")}
         </Typography>
-        <Typography sx={auctionSubtitle}>Goýulan wagty: ŞuGün</Typography>
       </Stack>
       <Stack direction="row" alignItems="center" justifyContent="center" mb={2}>
-        <Typography sx={auctionCost}>56450 TMT</Typography>
+        <Typography sx={auctionCost}>
+          {data[0]?.auctionProductPriceCurrent}
+        </Typography>
       </Stack>
-      <Stack
+      {/* <Stack
         direction="row"
         alignItems="center"
         justifyContent="center"
@@ -206,7 +237,13 @@ const AuctionDetails: FC<AuctionDetailsProps> = ({ isLoading, blurhash }) => {
             </motion.div>
           ))}
         </AnimatePresence>
-      </Stack>
+      </Stack> */}
+      <AuctionTimer
+        endDate={
+          showEndDate ? data[0]?.endDateAuction : data[0]?.startDateAuction
+        }
+        // timerId={data[0]?.auctionID}
+      />
     </Stack>
   );
 };

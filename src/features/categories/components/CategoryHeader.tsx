@@ -25,10 +25,6 @@ const CategoryHeader: FC<CategoryHeaderProps> = ({ categoryTitle }) => {
         alignItems="center"
         justifyContent="space-between"
       >
-        <Typography fontFamily="Open Sans" fontWeight={600} fontSize={18}>
-          {categoryTitle}
-        </Typography>
-
         <Select
           displayEmpty
           defaultValue="A-Z"

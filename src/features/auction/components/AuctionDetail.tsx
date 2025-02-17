@@ -6,13 +6,13 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { deliveryNavigateTitle } from "../../delivery/styles/deliveryStyle";
 import {
   auctionDetailCost,
   auctionDetailCurrentBigPicture,
   auctionDetailCurrentSmallPicture,
-  auctionDetailDateBox,
+  // auctionDetailDateBox,
   auctionDetailIconButton,
   auctionDetailNextSmallPicture,
   auctionDetailProductSubtitle,
@@ -25,17 +25,130 @@ import Grid from "@mui/material/Grid2";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 import AuctionDetailProporties from "./AuctionDetailProporties";
+import useDrawer from "../../../components/layouts/navbar/components/useDrawer";
+import axios from "axios";
+import { BASE_URL, BASE_URL_IMG } from "../../../api/instance";
+import { useParams } from "react-router-dom";
+import AuctionTimer from "./CounDownAuction";
+import toast from "react-hot-toast";
 
+interface Product {
+  imageOne: string;
+  nameTm: string;
+  imageTwo: string;
+  imageThree: string;
+  imageFour: string;
+  imageFive: string;
+}
+interface MyData {
+  id: string;
+  product: Product;
+  createdAt: string;
+  auctionID: string;
+  auctionProductPriceCurrent: number;
+  auctionProductPriceStart: number;
+  startDateAuction: string;
+  endDateAuction: string;
+  participants: [{ id: string }];
+}
 const AuctionDetail: FC = () => {
-  const [currentBigImage, setCurrentBigImage] =
-    useState<string>("./images/tozan.png");
+  const [data, setData] = useState<MyData>();
+  const [currentBigImage, setCurrentBigImage] = useState<any>(null);
+  const { openDrawer } = useDrawer();
+  const [bid, setBid] = useState<any>(0);
+  console.log(bid);
 
-  const smallImages = ["./images/tozan.png", "./images/tozan2.png"];
+  const [loading, setLoading] = useState(true); // Add loading state
+  const [error, setError] = useState(null); // Add error state
+  const registeredUser = () => {
+    return JSON.parse(localStorage.getItem("ElectronicaUser") ?? "[]");
+  };
 
+  const params = useParams();
+  const smallImages = [
+    data?.product.imageOne,
+    data?.product.imageTwo,
+    data?.product.imageThree,
+    data?.product.imageFour,
+    data?.product.imageFive,
+  ];
+  console.log(smallImages);
+  const handleDecrease = () => {
+    const inc = bid > 0 && bid - 50;
+    setBid(inc);
+  };
   const handleSmallImageClick = (image: string) => {
     setCurrentBigImage(image);
   };
+  const fetchData = async () => {
+    setLoading(true); // Set loading to true before fetching
+    setError(null); // Clear any previous errors
 
+    try {
+      await axios
+        .get(`${BASE_URL}auction/getOne?auctionId=${params.id}`)
+        .then((resp) => {
+          setData(resp.data);
+        });
+    } catch (err: any) {
+      console.error("Error fetching data:", err);
+      setError(err.message || "An error occurred while fetching data."); // Set the error message
+    } finally {
+      setLoading(false); // Set loading to false regardless of success or failure
+    }
+  };
+  useEffect(() => {
+    fetchData();
+  }, []);
+  if (loading) {
+    return <div style={{ height: "60vh" }}>Loading...</div>; // Display a loading message
+  }
+
+  if (error) {
+    return <div>Error: {error}</div>; // Display an error message
+  }
+  console.log(data);
+  const handleJoinAuction = async (auction: any) => {
+    const alreadyJoined = auction?.participants.filter(
+      (item: any) => item.id === registeredUser()?.id
+    );
+    console.log(alreadyJoined);
+    const startDate = new Date(auction.startDateAuction);
+    const isStarted = startDate <= new Date();
+    console.log(isStarted);
+    if (isStarted)
+      try {
+        if (alreadyJoined.length == 0) {
+          toast.error("Ulgama giriň!");
+          openDrawer();
+        } else {
+          const body = {
+            userId: registeredUser()?.id,
+            auctionId: data?.id,
+            newPrice: bid,
+          };
+          await axios.post(`${BASE_URL}auction/bidPrice`, body).then((resp) => {
+            if (resp.data.message == "Auction price updated successfully") {
+              toast.success("Üstünlikli!");
+              fetchData();
+              setBid(0);
+            } else {
+              toast.success("Ýalňyşlyk!");
+            }
+          });
+        }
+      } catch (error: any) {
+        if (
+          error.response.data.message ==
+          "User is already participating in this auction"
+        ) {
+          toast.error("Siz eýýäm gatnaşyjy!");
+        }
+      }
+    else {
+      toast.error("Auksion entäk başlanok!");
+    }
+  };
   return (
     <Box my={5}>
       <Container>
@@ -54,49 +167,30 @@ const AuctionDetail: FC = () => {
         >
           <Stack spacing={1}>
             <Typography sx={auctionDetailProductTitle}>
-              Mikrotolkunly peç Gorenje MO28A5BH
+              {data?.product.nameTm}
             </Typography>
             <Typography sx={auctionDetailProductSubtitle}>
               Ýagdaý: <span>Täze</span>
             </Typography>
             <Typography sx={auctionDetailProductSubtitle}>
-              Başlangyç baha: <span style={{ color: "#C3000E" }}>3050 TMT</span>
+              Başlangyç baha:{" "}
+              <span style={{ color: "#C3000E" }}>
+                {" "}
+                {data?.auctionProductPriceStart}
+              </span>
             </Typography>
           </Stack>
-          <Stack direction="row" alignItems="center" width="29%" spacing={1}>
-            <Stack direction="row" spacing={1} alignItems="center">
-              <Box sx={auctionDetailDateBox}>2</Box>
-              <Box
-                sx={{
-                  fontSize: { lg: "46px", md: "46px", sm: "40px", xs: "36px" },
-                }}
-              >
-                :
-              </Box>
-            </Stack>
-            <Stack direction="row" spacing={1} alignItems="center">
-              <Box sx={auctionDetailDateBox}>12</Box>
-              <Box
-                sx={{
-                  fontSize: { lg: "46px", md: "46px", sm: "40px", xs: "36px" },
-                }}
-              >
-                :
-              </Box>
-            </Stack>
-            <Stack direction="row" spacing={1} alignItems="center">
-              <Box sx={auctionDetailDateBox}>3</Box>
-              <Box
-                sx={{
-                  fontSize: { lg: "46px", md: "46px", sm: "40px", xs: "36px" },
-                }}
-              >
-                :
-              </Box>
-            </Stack>
-            <Stack direction="row" spacing={1} alignItems="center">
-              <Box sx={auctionDetailDateBox}>45</Box>
-            </Stack>
+          <Stack direction="row" alignItems="center" width="29%" spacing={0}>
+            <AuctionTimer
+              endDate={
+                data?.startDateAuction && data?.endDateAuction
+                  ? new Date(data.startDateAuction) < new Date()
+                    ? new Date(data.endDateAuction).toISOString()
+                    : new Date(data.startDateAuction).toISOString()
+                  : ""
+              }
+              timerId={data?.auctionID?.toString() || "default-timer-id"}
+            />
           </Stack>
         </Stack>
         <Grid
@@ -122,23 +216,27 @@ const AuctionDetail: FC = () => {
                     xs: "row",
                   }}
                 >
-                  {smallImages.map((image, index) => (
-                    <Box
-                      key={index}
-                      sx={
-                        currentBigImage === image
-                          ? auctionDetailCurrentSmallPicture
-                          : auctionDetailNextSmallPicture
-                      }
-                      onClick={() => handleSmallImageClick(image)}
-                    >
-                      <img
-                        src={image}
-                        style={{ width: "100%" }}
-                        alt={`small-${index}`}
-                      />
-                    </Box>
-                  ))}
+                  {smallImages.map(
+                    (image: any, index) =>
+                      image !== null && (
+                        <Box
+                          key={index}
+                          sx={
+                            currentBigImage === image
+                              ? auctionDetailCurrentSmallPicture
+                              : auctionDetailNextSmallPicture
+                          }
+                          onClick={() => handleSmallImageClick(image)}
+                        >
+                          <img
+                            // src={image}
+                            src={`${BASE_URL_IMG}public/${image}`}
+                            style={{ width: "100%" }}
+                            alt={`small-${index + 1}`}
+                          />
+                        </Box>
+                      )
+                  )}
                 </Stack>
               </Grid>
               <Grid size={{ lg: 10, md: 10, sm: 12, xs: 12 }}>
@@ -149,7 +247,12 @@ const AuctionDetail: FC = () => {
                       height: "100%",
                       objectFit: "contain",
                     }}
-                    src={currentBigImage}
+                    src={`${BASE_URL_IMG}public/${
+                      currentBigImage !== null
+                        ? currentBigImage
+                        : data?.product.imageOne
+                    }`}
+                    // src={currentBigImage}
                     alt="big"
                   />
                 </Box>
@@ -171,18 +274,27 @@ const AuctionDetail: FC = () => {
                 justifyContent="space-evenly"
                 my={3}
               >
-                <IconButton sx={auctionDetailIconButton}>
+                <IconButton
+                  sx={auctionDetailIconButton}
+                  onClick={handleDecrease}
+                >
                   <RemoveIcon
                     sx={{
                       width: { lg: "20px", md: "20px", sm: "15px", xs: "10px" },
                     }}
                   />
                 </IconButton>
-                <Typography sx={auctionDetailCost}>5050</Typography>
-                <IconButton sx={auctionDetailIconButton}>
+                <Typography sx={auctionDetailCost}>
+                  {data?.auctionProductPriceCurrent + bid}
+                </Typography>
+                <IconButton
+                  sx={auctionDetailIconButton}
+                  onClick={() => setBid(bid + 50)}
+                >
                   <AddIcon
                     sx={{
                       width: { lg: "20px", md: "20px", sm: "15px", xs: "10px" },
+                      color: "#000",
                     }}
                   />
                 </IconButton>
@@ -191,6 +303,8 @@ const AuctionDetail: FC = () => {
                 variant="contained"
                 fullWidth
                 sx={auctionDetailRecomendationButton}
+                disabled={bid == 0}
+                onClick={() => handleJoinAuction(data)}
               >
                 Teklip goýuň
               </Button>

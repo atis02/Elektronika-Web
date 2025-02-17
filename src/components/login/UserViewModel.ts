@@ -11,6 +11,10 @@ interface RegistrationData {
   password?: string;
   isNotify?: boolean;
 }
+interface LoginData {
+  phoneNumber: string;
+  password?: string;
+}
 
 interface UserData {
   id: number;
@@ -25,6 +29,13 @@ interface UserData {
   token: string;
   createdAt: string;
   updatedAt: string;
+  user:{
+    id:string
+    name:string
+    surname:string
+    email:string
+    phoneNumber:string
+  }
 }
 
 class UserViewModel {
@@ -46,17 +57,17 @@ class UserViewModel {
     try {
       const formData = new FormData();
       if (registrationData.file) {
-        formData.append("file", registrationData.file);
+        formData.append("image", registrationData.file);
       }
-      formData.append("firstName", registrationData.firstName);
-      formData.append("lastName", registrationData.lastName);
+      formData.append("name", registrationData.firstName);
+      formData.append("surname", registrationData.lastName);
       formData.append("email", registrationData.email);
       formData.append("phoneNumber", registrationData.phoneNumber);
       formData.append("password", registrationData.password || "");
-      formData.append("isNotify", registrationData.isNotify + "" || "");
+      // formData.append("isNotify", registrationData.isNotify + "" || "");
 
       const response = await axios.post<UserData>(
-        `${BASE_URL}users/register`,
+        `${BASE_URL}user/registration`,
         formData,
         {
           headers: {
@@ -78,7 +89,76 @@ class UserViewModel {
       this.loading = false;
     }
   }
+  // async login(loginData: LoginData) {
+  //   this.loading = true;
+  //   this.error = null;
+  //   this.registrationSuccess = false;
+  //   this.user = null;
 
+  //   try {
+  //     const body = {
+  //       phoneNumber:loginData.phoneNumber,
+  //       password : loginData.password
+  //     }
+  //     const response = await axios.post<UserData>(
+  //       `${BASE_URL}user/login`,
+  //       body
+  //     );
+
+  //     if (response.status === 200) {
+  //       this.registrationSuccess = true;
+  //       this.user = response.data;
+  //     }
+  //   } catch (error: any) {
+  //     console.error("Error registering user:", error);
+  //     this.error =
+  //       error.response?.data?.message ||
+  //       "Registration failed. Please try again.";
+  //   } finally {
+  //     this.loading = false;
+  //   }
+  // }
+  async login(loginData: LoginData) {
+    this.loading = true;
+    this.error = null;
+    this.registrationSuccess = false;
+    this.user = null;
+  
+    try {
+      const body = {
+        phoneNumber: loginData.phoneNumber,
+        password: loginData.password,
+      };
+  
+      const response = await axios.post<UserData>(`${BASE_URL}user/login`, body);
+  
+      if (response.status === 200) {
+        this.registrationSuccess = true;
+        this.user = response.data;
+  console.log(response.data);
+  
+        // Save user data and token to localStorage
+        localStorage.setItem("tokenOfElectronics", response.data.token);
+        localStorage.setItem(
+          "ElectronicaUser",
+          JSON.stringify({
+            id: response.data?.user.id,
+            name: response.data?.user.name,
+            surname: response.data?.user.surname,
+            email: response.data?.user.email,
+            phoneNumber: response.data?.user.phoneNumber,
+          })
+        );
+      }
+    } catch (error: any) {
+      console.error("Error logging in user:", error);
+      this.error =
+        error.response?.data?.message || "Login failed. Please try again.";
+    } finally {
+      this.loading = false;
+    }
+  }
+  
   async verifyOtp(otp: string) {
     this.loading = true;
     this.error = null;

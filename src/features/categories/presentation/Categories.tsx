@@ -43,8 +43,7 @@ const Categories: FC = observer(() => {
     <Container>
       <CategoryHeader
         categoryTitle={
-          ProductViewModel.products[0]?.productCategory?.nameTm ||
-          "Default Category Title"
+          ProductViewModel.products[0]?.productCategory?.nameTm || ""
         }
       />
       {/* {console.log(ProductViewModel.products)} */}

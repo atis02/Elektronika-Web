@@ -30,7 +30,7 @@ const MultiLangTypography: React.FC<MultiLangTypographyProps> = ({
 
   return (
     <Typography
-      fontFamily="Open Sans"
+      // fontFamily="Open Sans"
       whiteSpace="pre-wrap"
       textTransform="capitalize"
       fontSize={14}

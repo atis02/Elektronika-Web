@@ -91,10 +91,11 @@ const DiscountGoodBox: FC = () => {
       const response = await axios.get(
         `${BASE_URL}product/all?limit=20&page=1`
       );
+      console.log(response.data);
 
       const products = response.data?.products;
       const discounted = products.filter(
-        (product: any) => product.status?.nameTm === "Hödürlenýän harytlar"
+        (product: any) => product.status?.nameTm === "Hödürlenýän haryt"
       );
       setDiscountedProducts(discounted);
       setIsLoading(false);

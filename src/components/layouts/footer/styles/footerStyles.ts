@@ -35,7 +35,6 @@ export const footerLinksStyle2 = {
   color: "#fff",
   fontSize: "14px",
   cursor: "pointer",
-  fontFamily:'Open Sans',
   fontWeight: 400,
   lineHeight: "29px",
   marginBottom: { lg: "10px", md: "10px", sm: "5px", xs: "5px" },
@@ -50,7 +49,6 @@ export const footerLinksStyle = {
   color: "#fff",
   fontSize: "14px",
   cursor: "pointer",
-  fontFamily:'Open Sans',
   fontWeight: 400,
   lineHeight: "29px",
   marginBottom: { lg: "10px", md: "10px", sm: "5px", xs: "5px" },
@@ -64,6 +62,5 @@ export const footerLinksStyle = {
 export const footerAddressText = {
   color: "#929292",
   fontSize: "12px",
-  fontFamily:'Open Sans',
   fontWeight: 400,
 };

@@ -16,6 +16,10 @@ const MiniBasketRight: FC = () => {
     if (basketDataLocalStroge) {
       const parsed = JSON.parse(basketDataLocalStroge);
       const exist = parsed.find((elem: any) => elem.productQuantity === 0);
+      if (!parsed.length) {
+        toast.error("Haryt ýok!");
+        return;
+      }
       if (!exist) {
         navigate("/complete-order");
       } else {
