@@ -1,7 +1,10 @@
 import React from "react";
 import { Box, Typography } from "@mui/material";
 
+import { useTranslation } from "react-i18next";
+
 const ScrollingText: React.FC = () => {
+  const { t } = useTranslation();
   return (
     <Box
       sx={{
@@ -17,13 +20,12 @@ const ScrollingText: React.FC = () => {
         sx={{
           fontSize: 14,
           display: "inline-block",
-          animation: "scrollText 25s linear infinite",
+          position: "relative",
+          animation: "scrollText 45s linear infinite",
           color: "#fff",
         }}
       >
-        Уважаемые пользователи! Система работы сайтa не имеет отношения к
-        системе работы фактического магазина. Все скидки, акции и бонусы
-        действуют только на сайте.
+        {t("navbar.navbar-text")}
       </Typography>
     </Box>
   );

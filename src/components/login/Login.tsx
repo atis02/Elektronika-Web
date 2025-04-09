@@ -15,6 +15,11 @@ import ClearIcon from "@mui/icons-material/Clear";
 import { observer } from "mobx-react-lite";
 import UserViewModel from "./UserViewModel";
 import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
+import OtpVerification from "./OtpVerification";
+import axios from "axios";
+import { BASE_URL } from "../../api/instance";
+import ButtonWithTimer from "./ButtonWithTimer";
 // import OtpVerification from "./OtpVerification";
 
 interface LoginProps {
@@ -24,26 +29,31 @@ interface LoginProps {
 
 const Login: FC<LoginProps> = observer(({ isOpen, onClose }) => {
   const [activeTab, setActiveTab] = useState<"login" | "register">("register");
+  const [activeTabDirection, setActiveTabDirection] = useState<
+    "email" | "phoneNumber"
+  >("phoneNumber");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("+993");
-  const [password, setPassword] = useState("");
+  // const [password, setPassword] = useState("");
   const [file, setFile] = useState<File | null>(null);
   const [selectedFileName, setSelectedFileName] = useState<string | null>(null);
   const [isNotify, setIsNotify] = useState<boolean>(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
-  // const [isOtpVerificationOpen, setIsOtpVerificationOpen] = useState(false);
+  const [isOtpVerificationOpen, setIsOtpVerificationOpen] = useState(false);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState<string | null>(null);
   const [snackbarSeverity, setSnackbarSeverity] = useState<"success" | "error">(
     "success"
   );
+  const [loading, setLoading] = useState<boolean>(false);
+  const [successfullyVerificated, setSuccesfullyVerficated] = useState(false);
+  const [error, setError] = useState(false);
 
   const storedUser = localStorage.getItem("ElectronicaUser");
   let user = storedUser ? JSON.parse(storedUser) || [] : [];
-  console.log(!user);
-
+  const navigate = useNavigate();
   const handleLogout = () => {
     localStorage.removeItem("ElectronicaUser");
     onClose();
@@ -71,21 +81,26 @@ const Login: FC<LoginProps> = observer(({ isOpen, onClose }) => {
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
-    setSnackbarMessage(null); // Clear previous messages
+    setSnackbarMessage(null);
     setSnackbarOpen(false);
+    if (!isTurkmenPhoneNumber(phoneNumber) && !isEmail(email)) {
+      setError(true);
+      return toast.error("Telefon belgisi nädogry!");
+    }
+    if (successfullyVerificated !== true) {
+      setError(true);
+      return toast.error("Telefon belgi ýa-da email tassykla!");
+    }
     try {
       await UserViewModel.registerUser({
         file,
         firstName,
+        phoneNumber,
         lastName,
         email,
-        phoneNumber,
-        password,
-        // isNotify,
       });
 
       if (UserViewModel.registrationSuccess) {
-        // setIsOtpVerificationOpen(true);
         toast.success("Üstünlikli!");
         setActiveTab("login");
         setSnackbarSeverity("success");
@@ -94,39 +109,53 @@ const Login: FC<LoginProps> = observer(({ isOpen, onClose }) => {
         let message = UserViewModel.error;
         if (
           UserViewModel.error.includes(
-            `${phoneNumber} belgi ulgamda hasaba alnan!`
+            `${
+              phoneNumber !== "+993" ? phoneNumber : email
+            } belgi ulgamda hasaba alnan!`
           )
         ) {
-          message = `${phoneNumber} belgi ulgamda hasaba alnan!`;
+          message = `${
+            phoneNumber ? phoneNumber : email
+          } belgi ulgamda hasaba alnan!`;
         }
         setSnackbarMessage(message);
         setSnackbarSeverity("error");
         setSnackbarOpen(true);
       }
     } catch (error: any) {
-      console.log("Error:", error);
       setSnackbarMessage("An unexpected error has occurred.");
       setSnackbarSeverity("error");
       setSnackbarOpen(true);
     }
   };
 
-  // const handleOtpVerificationClose = () => {
-  //   setIsOtpVerificationOpen(false);
-  //   setActiveTab("login");
-  // };
-  console.log(password);
-  console.log(phoneNumber);
+  const handleOtpVerificationClose = () => {
+    setIsOtpVerificationOpen(false);
+    // setActiveTab("register");
+  };
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setSnackbarMessage(null); // Clear previous messages
     setSnackbarOpen(false);
+    if (!isTurkmenPhoneNumber(phoneNumber) && !isEmail(email)) {
+      setError(true);
+      return toast.error("Telefon belgisi nädogry!");
+    }
+    if (successfullyVerificated !== true) {
+      setError(true);
+      return toast.error("Telefon belgi ýa-da email tassykla!");
+    }
     try {
-      await UserViewModel.login({
-        phoneNumber,
-        password,
-      });
+      if (phoneNumber === "+993") {
+        await UserViewModel.loginWithEmail({
+          email,
+        });
+      } else {
+        await UserViewModel.login({
+          phoneNumber,
+        });
+      }
 
       if (UserViewModel.registrationSuccess) {
         // setIsOtpVerificationOpen(true);
@@ -143,7 +172,6 @@ const Login: FC<LoginProps> = observer(({ isOpen, onClose }) => {
         setSnackbarOpen(true);
       }
     } catch (error: any) {
-      console.log("Error:", error);
       setSnackbarMessage("An unexpected error has occurred.");
       setSnackbarSeverity("error");
       setSnackbarOpen(true);
@@ -155,6 +183,60 @@ const Login: FC<LoginProps> = observer(({ isOpen, onClose }) => {
 
   const handleSnackbarClose = () => {
     setSnackbarOpen(false);
+  };
+  function isTurkmenPhoneNumber(phoneNumber: string) {
+    const turkmenRegex = /^\+993([6-7][0-9])\d{6}$/;
+    return turkmenRegex.test(phoneNumber);
+  }
+  function isEmail(email: string) {
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    return emailRegex.test(email);
+  }
+  const sendOTP = (phoneNumberWithCountryCode: string) => {
+    function removeCountryCode(phoneNumber: string) {
+      if (phoneNumber.startsWith("+993")) {
+        return phoneNumber.substring(4);
+      }
+      return phoneNumber;
+    }
+    try {
+      const otpSending = async () => {
+        await axios
+          .post(`${BASE_URL}otp/add`, {
+            phone: removeCountryCode(phoneNumberWithCountryCode),
+          })
+          .then((resp) => {
+            if (resp.data.message == "OTP generated successfully!") {
+              toast.success("Tassyklaýyş kody ugradyldy!");
+              setIsOtpVerificationOpen(true);
+            }
+          });
+      };
+      otpSending();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const sendEmailOTP = (email: string) => {
+    try {
+      const otpSending = async () => {
+        setLoading(true);
+        await axios
+          .post(`${BASE_URL}otp/addEmail`, {
+            email: email,
+          })
+          .then((resp) => {
+            if (resp.data.message == "OTP generated successfully!") {
+              toast.success("Tassyklaýyş kody ugradyldy!");
+              setIsOtpVerificationOpen(true);
+              setLoading(false);
+            }
+          });
+      };
+      otpSending();
+    } catch (error) {
+      console.log(error);
+    }
   };
   return (
     <Drawer
@@ -197,9 +279,7 @@ const Login: FC<LoginProps> = observer(({ isOpen, onClose }) => {
                 {user?.surname}
               </Typography>
             </Stack>
-            <Typography fontWeight={500} fontSize={18}>
-              {user?.email}
-            </Typography>
+
             <Typography fontWeight={500} fontSize={18}>
               {user?.phoneNumber}
             </Typography>
@@ -214,6 +294,7 @@ const Login: FC<LoginProps> = observer(({ isOpen, onClose }) => {
                   textTransform: "revert",
                   fontSize: 16,
                 }}
+                onClick={() => navigate("/account")}
               >
                 Profilim
               </Button>
@@ -281,7 +362,126 @@ const Login: FC<LoginProps> = observer(({ isOpen, onClose }) => {
             {activeTab === "login" ? (
               <Box component={"form"} onSubmit={handleLogin} width={"100%"}>
                 <Stack spacing={3} width="100%">
-                  <TextField
+                  <Stack>
+                    <Stack direction="row" width={"100%"} spacing={2} mb={4}>
+                      <Button
+                        variant="contained"
+                        onClick={() => setActiveTabDirection("phoneNumber")}
+                        sx={{
+                          textTransform: "none",
+                          background:
+                            activeTabDirection === "phoneNumber"
+                              ? "#E0E0E0"
+                              : "#F5F5F5",
+                          color:
+                            activeTabDirection === "phoneNumber"
+                              ? "#2E2F38"
+                              : "#474747",
+                          fontWeight:
+                            activeTabDirection === "phoneNumber" ? 700 : 400,
+                          width: "50%",
+                          height: "40px",
+                          borderRadius: "4px",
+                        }}
+                      >
+                        Telefon belgi
+                      </Button>
+                      <Button
+                        variant="contained"
+                        onClick={() => setActiveTabDirection("email")}
+                        sx={{
+                          textTransform: "none",
+                          background:
+                            activeTabDirection === "email"
+                              ? "#E0E0E0"
+                              : "#F5F5F5",
+                          color:
+                            activeTabDirection === "email"
+                              ? "#2E2F38"
+                              : "#474747",
+                          fontWeight:
+                            activeTabDirection === "email" ? 700 : 400,
+                          width: "50%",
+                          height: "40px",
+                          borderRadius: "4px",
+                        }}
+                      >
+                        Email
+                      </Button>
+                    </Stack>
+                    {activeTabDirection === "phoneNumber" ? (
+                      <>
+                        <TextField
+                          type="text"
+                          label="Telefon belgi"
+                          value={phoneNumber}
+                          onChange={(e) => setPhoneNumber(e.target.value)}
+                          sx={{
+                            background: "#F5F5F5",
+                            "& fieldset": {
+                              border: "1px solid #F5F5F5",
+                            },
+                          }}
+                          disabled={successfullyVerificated == true}
+                          fullWidth
+                          required
+                          error={error}
+                        />
+                        {successfullyVerificated !== true ? (
+                          <ButtonWithTimer
+                            phoneNumber={phoneNumber}
+                            isTurkmenPhoneNumber={() =>
+                              isTurkmenPhoneNumber(phoneNumber)
+                            }
+                            loading={loading}
+                            sendOTP={() => sendOTP(phoneNumber)}
+                          />
+                        ) : (
+                          <Typography
+                            textAlign="center"
+                            fontSize={14}
+                            color="green"
+                          >
+                            Üstünlikli tassynyldy!
+                          </Typography>
+                        )}
+                      </>
+                    ) : (
+                      <>
+                        <TextField
+                          type="email"
+                          label="E-mail"
+                          value={email}
+                          onChange={(e) => setEmail(e.target.value)}
+                          sx={{
+                            background: "#F5F5F5",
+                            "& fieldset": {
+                              border: "none",
+                            },
+                          }}
+                          fullWidth
+                          required
+                        />
+                        {successfullyVerificated !== true ? (
+                          <ButtonWithTimer
+                            phoneNumber={email}
+                            isTurkmenPhoneNumber={() => isEmail(email)}
+                            sendOTP={() => sendEmailOTP(email)}
+                            loading={loading}
+                          />
+                        ) : (
+                          <Typography
+                            textAlign="center"
+                            fontSize={14}
+                            color="green"
+                          >
+                            Üstünlikli tassynyldy!
+                          </Typography>
+                        )}
+                      </>
+                    )}
+                  </Stack>
+                  {/* <TextField
                     type="text"
                     label="Telefon belgi"
                     value={phoneNumber}
@@ -294,8 +494,8 @@ const Login: FC<LoginProps> = observer(({ isOpen, onClose }) => {
                     }}
                     fullWidth
                     required
-                  />
-                  <TextField
+                  /> */}
+                  {/* <TextField
                     type="password"
                     label="Açar söz"
                     sx={{
@@ -308,7 +508,7 @@ const Login: FC<LoginProps> = observer(({ isOpen, onClose }) => {
                     onChange={(e) => setPassword(e.target.value)}
                     fullWidth
                     required
-                  />
+                  /> */}
                 </Stack>
                 <Stack
                   direction="row"
@@ -359,7 +559,7 @@ const Login: FC<LoginProps> = observer(({ isOpen, onClose }) => {
               </Box>
             ) : (
               <Box component={"form"} onSubmit={handleRegister} width={"100%"}>
-                <Stack spacing={1} width="100%" mt={2}>
+                <Stack spacing={1} width="100%">
                   <TextField
                     type="text"
                     label="Ady"
@@ -388,35 +588,127 @@ const Login: FC<LoginProps> = observer(({ isOpen, onClose }) => {
                     fullWidth
                     required
                   />
-                  <TextField
-                    type="text"
-                    label="+993"
-                    value={phoneNumber}
-                    onChange={(e) => setPhoneNumber(e.target.value)}
-                    sx={{
-                      background: "#F5F5F5",
-                      "& fieldset": {
-                        border: "none",
-                      },
-                    }}
-                    fullWidth
-                    required
-                  />
-                  <TextField
-                    type="email"
-                    label="E-mail"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    sx={{
-                      background: "#F5F5F5",
-                      "& fieldset": {
-                        border: "none",
-                      },
-                    }}
-                    fullWidth
-                    required
-                  />
-                  <TextField
+                  <Stack>
+                    <Stack direction="row" width={"100%"} spacing={2} mb={4}>
+                      <Button
+                        variant="contained"
+                        onClick={() => setActiveTabDirection("phoneNumber")}
+                        sx={{
+                          textTransform: "none",
+                          background:
+                            activeTabDirection === "phoneNumber"
+                              ? "#E0E0E0"
+                              : "#F5F5F5",
+                          color:
+                            activeTabDirection === "phoneNumber"
+                              ? "#2E2F38"
+                              : "#474747",
+                          fontWeight:
+                            activeTabDirection === "phoneNumber" ? 700 : 400,
+                          width: "50%",
+                          height: "40px",
+                          borderRadius: "4px",
+                        }}
+                      >
+                        Telefon belgi
+                      </Button>
+                      <Button
+                        variant="contained"
+                        onClick={() => setActiveTabDirection("email")}
+                        sx={{
+                          textTransform: "none",
+                          background:
+                            activeTabDirection === "email"
+                              ? "#E0E0E0"
+                              : "#F5F5F5",
+                          color:
+                            activeTabDirection === "email"
+                              ? "#2E2F38"
+                              : "#474747",
+                          fontWeight:
+                            activeTabDirection === "email" ? 700 : 400,
+                          width: "50%",
+                          height: "40px",
+                          borderRadius: "4px",
+                        }}
+                      >
+                        Email
+                      </Button>
+                    </Stack>
+                    {activeTabDirection === "phoneNumber" ? (
+                      <>
+                        <TextField
+                          type="text"
+                          label="Telefon belgi"
+                          value={phoneNumber}
+                          onChange={(e) => setPhoneNumber(e.target.value)}
+                          sx={{
+                            background: "#F5F5F5",
+                            "& fieldset": {
+                              border: "1px solid #F5F5F5",
+                            },
+                          }}
+                          disabled={successfullyVerificated == true}
+                          fullWidth
+                          required
+                          error={error}
+                        />
+                        {successfullyVerificated !== true ? (
+                          <ButtonWithTimer
+                            phoneNumber={phoneNumber}
+                            isTurkmenPhoneNumber={() =>
+                              isTurkmenPhoneNumber(phoneNumber)
+                            }
+                            loading={loading}
+                            sendOTP={() => sendOTP(phoneNumber)}
+                          />
+                        ) : (
+                          <Typography
+                            textAlign="center"
+                            fontSize={14}
+                            color="green"
+                          >
+                            Üstünlikli tassynyldy!
+                          </Typography>
+                        )}
+                      </>
+                    ) : (
+                      <>
+                        <TextField
+                          type="email"
+                          label="E-mail"
+                          value={email}
+                          onChange={(e) => setEmail(e.target.value)}
+                          sx={{
+                            background: "#F5F5F5",
+                            "& fieldset": {
+                              border: "none",
+                            },
+                          }}
+                          fullWidth
+                          required
+                        />
+                        {successfullyVerificated !== true ? (
+                          <ButtonWithTimer
+                            phoneNumber={email}
+                            isTurkmenPhoneNumber={() => isEmail(email)}
+                            sendOTP={() => sendEmailOTP(email)}
+                            loading={loading}
+                          />
+                        ) : (
+                          <Typography
+                            textAlign="center"
+                            fontSize={14}
+                            color="green"
+                          >
+                            Üstünlikli tassynyldy!
+                          </Typography>
+                        )}
+                      </>
+                    )}
+                  </Stack>
+
+                  {/* <TextField
                     type="password"
                     label="Parol"
                     value={password}
@@ -429,7 +721,7 @@ const Login: FC<LoginProps> = observer(({ isOpen, onClose }) => {
                     }}
                     fullWidth
                     required
-                  />
+                  /> */}
                 </Stack>
                 <input
                   type="file"
@@ -538,10 +830,11 @@ const Login: FC<LoginProps> = observer(({ isOpen, onClose }) => {
           {snackbarMessage}
         </Alert>
       </Snackbar>
-      {/* <OtpVerification
+      <OtpVerification
+        setSuccesfullyVerficated={setSuccesfullyVerficated}
         isOpen={isOtpVerificationOpen}
         onClose={handleOtpVerificationClose}
-      /> */}
+      />
     </Drawer>
   );
 });

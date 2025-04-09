@@ -24,6 +24,7 @@ import { Product } from "../../../../components/redux/interface";
 import { BASE_URL_IMG } from "../../../../api/instance";
 import toast from "react-hot-toast";
 import AppDrawer from "../../../drawer/presentation/BasketDrawer";
+import { useTranslation } from "react-i18next";
 
 // interface Product {
 //   id: number;
@@ -89,53 +90,33 @@ import AppDrawer from "../../../drawer/presentation/BasketDrawer";
 //   properties: any[];
 // }
 interface CategoryProductsBoxProps {
-  products: Product[];
-  totalProducts: number;
+  products: Product[] | undefined;
 }
 
 const CategoryProductsBox: FC<CategoryProductsBoxProps> = ({ products }) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
+  const { t, i18n } = useTranslation();
 
   const toggleDrawer = (open: boolean) => {
     setIsOpen(open);
   };
   const navigate = useNavigate();
-  // const [compareStates, setCompareStates] = useState<Record<number, boolean>>(
-  //   {}
-  // );
-  // const [favoriteStates, setFavoriteStates] = useState<Record<number, boolean>>(
-  //   {}
-  // );
   const compareProducts = useAppSelector((state) => state.compare.products);
   const dispatch = useDispatch();
 
   const handleCompareClick = (product: any) => {
     const observableArray = observable(product);
-
-    // Передаем копию наблюдаемого массива в функцию или компонент
     const copyOfArray = toJS(observableArray);
     dispatch(addProduct(copyOfArray));
-    // setCompareStates((prevState) => ({
-    //   ...prevState,
-    //   [productId]: !prevState[productId],
-    // }));
   };
 
   const favorites = useAppSelector((state) => state.favorites.favorites);
 
   const handleToggleFavorite = (product: any) => {
     const observableArray = observable(product);
-
-    // Передаем копию наблюдаемого массива в функцию или компонент
     const copyOfArray = toJS(observableArray);
     dispatch(toggleFavorite(copyOfArray));
   };
-  // const handleFavoriteClick = (productId: number) => {
-  //   setFavoriteStates((prevState) => ({
-  //     ...prevState,
-  //     [productId]: !prevState[productId],
-  //   }));
-  // };
 
   const productItemVariants = {
     hidden: { opacity: 0, y: 50 },
@@ -145,11 +126,21 @@ const CategoryProductsBox: FC<CategoryProductsBoxProps> = ({ products }) => {
       transition: { delay: delay * 0.2, duration: 0.7, ease: "easeInOut" },
     }),
   };
-
+  const getTitle = (nameTm: string, nameRu: string, nameEn: string) => {
+    const currentLanguage = i18n.language; // Get the current language (e.g., "en", "ru", "tm")
+    switch (currentLanguage) {
+      case "ru":
+        return nameRu;
+      case "tm":
+        return nameTm;
+      default:
+        return nameEn; // Default to English
+    }
+  };
   return (
     <Grid container spacing={2}>
       <AnimatePresence>
-        {products.length ? (
+        {Array.isArray(products) && products.length ? (
           products.map((product: any, index) => (
             <Grid size={{ lg: 3, md: 4, sm: 6, xs: 6 }} key={product.id}>
               <motion.div
@@ -157,8 +148,27 @@ const CategoryProductsBox: FC<CategoryProductsBoxProps> = ({ products }) => {
                 animate="visible"
                 variants={productItemVariants}
                 custom={index}
+                style={{
+                  position: "relative",
+                }}
               >
                 <Box>
+                  {product.warranty && (
+                    <Box
+                      sx={{
+                        position: "absolute",
+                        right: 2,
+                        top: 10,
+                      }}
+                    >
+                      <Stack direction="row" color="#B71C1C">
+                        <img
+                          src="/images/guarantee.png"
+                          style={{ width: 40, height: 40 }}
+                        />
+                      </Stack>
+                    </Box>
+                  )}
                   <Box
                     sx={{
                       width: "100%",
@@ -170,7 +180,6 @@ const CategoryProductsBox: FC<CategoryProductsBoxProps> = ({ products }) => {
                       },
                       overflow: "hidden",
                       background: "#f7f7f7",
-                      // p: 2,
                       borderRadius: "6px",
                       display: "flex",
                       alignItems: "center",
@@ -179,7 +188,6 @@ const CategoryProductsBox: FC<CategoryProductsBoxProps> = ({ products }) => {
                   >
                     <img
                       onClick={() => navigate(`/product/${product.id}`)}
-                      // src={product.images[0] || "./images/placeholder.png"}
                       src={`${BASE_URL_IMG}public/${product.imageOne}`}
                       alt={product.title_en}
                       style={{
@@ -187,6 +195,7 @@ const CategoryProductsBox: FC<CategoryProductsBoxProps> = ({ products }) => {
                         height: "90%",
                         objectFit: "cover",
                         display: "block",
+                        cursor: "pointer",
                       }}
                       loading="lazy"
                     />
@@ -197,14 +206,18 @@ const CategoryProductsBox: FC<CategoryProductsBoxProps> = ({ products }) => {
                       noWrap
                       onClick={() => navigate(`/product/${product.id}`)}
                     >
-                      {product.nameEn}
+                      {getTitle(product.nameTm, product.nameRu, product.nameEn)}
                     </Typography>
                     <Typography sx={discountGoodCompanyTitle}>
-                      {product.brand?.nameTm || "No Brand"}
+                      {getTitle(
+                        product.brand?.nameTm,
+                        product.brand?.nameRu,
+                        product.brand?.nameEn
+                      )}
                     </Typography>
                     <Stack direction="row" spacing={1} my={1}>
                       <Typography sx={discountGoodCodeText}>
-                        Haryt kody:
+                        {t("home.barcode")}
                       </Typography>
                       <Typography sx={discountGoodCodeText}>
                         {product.barcode || "N/A"}
@@ -219,7 +232,7 @@ const CategoryProductsBox: FC<CategoryProductsBoxProps> = ({ products }) => {
                         {product.sellPrice - product.discount_priceTMT} m.
                       </Typography>
                       <Button variant="contained" sx={discountGoodLastCount}>
-                        Nagt {product.productQuantity || 0}
+                        {t("products.nagt")} {product.productQuantity || 0}
                       </Button>
                     </Stack>
                   </Stack>
@@ -235,7 +248,7 @@ const CategoryProductsBox: FC<CategoryProductsBoxProps> = ({ products }) => {
                           toggleDrawer(true));
                     }}
                   >
-                    Sebede goş
+                    {t("home.addToCart")}
                   </Button>
                   <Stack
                     direction="row"
@@ -277,7 +290,7 @@ const CategoryProductsBox: FC<CategoryProductsBoxProps> = ({ products }) => {
                         alt="compare-icon"
                         style={{ marginRight: "5px" }}
                       />
-                      Deňeşdir
+                      {t("home.compare")}
                     </Button>
                     <Button
                       onClick={() => handleToggleFavorite(product)}
@@ -309,7 +322,7 @@ const CategoryProductsBox: FC<CategoryProductsBoxProps> = ({ products }) => {
                             : "#929292",
                         }}
                       />
-                      Saýla
+                      {t("home.favourite")}
                     </Button>
                   </Stack>
                 </Box>

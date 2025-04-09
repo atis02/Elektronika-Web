@@ -74,6 +74,15 @@ const NavLinks: FC = () => {
       >
         {t("navbar.auction")}
       </Typography>
+      <Typography
+        onClick={() => navigate("/present-card")}
+        sx={{
+          ...navLinks,
+          fontWeight: isActiveLink("/present-card") ? 700 : 400,
+        }}
+      >
+        {t("navbar.presentCard")}
+      </Typography>
     </Stack>
   );
 };

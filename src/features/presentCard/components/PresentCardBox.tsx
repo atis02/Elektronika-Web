@@ -2,36 +2,36 @@ import { FC } from "react";
 import Grid from "@mui/material/Grid2";
 import { Box, Button, Stack, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 // Define an array of card data
-const cardData = [
-  {
-    id: 1,
-    image: "./images/present1.png",
-    description: `Как часто вы сталкиваетесь с проблемой выбора подарка для близкого человека? 
-      Если с подарками для самых близких людей, вопросов все-таки возникает меньше (вы знаете их привычки, уже успели понять что им нравится, а что нет), 
-      то с людьми не из самого близкого круга, все намного сложнее.`,
-  },
-  {
-    id: 2,
-    image: "./images/present2.png",
-    description: `Редко когда кто-то хочет, чтобы его подарок лежал и пылился в шкафу, пока его не вытросят во время генеральной уборки или был передарен кому-то за ненадобностью.`,
-  },
-  {
-    id: 3,
-    image: "./images/present1.png",
-    description: `Подарок - это не только знак внимания. Это еще и постаянное напоминание о том, кто его сделал.`,
-  },
-  {
-    id: 4,
-    image: "./images/present2.png",
-    description: `Подарите близкому человеку подарочный сертификать из нашего магазина и будьте уверены, что он сам выберет себе подарок по душе и будет помнить ваш знак внимания!`,
-  },
-];
 
 const PresentCardBox: FC = () => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
+  const cardData = [
+    {
+      id: 1,
+      image: "./images/present2.png",
+      description: t("certifate.descOne"),
+    },
+    {
+      id: 2,
+      image: "./images/certificate2.png",
+      description: t("certifate.descTwo"),
+    },
+    {
+      id: 3,
+      image: "./images/present1.png",
+      description: t("certifate.descThree"),
+    },
+    {
+      id: 4,
+      image: "./images/certificate.png",
+      description: t("certifate.descFour"),
+    },
+  ];
   return (
     <>
       <Grid container spacing={5}>
@@ -47,7 +47,11 @@ const PresentCardBox: FC = () => {
               >
                 <img
                   src={card.image}
-                  style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                  style={{
+                    width: "100%",
+                    height: "100%",
+                    objectFit: "contain",
+                  }}
                   alt="present"
                 />
               </Stack>
@@ -75,7 +79,7 @@ const PresentCardBox: FC = () => {
             color: "#000",
           }}
         >
-          Купить подарочный сертификать
+          {t("certifate.buyCertificate")}
         </Button>
       </Stack>
     </>

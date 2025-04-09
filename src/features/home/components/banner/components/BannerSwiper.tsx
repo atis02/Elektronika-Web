@@ -74,6 +74,7 @@ const BannerSwiper: React.FC = () => {
   }
 
   if (isError) return <Typography>Error loading banners</Typography>;
+  if (!banners) return <Typography></Typography>;
 
   return (
     <div>

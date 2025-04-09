@@ -4,10 +4,12 @@ import toast from "react-hot-toast";
 
 interface CompareState {
   products: Product[];
+  isOpenFastCompare:boolean
 }
 
 const initialState: CompareState = {
   products: JSON.parse(localStorage.getItem("compareProducts") || "[]"),
+  isOpenFastCompare: false,
 };
 
 const compareSlice = createSlice({
@@ -25,6 +27,7 @@ const compareSlice = createSlice({
         toast.success("Üstünlikli!");
 
       }
+      state.isOpenFastCompare = true;
     },
     removeProduct: (state, action: PayloadAction<string>) => {
       state.products = state.products.filter(
@@ -38,10 +41,14 @@ const compareSlice = createSlice({
       state.products = [];
       localStorage.removeItem("compareProducts");
       toast.success("Üstünlikli!");
+      state.isOpenFastCompare = false;
 
     },
+    closeFastCompare: (state) => {
+      state.isOpenFastCompare = false;
+    }
   },
 });
 
-export const { addProduct, removeProduct, clearProducts } = compareSlice.actions;
+export const { addProduct, removeProduct, clearProducts ,closeFastCompare} = compareSlice.actions;
 export default compareSlice.reducer;

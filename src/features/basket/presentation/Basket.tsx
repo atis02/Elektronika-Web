@@ -4,6 +4,7 @@ import { Box, Container } from "@mui/material";
 import BasketLeft from "../components/BasketLeft";
 import BasketRight from "../components/BasketRight";
 import BasketTitle from "../components/BasketTitle";
+import CompleteOrder from "../../delivery/components/CompleteOrder";
 
 const Basket: FC = () => {
   return (
@@ -19,6 +20,7 @@ const Basket: FC = () => {
               <BasketRight />
             </Grid>
           </Grid>
+          <CompleteOrder />
         </Box>
       </Container>
     </>

@@ -40,9 +40,9 @@ const CompareDescription: FC = () => {
                     }}
                   >
                     <MultiLangTypography
-                      title_ru={item.nameRu || "def"}
-                      title_en={item.nameEn || "def"}
-                      title_tm={item.nameTm || "def"}
+                      title_ru={item.nameRu || "-"}
+                      title_en={item.nameEn || "-"}
+                      title_tm={item.nameTm || "-"}
                     />
                   </TableCell>
                 </TableRow>
@@ -64,15 +64,19 @@ const CompareDescription: FC = () => {
                     }}
                   >
                     <Stack direction="row" alignItems="center" spacing={1}>
+                      {item.discount_priceTMT !== 0 && (
+                        <Typography
+                          // fontFamily="Open Sans"
+                          color="#929292"
+                          fontSize={12}
+                          sx={{
+                            textDecoration: "line-through",
+                          }}
+                        >
+                          {item.sellPrice}
+                        </Typography>
+                      )}
                       <Typography
-                        fontFamily="Open Sans"
-                        color="#929292"
-                        fontSize={12}
-                      >
-                        {item.sellPrice}
-                      </Typography>
-                      <Typography
-                        fontFamily="Open Sans"
                         color="#C3000E"
                         fontSize={16}
                         fontWeight={600}
@@ -101,15 +105,25 @@ const CompareDescription: FC = () => {
                     align="justify"
                     sx={{
                       border: "1px solid #ddd",
-                      display: "flex",
-                      justifyContent: "center",
-                      alignItems: "center",
+                      // display: "flex",
+                      justifyContent: "flex-start",
+                      alignItems: "start",
                       wordWrap: "break-word",
                       minHeight: "170px",
                       maxHeight: "500px",
                       overflowY: "auto",
                     }}
                   >
+                    <Typography
+                      // fontFamily="Open Sans"
+                      whiteSpace="pre-wrap"
+                      textTransform="capitalize"
+                      fontSize={14}
+                      component="div"
+                      fontWeight={600}
+                    >
+                      Beýan:
+                    </Typography>
                     <MultiLangTypography
                       title_en={item.descriptionEn || "def"}
                       title_ru={item.descriptionRu || "def"}
@@ -126,26 +140,29 @@ const CompareDescription: FC = () => {
                         sx={{
                           border: "1px solid #ddd",
                           display: "flex",
-                          justifyContent: "center",
-                          flexDirection: "column",
                           alignItems: "center",
                           wordWrap: "break-word",
                           minHeight: "70px",
                           maxHeight: "500px",
                           overflowY: "auto",
                           gap: 1,
+                          flexWrap: "wrap",
                         }}
                       >
+                        <Typography
+                          whiteSpace="pre-wrap"
+                          textTransform="capitalize"
+                          fontSize={15}
+                          component="div"
+                          fontWeight={600}
+                          fontStyle="italic"
+                        >
+                          {elem.key}:
+                        </Typography>
                         <MultiLangTypography
-                          title_en={elem.title_en}
-                          title_ru={elem.title_ru}
-                          title_tm={elem.title_tm}
-                        />
-
-                        <MultiLangTypography
-                          title_en={elem.value_en}
-                          title_ru={elem.value_ru}
-                          title_tm={elem.value_tm}
+                          title_en={elem.value}
+                          title_ru={elem.value}
+                          title_tm={elem.value}
                         />
                       </TableCell>
                     </TableRow>

@@ -4,94 +4,55 @@ import { BASE_URL } from "../../../api/instance";
 import { Product } from "../../../components/redux/interface";
 
 interface Filters {
-  categoryId: string | null | undefined; 
+  categoryId: string | null | undefined;
   subCategoryId: string | null | undefined;
   segmentId: string | null | undefined;
   brandId: string | null | undefined;
+  minPrice: number | null | undefined;
+  maxPrice: number | null | undefined;
+  sortBy: string | null | undefined;
+  sortOrder: string | null | undefined;
+}
+interface Brands {
+  id: string;
+  nameTm: string;
 }
 
-// export interface Product {
-//   id: number;
-//   title_tm: string;
-//   title_ru: string;
-//   title_en: string;
-//   desc_tm: string;
-//   desc_ru: string;
-//   desc_en: string;
-//   price: number;
-//   old_price: number;
-//   discount_percentage: number;
-//   discounted_price: number;
-//   stock: number;
-//   is_active: boolean;
-//   weight: number;
-//   width: number;
-//   height: number;
-//   depth: number;
-//   images: string[];
-//   size: string;
-//   color: string;
-//   tags: string;
-//   views: number;
-//   rating: number;
-//   brand_id: number;
-//   category_id: number;
-//   segment_id: number;
-//   created_at: string;
-//   updated_at: string;
-//   brand: {
-//     id: number;
-//     imageUrl: string;
-//     title_tm: string;
-//     title_ru: string;
-//     title_en: string;
-//     desc_tm: string;
-//     desc_ru: string;
-//     desc_en: string;
-//   };
-//   category: {
-//     id: number;
-//     imageUrl: string;
-//     title_tm: string;
-//     title_ru: string;
-//     title_en: string;
-//     desc_tm: string;
-//     desc_ru: string;
-//     desc_en: string;
-//     category_id: number;
-//   };
-//   segment: {
-//     id: number;
-//     imageUrl: string;
-//     title_tm: string;
-//     title_ru: string;
-//     title_en: string;
-//     desc_tm: string;
-//     desc_ru: string;
-//     desc_en: string;
-//     subcategory_id: number;
-//   };
-//   properties: any[];
-// }
+interface Properties {
+  keyTm: string;
+  valueTm: string[];
+}
 interface ApiResponse {
   products: Product[];
-  total: number;
+  totalItems: number;
+  uniqueBrands: Brands[];
+  properties: Properties[];
+  minPrice: number;
+  maxPrice: number;
 }
 
 class ProductViewModel {
   products: Product[] = [];
+  uniqueBrands: Brands[] = [];
+  properties: Properties[] = [];
+  minPrice: number = 0;
+  maxPrice: number = 0;
   loading: boolean = false;
   error: string | null = null;
   totalProducts: number | null = null;
   currentPage: number = 1;
   limit: number = 20;
-  filters: Filters = { 
-    categoryId: null, 
-    subCategoryId: null, 
-    segmentId: null, 
-    brandId: null 
-  }; 
-  selectedProduct: Product | null = null; // Add selectedProduct
+  filters: Filters = {
+    categoryId: null,
+    subCategoryId: null,
+    segmentId: null,
+    brandId: null,
+    minPrice: 0,
+    maxPrice: 0,
+    sortBy: "alphabet",
+    sortOrder: "ASC",
+  };
+  selectedProduct: Product | null = null;
   constructor() {
     makeAutoObservable(this);
   }
@@ -101,7 +62,7 @@ class ProductViewModel {
 
   setFilters = (filters: Filters) => {
     this.filters = filters;
-    this.currentPage = 1; // Reset to page 1 when filters change
+    this.currentPage = 1;
   };
   setCurrentPage = (page: number) => {
     this.currentPage = page;
@@ -110,11 +71,15 @@ class ProductViewModel {
     this.limit = limit;
   };
   clearFilters = () => {
-    this.filters=  { 
-      categoryId: null, 
-      subCategoryId: null, 
-      segmentId: null, 
-      brandId: null 
+    this.filters = {
+      categoryId: null,
+      subCategoryId: null,
+      segmentId: null,
+      brandId: null,
+      minPrice: null,
+      maxPrice: null,
+      sortBy: "alphabet",
+      sortOrder: "ASC",
     };
     this.currentPage = 1;
     this.products = [];
@@ -139,21 +104,30 @@ class ProductViewModel {
         queryParams.append("segmentId", String(this.filters.segmentId));
       if (this.filters.brandId)
         queryParams.append("brandId", String(this.filters.brandId));
+      if (this.filters.minPrice)
+        queryParams.append("minPrice", String(this.filters.minPrice));
+      if (this.filters.maxPrice)
+        queryParams.append("maxPrice", String(this.filters.maxPrice));
+      if (this.filters.sortBy)
+        queryParams.append("sortBy", String(this.filters.sortBy));
+      if (this.filters.sortOrder)
+        queryParams.append("sortOrder", String(this.filters.sortOrder));
 
       const url = `${BASE_URL}product/all?${queryParams.toString()}`;
 
       const response = await axios.get(url);
       const data: ApiResponse = response.data;
 
-      this.products = data.products;
-      this.totalProducts = data.total;
+      this.products = Array.isArray(data.products) ? data.products : [];
 
-      // Explicitly return the products
+      this.totalProducts = data.totalItems;
+      this.uniqueBrands = data.uniqueBrands;
+      this.properties = data.properties;
       return this.products;
     } catch (error: any) {
       console.error("Error fetching products:", error);
       this.error = "Failed to load products. Please try again.";
-      return []; // Return an empty array on error
+      return [];
     } finally {
       this.loading = false;
     }

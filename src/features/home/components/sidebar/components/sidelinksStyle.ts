@@ -18,3 +18,13 @@ export const sidelinkImageBox = {
   padding: "10px",
   borderRadius: "4px",
 };
+export const sidelinkImageBoxe = {
+  height: "60px",
+  width: "60px",
+  background: "#f7f7f7",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+  padding: "10px",
+  borderRadius: "4px",
+};

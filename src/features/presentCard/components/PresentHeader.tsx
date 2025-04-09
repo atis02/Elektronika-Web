@@ -1,7 +1,9 @@
 import { FC } from "react";
 import { Typography, Box } from "@mui/material";
+import { useTranslation } from "react-i18next";
 
 const PresentHeader: FC = () => {
+  const { t } = useTranslation();
   return (
     <>
       <Box sx={{ position: "relative", display: "inline-block" }}>
@@ -13,7 +15,7 @@ const PresentHeader: FC = () => {
             fontWeight: 600,
           }}
         >
-          Sowgat karty
+          {t("certifate.mainTitle")}
         </Typography>
         <Box
           sx={{
@@ -37,7 +39,7 @@ const PresentHeader: FC = () => {
           textTransform: "uppercase",
         }}
       >
-        Подарочный сертификать - лучщий подарок современному человеку
+        {t("certifate.title")}
       </Typography>
     </>
   );

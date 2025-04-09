@@ -1,8 +1,8 @@
 import React from "react";
 import { Drawer, IconButton, Box, Typography, Stack } from "@mui/material";
-import CloseIcon from "@mui/icons-material/Close";
 import MiniBasket from "../components/MiniBasket";
 import MiniBasketRight from "../components/MiniBasketRight";
+import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
 
 interface Bools {
   isOpen: boolean;
@@ -38,7 +38,7 @@ const AppDrawer: React.FC<Bools> = ({ isOpen, toggleDrawer }) => {
             alignItems="center"
           >
             <IconButton onClick={() => toggleDrawer(false)}>
-              <CloseIcon
+              <KeyboardBackspaceIcon
                 sx={{
                   color: "#B71C1C",
                   border: "1px solid #B71C1C",

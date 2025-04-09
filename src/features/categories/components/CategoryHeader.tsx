@@ -1,13 +1,57 @@
-import { FC } from "react";
-import { MenuItem, Select, Stack, Typography } from "@mui/material";
+import { FC, useState } from "react";
+import {
+  MenuItem,
+  Select,
+  SelectChangeEvent,
+  Stack,
+  Typography,
+} from "@mui/material";
 import { deliveryNavigateTitle } from "../../delivery/styles/deliveryStyle";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 interface CategoryHeaderProps {
   categoryTitle?: string;
+  handleCategorySelect: (filters: any) => void;
 }
 
-const CategoryHeader: FC<CategoryHeaderProps> = ({ categoryTitle }) => {
+const CategoryHeader: FC<CategoryHeaderProps> = ({
+  categoryTitle,
+  handleCategorySelect,
+}) => {
+  const [selectedSort, setSelectedSort] = useState("alphabet-ASC"); // Combined state
+  const [searchParams] = useSearchParams();
+  const { t } = useTranslation();
+  const handleChange = (event: SelectChangeEvent<string>) => {
+    const newValue = event.target.value;
+    setSelectedSort(newValue);
+    updateFilters(newValue);
+  };
+
+  const updateFilters = (sortValue: string) => {
+    const [sortBy, sortOrder] = sortValue.split("-"); // Split combined value
+
+    const filters = {
+      categoryId: searchParams.get("categoryId")
+        ? searchParams.get("categoryId")
+        : undefined,
+      subCategoryId: searchParams.get("subCategoryId")
+        ? searchParams.get("subCategoryId")
+        : undefined,
+      segmentId: searchParams.get("segmentId")
+        ? searchParams.get("segmentId")
+        : undefined,
+      brandId: searchParams.get("brandId")
+        ? searchParams.get("brandId")
+        : undefined,
+      minPrice: 100,
+      maxPrice: 200000,
+      sortBy: sortBy,
+      sortOrder: sortOrder,
+    };
+    handleCategorySelect(filters);
+  };
+
   return (
     <>
       <Stack direction="row" alignItems="center" spacing={0.4}>
@@ -18,18 +62,13 @@ const CategoryHeader: FC<CategoryHeaderProps> = ({ categoryTitle }) => {
         </Typography>
         <Typography sx={deliveryNavigateTitle}>{categoryTitle}</Typography>
       </Stack>
-      <Stack
-        // my={3}
-        mt="5px"
-        direction="row"
-        alignItems="center"
-        justifyContent="space-between"
-      >
+      <Stack mt="5px" direction="row" alignItems="center" spacing={2}>
         <Select
           displayEmpty
-          defaultValue="A-Z"
+          value={selectedSort}
+          onChange={handleChange}
           sx={{
-            width: 160,
+            width: "100%",
             "& .MuiOutlinedInput-notchedOutline": {
               borderColor: "#929292",
             },
@@ -47,10 +86,10 @@ const CategoryHeader: FC<CategoryHeaderProps> = ({ categoryTitle }) => {
             },
           }}
         >
-          <MenuItem value="A-Z">A-dan Z cenli</MenuItem>
-          <MenuItem value="Z-A">Z-dan A cenli</MenuItem>
-          <MenuItem value="Z-A">Arzandan Gymmada</MenuItem>
-          <MenuItem value="Z-A">Gymmatdan Arzana</MenuItem>
+          <MenuItem value="alphabet-ASC">A-Z</MenuItem>
+          <MenuItem value="alphabet-DESC">Z-A</MenuItem>
+          <MenuItem value="price-ASC">{t("category.select1")}</MenuItem>
+          <MenuItem value="price-DESC">{t("category.select2")}</MenuItem>
         </Select>
       </Stack>
     </>

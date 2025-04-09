@@ -141,7 +141,7 @@ const MiniBasket: FC = observer(() => {
           sx={clearAllBasketButton}
           onClick={() => BasketViewModel.clearBasket()}
         >
-          Hemmesini bozmak
+          Ählisini pozmak
         </Button>
       </Stack>
       <Divider />
@@ -181,7 +181,8 @@ const MiniBasket: FC = observer(() => {
           <Grid size={{ lg: 12, md: 6, sm: 12, xs: 12 }}>
             <Stack
               direction="row"
-              alignItems="center"
+              // alignItems="center"
+              mt={1}
               justifyContent="space-between"
             >
               <Stack direction="row" alignItems="center" spacing={1}>

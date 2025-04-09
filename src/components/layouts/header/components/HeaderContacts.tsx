@@ -1,63 +1,195 @@
-import { FC } from "react";
-import { Stack, Typography, Skeleton } from "@mui/material";
+import { FC, useEffect, useState, useRef } from "react";
 import {
-  headerContactSubTitle,
-  headerContactTitle,
-} from "../styles/headerStyles";
+  Stack,
+  Typography,
+  Skeleton,
+  TextField,
+  InputAdornment,
+  CircularProgress,
+  Divider,
+} from "@mui/material";
+import SearchIcon from "@mui/icons-material/Search";
+import { BASE_URL, BASE_URL_IMG } from "../../../../api/instance";
+import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
 interface HeaderContactsProps {
   isLoading: boolean;
 }
+interface SearchedProducts {
+  products: {
+    id: string;
+    nameTm: string;
+    imageOne: string;
+  }[];
+}
 
-const HeaderContacts: FC<HeaderContactsProps> = ({ isLoading }) => {
+const HeaderContactsSearch: FC<HeaderContactsProps> = ({ isLoading }) => {
+  const [searchValue, setSearchValue] = useState("");
+  const [result, setResult] = useState<SearchedProducts | undefined>(undefined);
+  const [debouncedValue, setDebouncedValue] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [isSearchOpen, setIsSearchOpen] = useState(false); // Контроль видимости результатов
+  const navigate = useNavigate();
+  const searchRef = useRef<HTMLDivElement>(null);
   const { t } = useTranslation();
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      setDebouncedValue(searchValue);
+    }, 500);
+    return () => clearTimeout(timeout);
+  }, [searchValue]);
+
+  useEffect(() => {
+    handleSearch(debouncedValue);
+  }, [debouncedValue]);
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        searchRef.current &&
+        !searchRef.current.contains(event.target as Node)
+      ) {
+        setIsSearchOpen(false);
+      }
+    };
+
+    if (isSearchOpen) {
+      document.addEventListener("click", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("click", handleClickOutside);
+    };
+  }, [isSearchOpen]);
+
+  const handleSearch = async (query: string) => {
+    if (!query.trim()) return;
+
+    setLoading(true); // Без try, чтобы не вызвать баг в useEffect
+    try {
+      const response = await fetch(`${BASE_URL}product/all?nameTm=${query}`);
+      const data = await response.json();
+      setResult(data);
+    } catch (error) {
+      console.error("Search error:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   if (isLoading) {
     return (
       <Stack direction="row" justifyContent="space-between">
+        <Stack></Stack>
         <Stack>
           <Skeleton variant="text" sx={{ fontSize: "1.5rem" }} width={150} />
           <Skeleton variant="text" sx={{ fontSize: "1rem" }} width={100} />
         </Stack>
-        <Stack>
-          <Skeleton variant="text" sx={{ fontSize: "1.5rem" }} width={150} />
-          <Skeleton variant="text" sx={{ fontSize: "1rem" }} width={100} />
-        </Stack>
-        <Stack>
-          <Skeleton variant="text" sx={{ fontSize: "1.5rem" }} width={150} />
-          <Skeleton variant="text" sx={{ fontSize: "1.5rem" }} width={150} />
-        </Stack>
+        <Stack></Stack>
       </Stack>
     );
   }
+  const style3 = {
+    fontSize: "14px",
+    whiteSpace: "normal",
+    overflow: "hidden",
+    textOverflow: "ellipsis",
+    fontWeight: 500,
+    display: "-webkit-box",
+    WebkitLineClamp: 1,
+    WebkitBoxOrient: "vertical",
+  };
 
   return (
-    <>
-      <Stack direction="row" justifyContent="space-between">
-        <Stack>
-          <Typography sx={headerContactTitle}>
-            {t("header.work_time")}
-          </Typography>
-          <Typography sx={headerContactSubTitle}>
-            {t("header.work_hours")}
-          </Typography>
+    <Stack position="relative" ref={searchRef}>
+      {/* <TextField
+        fullWidth
+        placeholder="Search"
+        variant="outlined"
+        size="small"
+        autoComplete="off"
+        onChange={(e) => setSearchValue(e.target.value)}
+        onFocus={() => setIsSearchOpen(true)}
+        InputProps={{
+          startAdornment: (
+            <InputAdornment position="start">
+              <SearchIcon sx={{ color: "#DE9D9D" }} />
+            </InputAdornment>
+          ),
+        }}
+      /> */}
+      <TextField
+        fullWidth
+        placeholder={t("header.search")}
+        variant="outlined"
+        size="small"
+        autoComplete="off"
+        onChange={(e) => setSearchValue(e.target.value)}
+        onFocus={() => setIsSearchOpen(true)}
+        InputProps={{
+          startAdornment: (
+            <InputAdornment position="start">
+              <SearchIcon sx={{ color: "#DE9D9D" }} />
+            </InputAdornment>
+          ),
+        }}
+        sx={{
+          "& .MuiOutlinedInput-root": {
+            "&.Mui-focused fieldset": {
+              borderColor: "#B71C1C", // Change to your desired color
+            },
+          },
+        }}
+      />
+      {isSearchOpen && searchValue !== "" && (
+        <Stack
+          position="absolute"
+          top={40}
+          bgcolor="#fff"
+          border="1px solid lightgray"
+          width="100%"
+          minHeight="50px"
+          maxHeight="450px"
+          zIndex={100}
+          borderRadius={1}
+          p={1}
+          overflow="auto"
+          className="searchResult"
+        >
+          {loading ? (
+            <Stack alignItems="center">
+              <CircularProgress />
+            </Stack>
+          ) : result?.products?.length ? (
+            result.products.map((elem) => (
+              <Stack key={elem.id}>
+                <Stack
+                  direction="row"
+                  alignItems="center"
+                  spacing={2}
+                  sx={{ cursor: "pointer" }}
+                  onClick={() => {
+                    navigate(`/product/${elem.id}`);
+                    setIsSearchOpen(false); // Закрываем после клика
+                  }}
+                >
+                  <img
+                    src={`${BASE_URL_IMG}public/${elem.imageOne}`}
+                    alt={elem.nameTm}
+                    style={{ width: "20%", objectFit: "cover" }}
+                  />
+                  <Typography sx={style3}>{elem.nameTm}</Typography>
+                </Stack>
+                <Divider />
+              </Stack>
+            ))
+          ) : (
+            <Typography>Haryt tapylmady</Typography>
+          )}
         </Stack>
-        <Stack>
-          <Typography sx={headerContactTitle}>
-            {t("header.address_title")}
-          </Typography>
-          <Typography sx={headerContactSubTitle}>
-            {t("header.our_address")}
-          </Typography>
-        </Stack>
-        <Stack>
-          <Typography sx={headerContactTitle}>+993 60 14 22 51</Typography>
-          <Typography sx={headerContactTitle}>+993 62 56 01 31</Typography>
-        </Stack>
-      </Stack>
-    </>
+      )}
+    </Stack>
   );
 };
 
-export default HeaderContacts;
+export default HeaderContactsSearch;

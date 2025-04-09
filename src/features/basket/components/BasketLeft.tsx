@@ -132,7 +132,7 @@ const BasketLeft: FC = observer(() => {
           sx={clearAllBasketButton}
           onClick={() => BasketViewModel.clearBasket()}
         >
-          Hemmesini bozmak
+          Hemmesini pozmak
         </Button>
       </Stack>
       <Divider />

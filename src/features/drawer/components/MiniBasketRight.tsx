@@ -21,7 +21,7 @@ const MiniBasketRight: FC = () => {
         return;
       }
       if (!exist) {
-        navigate("/complete-order");
+        navigate("/basket");
       } else {
         toast.error("Ammarda haryt az mukdarda");
       }

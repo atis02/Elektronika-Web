@@ -11,6 +11,7 @@ import {
   auctionDiscountTextCountBox,
   auctionImageBox,
   auctionTextBox,
+  auctionTextBoxWarranty,
   compareDiscountGoodsCostButton,
   discountGoodCodeText,
   discountGoodCompanyTitle,
@@ -38,8 +39,8 @@ import { toggleFavorite } from "../../../../../components/redux/favouriteSlice";
 import { useTranslation } from "react-i18next";
 import toast from "react-hot-toast";
 import AppDrawer from "../../../../drawer/presentation/BasketDrawer";
-// const { toggleFavorite } = useFavoriteProducts();
-// Function to convert blurhash to base64
+import { formatNumber } from "../../../../../components/utils/allutils";
+import DoneIcon from "@mui/icons-material/Done";
 const blurHashToBase64 = (
   blurhash: string,
   width: number = 32,
@@ -74,36 +75,26 @@ const DiscountGoodBox: FC = () => {
   const toggleDrawer = (open: boolean) => {
     setIsOpen(open);
   };
-  // const [compareStates, setCompareStates] = useState<Record<number, boolean>>(
-  //   {}
-  // );
-  // const [favoriteStates, setFavoriteStates] = useState<Record<number, boolean>>(
-  //   {}
-  // );
   const [showAll, setShowAll] = useState(false);
 
-  // Intersection Observer for animation trigger
   const { ref: containerRef, inView: containerInView } = useInView({
     threshold: 0.2,
   });
-
-  // Fetch discounted products with a fixed limit of 4
   const fetchDiscountedProducts = async () => {
     try {
       setIsLoading(true);
       const response = await axios.get(
-        `${BASE_URL}product/all?limit=20&page=1`
+        `${BASE_URL}product/all?limit=100&page=1`
       );
 
       const products = response.data?.products;
+
       const discounted = products.filter(
         (product: any) => product.discount_pricePercent > 0
       );
       setDiscountedProducts(discounted);
       setIsLoading(false);
     } catch (error) {
-      console.log(error);
-
       setIsError(true);
       setIsLoading(false);
     }
@@ -123,24 +114,6 @@ const DiscountGoodBox: FC = () => {
   const handleToggleFavorite = (product: any) => {
     dispatch(toggleFavorite(product)); // Remove the product if it's already a favorite
   };
-  // const isProductInCompare = compareProducts.some((p) => p.id === productId);
-
-  // const handleCompareClick = (productId: number) => {
-  //     isProductInCompare
-  //       ? dispatch(removeProduct(productId))
-  //       : dispatch(addProduct(product))
-  //   // setCompareStates((prevState) => ({
-  //   //   ...prevState,
-  //   //   [productId]: !prevState[productId], // Toggle the compare state
-  //   // }));
-  // };
-
-  // const handleFavoriteClick = (productId: number) => {
-  //   setFavoriteStates((prevState) => ({
-  //     ...prevState,
-  //     [productId]: !prevState[productId], // Toggle the favorite state
-  //   }));
-  // };
 
   const handleShowAll = () => {
     setShowAll(!showAll);
@@ -221,7 +194,7 @@ const DiscountGoodBox: FC = () => {
   }
 
   if (discountedProducts.length === 0) {
-    return <Typography>No discounted products available</Typography>;
+    return <Typography></Typography>;
   }
 
   const displayedProducts = showAll
@@ -243,7 +216,12 @@ const DiscountGoodBox: FC = () => {
         return nameEn; // Default to English
     }
   };
-
+  const isExist = (product: any) => {
+    const isInBasket = BasketViewModel.items.some(
+      (item) => item.product.id === product.id
+    );
+    return isInBasket ? <DoneIcon /> : <LocalGroceryStoreOutlinedIcon />;
+  };
   return (
     <>
       <Stack direction="row" alignItems="center" justifyContent="space-between">
@@ -275,14 +253,39 @@ const DiscountGoodBox: FC = () => {
               variants={productItemVariants}
             >
               <Box sx={{ p: 1, borderRadius: "6px" }}>
-                <Box sx={auctionTextBox}>
-                  <Stack direction="row" pl={5}>
-                    <Box sx={auctionTextBox}> {t("home.sale")}</Box>
-                    <Box sx={auctionDiscountTextCountBox}>
-                      -{product.discount_pricePercent.toFixed(0)}%
+                <Stack direction="row" justifyContent="space-between">
+                  <Box sx={auctionTextBox}>
+                    <Stack direction="row" pl={5}>
+                      <Box sx={auctionTextBox}> {t("home.sale")}</Box>
+                      <Box sx={auctionDiscountTextCountBox}>
+                        - {product.discount_pricePercent.toFixed(0)}%
+                      </Box>
+                    </Stack>
+                  </Box>
+                  {product.warranty && (
+                    <Box
+                      sx={{
+                        ...auctionTextBoxWarranty,
+                        flexDirection: "column",
+                        position: "relative",
+                      }}
+                    >
+                      <Stack direction="row" color="#B71C1C">
+                        <img
+                          src="/images/guarantee.png"
+                          style={{ width: 40, height: 40 }}
+                        />
+                      </Stack>
+                      <Typography
+                        fontSize={13}
+                        position="absolute"
+                        bottom={-18}
+                      >
+                        {product.warranty}
+                      </Typography>
                     </Box>
-                  </Stack>
-                </Box>
+                  )}
+                </Stack>
                 <Box sx={auctionImageBox}>
                   <LazyLoadImage
                     onClick={() => navigate(`/product/${product.id}`)}
@@ -306,11 +309,23 @@ const DiscountGoodBox: FC = () => {
                     noWrap
                   >
                     {getTitle(product.nameTm, product.nameRu, product.nameEn)}
-                    {/* {product.nameTm} */}
                   </Typography>
-                  <Typography sx={discountGoodCompanyTitle}>
-                    {product.brand?.nameTm || "Unknown Brand"}
-                  </Typography>
+                  <Stack direction="row" justifyContent="space-between">
+                    <Typography sx={discountGoodCompanyTitle}>
+                      {product.brand?.nameTm || "Unknown Brand"}
+                    </Typography>
+                    {product.anotherMarketProduct && (
+                      <Box sx={{ "& > img": { mr: 2, flexShrink: 0 } }}>
+                        <img
+                          loading="lazy"
+                          width="30"
+                          srcSet={`https://countryflagsapi.netlify.app/flag/${product?.anotherMarketProduct?.toUpperCase()}.svg`}
+                          src={`https://countryflagsapi.netlify.app/flag/${product?.anotherMarketProduct?.toUpperCase()}.svg`}
+                          alt=""
+                        />
+                      </Box>
+                    )}
+                  </Stack>
                   <Stack direction="row" spacing={1} my={1}>
                     <Typography sx={discountGoodCodeText}>
                       {t("home.barcode")}
@@ -325,17 +340,20 @@ const DiscountGoodBox: FC = () => {
                     alignItems="center"
                   >
                     <Typography sx={discountGoodCost}>
-                      {product.sellPrice - product.discount_priceTMT} m.
+                      {formatNumber(
+                        product.sellPrice - product.discount_priceTMT
+                      )}{" "}
+                      m.
                     </Typography>
                     <Button variant="contained" sx={discountGoodLastCount}>
-                      Nagt {product.productQuantity}
+                      {t("products.nagt")} {product.productQuantity}
                     </Button>
                   </Stack>
                 </Stack>
                 <Button
                   variant="contained"
                   fullWidth
-                  endIcon={<LocalGroceryStoreOutlinedIcon />}
+                  endIcon={isExist(product)}
                   sx={addStoreDiscountGoodButton}
                   onClick={() => {
                     product.productQuantity <= 0
@@ -353,12 +371,7 @@ const DiscountGoodBox: FC = () => {
                   gap={1}
                 >
                   <Button
-                    // onClick={() => handleCompareClick(product.id)}
-                    onClick={() =>
-                      // isProductInCompare
-                      //   ? dispatch(removeProduct(product.id)):
-                      dispatch(addProduct(product))
-                    }
+                    onClick={() => dispatch(addProduct(product))}
                     sx={{
                       ...compareDiscountGoodsCostButton,
                       backgroundColor: compareProducts.some(
@@ -384,8 +397,7 @@ const DiscountGoodBox: FC = () => {
                     <img
                       src={
                         compareProducts.some((p) => p.id === product.id)
-                          ? // compareStates[product.id]
-                            "/icons/compare white.svg"
+                          ? "/icons/compare white.svg"
                           : "/icons/compare.svg"
                       }
                       alt="compare-icon"
@@ -393,30 +405,8 @@ const DiscountGoodBox: FC = () => {
                     />
                     {t("home.compare")}
                   </Button>
-                  {/* <Button
-                    onClick={() => toggleFavorite(product)}
-                    sx={{
-                      color: favorites.includes(product)
-                        ? "#C3000E"
-                        : "inherit",
-                      borderRadius: "50%",
 
-                      transition: "background-color 0.3s, transform 0.2s",
-                      transform: favorites ? "scale(1.1)" : "scale(1)",
-                    }}
-                  >
-                    {favorites.includes(product) ? (
-                      <FavoriteIcon />
-                    ) : (
-                      <FavoriteBorderIcon
-                        sx={{
-                          color: "#C3000E",
-                        }}
-                      />
-                    )}
-                  </Button> */}
                   <Button
-                    // onClick={() => handleFavoriteClick(product.id)}
                     onClick={() => handleToggleFavorite(product)}
                     sx={{
                       ...compareDiscountGoodsCostButton,

@@ -15,13 +15,25 @@ const FooterContact: FC = () => {
           </Typography>
           <Typography sx={footerLinksStyle2}>
             {/* Aşgabat, Bitarap Türkmenistan şaýoly 183 */}
-            {t("header.our_address")}
+            {t("footer.address")}
           </Typography>
         </Box>
         <Box>
           <Typography sx={footerAddressText}>Telefon: </Typography>
           <Typography sx={footerLinksStyle2}>
-            (+993 60) 14-22-41; (+993 62) 56-01-31
+            <a
+              href="tel:142241"
+              style={{ textDecoration: "none", color: "#fff" }}
+            >
+              (+993 60) 14-22-51
+            </a>
+            <br />
+            <a
+              href="tel:(+993 62) 56-01-31"
+              style={{ textDecoration: "none", color: "#fff" }}
+            >
+              (+993 62) 56-01-31
+            </a>
           </Typography>
         </Box>
         <Box>

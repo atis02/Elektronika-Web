@@ -137,7 +137,7 @@ const AuctionCard: FC = () => {
                   />
 
                   <Box my={2} sx={auctionIndexNumerBox}>
-                    {index + 1}
+                    {auction.auctionID}
                   </Box>
                   <Box
                     sx={{
@@ -159,7 +159,7 @@ const AuctionCard: FC = () => {
                       {auction.product?.nameTm}
                     </Typography>
                     <Typography sx={autionProductTitle}>
-                      Bahasy: <b>{auction.auctionProductPriceCurrent}</b>
+                      Bahasy: <b>{auction.auctionProductPriceCurrent} manat</b>
                     </Typography>
                     <Button
                       onClick={() => handleJoinAuction(auction)}

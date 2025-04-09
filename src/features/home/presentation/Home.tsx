@@ -24,17 +24,19 @@ const Home: FC = () => {
           size={size1_4}
           sx={{ display: { lg: "block", md: "block", sm: "none", xs: "none" } }}
         >
-          <Stack spacing={4}>
+          {/* <Stack spacing={4}> */}
+
+          <Box>
+            <Sidebar />
+          </Box>
+          <Box mt={4}>
+            <Auction />
+          </Box>
+          <Box mt={1}>
+            <Feedback />
+          </Box>
+          <Stack mt={4} spacing={4} position="sticky" top={60} zIndex="100">
             <Box>
-              <Sidebar />
-            </Box>
-            <Box>
-              <Auction />
-            </Box>
-            <Box>
-              <Feedback />
-            </Box>
-            <Box sx={{ position: "relative", minHeight: "115vh" }}>
               <LastAddedProducts />
             </Box>
           </Stack>

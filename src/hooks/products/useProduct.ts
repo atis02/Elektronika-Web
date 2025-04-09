@@ -105,7 +105,18 @@ export const useProduct = (
     products: data?.products,
     totalProducts: data?.totalItems, // Assuming the backend includes a total count
     lastAddedDiscountedProducts: data?.products
-      ? getLastAddedDiscountedProducts(data.products, 4)
+      ? getLastAddedDiscountedProducts(
+          data.products,
+          !data?.products.filter(
+            (product: Product) => product.discount_pricePercent > 0
+          ).length ||
+            !data?.products.filter(
+              (product: any) =>
+                product.status?.nameTm === "Hödürlenýän harytlar"
+            ).length
+            ? 2
+            : 7
+        )
       : [],
     isLoading: !error && !data,
     isError: error,

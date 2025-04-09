@@ -11,8 +11,8 @@ export const weeksGoodsSmallImageBox = {
 };
 
 export const weeksGoodsBigImageBox = {
-  width: "auto",
-  height: { lg: "400px", md: "400px", sm: "200px", xs: "200px" },
+  width: "100%",
+  height: { lg: "400px", md: "400px", sm: "200px", xs: "260px" },
   display: "flex",
   alignItems: "center",
   justifyContent: "center",

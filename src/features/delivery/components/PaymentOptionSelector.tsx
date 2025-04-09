@@ -31,14 +31,8 @@ const PaymentOptionSelector: FC<DeliveryTypeProps> = ({
         Töleg görnüşini saýlaň
       </Typography>
       <Grid container spacing={2} my={1} ref={ref}>
-        {[
-          "Eltip berende töleg",
-          "Kart bilen hasaplaşyk",
-          "Altyn Asyr",
-          "TFEB",
-          "Senagat bank",
-        ].map((option, index) => (
-          <Grid key={option} size={{ lg: 2.3, md: 4, sm: 6, xs: 12 }}>
+        {["Nagt", "Kart bilen töleg", "Altyn Asyr"].map((option, index) => (
+          <Grid key={option} size={{ lg: 2.4, md: 4, sm: 6, xs: 12 }}>
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: inView ? 1 : 0, y: inView ? 0 : 20 }}

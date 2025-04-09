@@ -3,11 +3,13 @@
     "categories": "Categories",
     "delivery": "Delivery",
     "service": "Service",
-    "return_exchange": "Return and Exchange",
+    "return_exchange": "Return",
     "how_to_order": "How to Order",
     "serviceCenter": "Service center",
     "embassy": "Embassy",
-    "auction": "Auction"
+    "auction": "Auction",
+    "navbar-text":"Hormatly ulanyjylar! Saýtyň işleýşi dükanyň işleýşi bilen deň däldir. Ähli skidkalar we bonuslar diňe saýtda hereket edýär.",
+    "presentCard":"Present sertificate"
   },
 
   "header": {
@@ -17,9 +19,12 @@
     "address_title": "Our Address",
     "our_address": "Ashgabat, Bitarap Turkmenistan Street 183",
     "pageDoesntExist":"Oops! The page you`re looking for doesn`t exist.",
-    "how_to_register":"How to register"
+    "how_to_register":"How to register",
+    "search":"Search..."
   },
   "home":{
+    "writeRating":"Leave your comment",
+    "sameProducts":"Similar products",
     "discountedGoods":"All Sale",
     "offeredProducts":"Offered Products",
     "seeAll":"See all",
@@ -29,50 +34,94 @@
     "favourite":"Favourite",
     "barcode":"Barcode",
     "mainPage":"Main Page",
-    "delivery":"Delivery"
+    "delivery":"Delivery",
+    "lastAddedProducts":"Last added products"
+
+  },
+  "howRegister":{
+    "how-to-register":"How to register on the site.",
+    "htoDesc":"The registration principle is very simple:<1/>Click on the little man in the upper right corner. A window will appear in which you need to indicate your initials, contact number and email address. Then click on the 'Registration' button<1/>Done!"
   },
   "footer":{
     "footerFastHelp":"Fast help",
     "contacts":"Contacts",
     "apps":"Mobile Apps",
-    "socialLinks":"Social links"
+    "socialLinks":"Social links",
+    "address":"Ashgabat, Bitarap Turkmenistan Avenue, 183"
+
 
   },
-  "aboutDelivery":"About Delivery",
-  "descDelivery":"Our online store offers delivery services for any goods purchased from us.  <1/>If you decide to use our delivery service, we kindly ask you to familiarize yourself with the terms of delivery and receipt:  <1/>All orders priced above 150 TMT are delivered free of charge!  <1/>Orders under 150 TMT are subject to a delivery fee of 20 TMT.  <1/>You can use the 'Express Delivery' service, which ensures delivery within 2 hours from the time of order. The cost of the 'Express Delivery' service, regardless of the type of goods, is 20 TMT.  <1/>Order acceptance hours: <1/>Monday - Friday: 09:00 - 18:00  <1/> Saturday: 09:00 - 13:00  <1/>Delivery speed:<1/> 'Standard Delivery' is carried out on the same day if the order is placed before 16:00.  <1/> Orders placed after 16:00 will be delivered the next day.  <1/> Goods will be delivered on the agreed day and at a convenient time for you.  <1/> The goods will be delivered to the address you specify.",
+  "aboutDelivery":"Delivery information.",
+  "descDelivery":"Our online store delivers any product purchased from us.<1/><1/>If you decide to use our delivery service, please read the rules for delivery and transfer of goods:<1/><1/>All orders that have reached the amount of over 150 TMT are carried out free of charge! The cost of delivery of an order that has not reached the amount of 150 TMT will be 20 TMT.<1/>You can use the 'Express delivery' service in the city of Ashgabat, the speed of which is carried out within 2 hours from the moment of ordering. The cost of 'Express delivery', regardless of the type of product, will be 20 TMT.<1/>Order acceptance time:<1/>Mon - Fri from 9:00 to 18:00<1/>Sat from 9:00 to 13:00<1/>Urgent delivery:<1/>'Standard delivery' is carried out during the day, for orders placed before 16:00.<1/>Orders placed after 16:00 are transferred to the next day.<1/>The goods will be delivered on the day and at a time convenient for you agreed with you.<1/>The goods will be delivered to the address you specified.Be careful when checking the goods delivered to you. Make sure there is no visible mechanical damage and that all items included in the kit are present. The fact that you have accepted the goods by appearance, completeness and availability of documents is confirmed by your signature on the application for delivery of the goods and indicates the absence of any claims to the goods.<1/>If the delivered goods have visible external damage, you have the right not to accept them.<1/>In accordance with the Law 'On Protection of Consumer Rights' of Turkmenistan, you can return or exchange goods of inadequate quality within the time limits specified by law.<1/>The Elektronika.tm team expresses its appreciation and thanks you for purchasing the goods!",
   "service": {
-    "serviceTitle": "Service Center",
-    "serviceDesc": "Your comfort is our concern! '<1/>«World of Technology»<1/>We are a true team of professionals and the leading household appliance repair service in the country!<1/>Our service center provides high-quality repair services to extend the life of your appliances. Our technicians are experts you can trust to repair household appliances from any manufacturer.<1/>At the service center, you submit a request.<1/>We identify and determine the causes of the breakdown, agree on the repair time and cost.<1/>We notify you when the product is ready.<1/>We deliver the repaired equipment and handle the payment.<1/>The entire list of services provided is guaranteed.<1/>Service Center<1/>Our address: Neutral Turkmenistan Avenue 183, Ashgabat.<1/>Tel.: 142254, 142255"
+    "serviceTitle": "Service Center «Tehnika Dunyasi»",
+    "serviceDesc": "«Your comfort is our concern!»<1/>We are the leading service for repairing household appliances!<1/><1/>Our service center provides quality repair services to extend the life of your equipment. Our specialists are experts in repairing household appliances of any manufacturer.<1/>After you leave your request in our service center - we will identify and determine the causes of the breakdown, agree on the time and cost of repair. Then we will inform you about the readiness of the product. Then we issue the finished equipment and make a calculation.The entire list of services provided is covered by a guarantee.<1/><1/>Our address:Ashgabat, Bitarap Turkmenistan Avenue, 183.<1/>Tel.: 142254, 142255"
   },
   "returnPolicy":{
-    "returnPolicyTitle":"Return and Exchange Product",
-    "returnPolicyDesc":"Return before payment:<1/>The customer can refuse/return all or part of the ordered goods before deciding to purchase and before paying their total cost and delivery service fee.<1/>Return conditions after payment:<1/>The customer can return the goods after payment if there are quality defects, obvious manufacturing defects, or shortcomings in the goods (shortcomings – failure to meet mandatory requirements for the goods).<1/>If the provided goods do not match the described ones, the customer can return them within 7 days.<1/>The return of goods in good condition is possible only under the following conditions:<1/>The goods have not been used<1/>The goods are in their original condition<1/>All consumer properties are preserved<1/>When returning the goods, all items in the set, packaging, and labels must be in place and in new/unused condition."
+    "returnPolicyTitle":"Exchange and return of goods",
+    "returnPolicyDesc":"Rules for returning goods before payment:<1/>The customer can refuse all or part of the ordered goods without paying either their cost or the cost of delivery before deciding to purchase.<1/>Rules for returning goods after payment:<1/>The customer can return only food products of inadequate quality, namely goods with a defect or not corresponding to the description on the website.<1/>The customer can return goods of inadequate quality within 7 days.<1/>Returns are made only if the specified goods:<1/>have not been used;<1/>have retained their presentation;<1/>have retained consumer properties.<1/>The goods are accepted for return only in full assembly, with all packaging and stickers, in unworn/unused condition!"
   },
   "orderProcess": {
-  "orderProcessTitle": "How to order",
-  "orderProcessDesc":  "1) Add the selected products to your cart. Click on 'Add to Cart' or 'Buy Now' to the right of the product image.<1/>By adding the product to your cart, you can continue browsing and adding other products. By choosing the 'Buy Now' function, you can proceed directly to checkout.<1/>2) Once your cart is full, click on the 'Cart' link in the top-right corner of the page.<1/>3) Click 'Proceed to Checkout'.<1/>4) A window will appear for you to fill in your order delivery details. Then click 'Continue'.<1/>5) Choose a delivery method, then click 'Continue'.<1/>6) Choose a payment method, then click 'Continue'.<1/>7) In the window that appears, click 'Confirm Order'.<1/>8) Finally, a window will appear with the following text:<1/>Thank you for your order! Order number #.......<1/>Our operator will contact you shortly."
+  "orderProcessTitle": "How to place an order.",
+  "orderProcessDesc":"After you have selected the product you need, click on this product. Below the product there is a button 'Add to cart', click on it, your product will be transferred to the 'Cart'. Next, in the upper right corner, click on the 'Cart' icon. One or more products you have selected will be displayed in the 'Cart'. Click on the 'Place an order' button, specify your details and delivery address, select the payment method and delivery method. Next, click on the 'Place an order' button. The order is accepted."
   
-},
+  },
 "order":{
   "orderComplete":"Complete order",
   "orderAddress":"Delivery address",
   "name":"Name",
-"surname":"Surname",
-"adress":"Address",
-"velayat":"Region",
-"city/district":"City / District",
-"phone":"Phone",
-"deliveryTypeTitle":"Choose delivery type",
-"express":"Express service",
-"expressDesc":"Delivery in 2 hours",
-"turkmenPochta":"Turkmen pochta",
-"turkmenPochtaDesc":"Turkmen pochta service",
-"curer":"Courier",
-"curerDesc":"Free in Ashgabat",
-"selfDeliver":"Pickup",
-"selfDeliverDesc":"182, Bitarap Türkmenistan street, “Elektonika dünýäsi”"
+  "surname":"Surname",
+  "adress":"Address",
+  "velayat":"Region",
+  "city/district":"City / District",
+  "phone":"Phone",
+  "deliveryTypeTitle":"Choose delivery type",
+  "express":"Express service",
+  "expressDesc":"Delivery in 2 hours (Ashgabat - 20 m)",
+  "turkmenPochta":"Turkmen pochta",
+  "turkmenPochtaDesc":"Turkmen pochta service",
+  "curer":"Courier",
+  "curerDesc":"Free in Ashgabat",
+  "selfDeliver":"Pickup",
+  "selfDeliverDesc":"182, Bitarap Türkmenistan street, “Elektonika dünýäsi”"
 
+},
+"compare":{
+  "productTitle":"Compare Products"
+},
+"certifate":{
+  "phoneError":"Phone number can't be only +993 ",
+  "mustValue":"Price must be at least 500.0 ТМТ",
+  "buy":"Buy",
+  "mustField":"Must field!",
+   "whom":"Whom",
+  "fromWhom":"From whom",
+  "address":"Address",
+  "phoneNumber":"Receipient phone number",
+  "totalPrice":"Total price",
+  "certificateText":"Text (this text will be printed on the gift certificate)",
+  "mainTitle":"Gift Certificate",
+  "title":"Gift Certificate - is the best gift for you and your loved ones",
+  "buyCertificate":"Buy Gift Certificate",
+  "descOne":"How often do you face the problem of choosing a gift for a loved one?If it’s for your closest ones, there are fewer questions (you know their habits, you have already understood what they like and what they don't), but with people outside your inner circle, it is much more difficult.",
+  "descTwo":"Rarely does someone want their gift to sit and collect dust in a closet until it is thrown away during general cleaning or passed on to someone out of necessity.",
+  "descThree":"A gift is not only a sign of attention. It's also a constant reminder of who made it.",
+  "descFour":"Give your loved one a gift certificate from our store and be sure that he will choose a gift of his choice and remember your sign!"
+},
+"products":{
+  "nagt":"quantity"
+},
+"goodOfWeek":{
+  "quality":"The best quality",
+  "orderNow":"Order now!",
+  "goodOfWeek":"Product of the week"
+},
+"category":{
+  "select1":"Price hight to low",
+  "select2":"Price low to hight"
+},
+"partners":{
+  "ourPartners":"Our Partners"
 }
-
 
 }

@@ -18,7 +18,6 @@ import Service from "../features/service/presentation/Service";
 import ReturnExchange from "../features/returnExchange/presentation/ReturnExchange";
 import HowToOrder from "../features/howToOrder/presentation/HowToOrder";
 import AuctionDetail from "../features/auction/components/AuctionDetail";
-import CompleteOrder from "../features/delivery/components/CompleteOrder";
 import PresentCard from "../features/presentCard/presentation/PresentCard";
 import BuyPresentCard from "../features/presentCard/components/BuyPresentCard";
 import Embassy from "../features/embassy/presentation/Embassy";
@@ -26,7 +25,9 @@ import Compare from "../features/compare/presentation/Compare";
 import FullDescriptionProduct from "../features/products/components/FullDescriptionProduct";
 import NotFoundPage from "../components/layouts/NotFound";
 import PreLoader from "../components/utils/Preloader";
-
+import Account from "../features/account/presentation/Account";
+import HowToRegister from "../features/howToRegister/presentation/howToRegister";
+import PaymentSucces from "../features/paymentSucces";
 // Custom Skeleton Loader
 
 const App = () => {
@@ -76,13 +77,15 @@ const App = () => {
                   <Route path="/service" element={<Service />} />
                   <Route path="/return-exchange" element={<ReturnExchange />} />
                   <Route path="/how-to-order" element={<HowToOrder />} />
-                  <Route path="/complete-order" element={<CompleteOrder />} />
+                  <Route path="/how-to-register" element={<HowToRegister />} />
                   <Route path="/present-card" element={<PresentCard />} />
                   <Route
                     path="/buy-present-card"
                     element={<BuyPresentCard />}
                   />
                   <Route path="/compare" element={<Compare />} />
+                  <Route path="/successPayment" element={<PaymentSucces />} />
+                  <Route path="/account" element={<Account />} />
                   <Route path="/favourites" element={<Favourites />} />
                   <Route path="*" element={<NotFoundPage />} />
                 </Route>

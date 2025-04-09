@@ -1,5 +1,7 @@
 import {
   FC,
+  useEffect,
+  useState,
   // useState\
 } from "react";
 import { Box, IconButton, Stack } from "@mui/material";
@@ -22,13 +24,20 @@ import {
 import { removeProduct } from "../../../components/redux/ProductSlice";
 import { BASE_URL_IMG } from "../../../api/instance";
 import CloseIcon from "@mui/icons-material/Close";
+import HeaderContactsSearch from "../../../components/layouts/header/components/HeaderContacts";
 const CompareSlider: FC = () => {
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 1000);
+  }, []);
   // const [currentImages, setCurrentImages] = useState<{ [key: string]: string }>(
   //   {}
   // );
   const dispatch = useAppDispatch();
   const compareProducts = useAppSelector((state) => state.compare.products);
-  console.log(compareProducts);
 
   // const handleImageClick = (productId: string, image: string) => {
   //   setCurrentImages((prevImages) => ({
@@ -47,11 +56,7 @@ const CompareSlider: FC = () => {
               <Grid key={elem.id} size={compareGridSize}>
                 <Box sx={compareItemsCardBox}>
                   <Stack direction="row" alignItems="center">
-                    <input
-                      type="text"
-                      placeholder="Gözleg"
-                      className="compareSearchInput"
-                    />
+                    <HeaderContactsSearch isLoading={isLoading} />
                   </Stack>
 
                   <Box sx={compareImagebox}>

@@ -1,21 +1,22 @@
 import { makeAutoObservable } from "mobx";
 import axios from "axios";
 import { BASE_URL } from "../../api/instance";
+import toast from "react-hot-toast";
 
 interface RegistrationData {
   file?: File | null;
   firstName: string;
   lastName: string;
-  email: string;
   phoneNumber: string;
-  password?: string;
   isNotify?: boolean;
+  email:string;
 }
 interface LoginData {
   phoneNumber: string;
-  password?: string;
 }
-
+interface LoginDataEmail {
+  email: string;
+}
 interface UserData {
   id: number;
   firstName: string;
@@ -35,6 +36,7 @@ interface UserData {
     surname:string
     email:string
     phoneNumber:string
+    image:string
   }
 }
 
@@ -61,11 +63,14 @@ class UserViewModel {
       }
       formData.append("name", registrationData.firstName);
       formData.append("surname", registrationData.lastName);
-      formData.append("email", registrationData.email);
-      formData.append("phoneNumber", registrationData.phoneNumber);
-      formData.append("password", registrationData.password || "");
-      // formData.append("isNotify", registrationData.isNotify + "" || "");
+     if(registrationData.phoneNumber ==='+993'){
 
+       formData.append("email", registrationData.email);
+      }else{
+
+        formData.append("phoneNumber", registrationData.phoneNumber);
+      }
+        
       const response = await axios.post<UserData>(
         `${BASE_URL}user/registration`,
         formData,
@@ -81,7 +86,6 @@ class UserViewModel {
         this.user = response.data;
       }
     } catch (error: any) {
-      console.error("Error registering user:", error);
       this.error =
         error.response?.data?.message ||
         "Registration failed. Please try again.";
@@ -89,35 +93,6 @@ class UserViewModel {
       this.loading = false;
     }
   }
-  // async login(loginData: LoginData) {
-  //   this.loading = true;
-  //   this.error = null;
-  //   this.registrationSuccess = false;
-  //   this.user = null;
-
-  //   try {
-  //     const body = {
-  //       phoneNumber:loginData.phoneNumber,
-  //       password : loginData.password
-  //     }
-  //     const response = await axios.post<UserData>(
-  //       `${BASE_URL}user/login`,
-  //       body
-  //     );
-
-  //     if (response.status === 200) {
-  //       this.registrationSuccess = true;
-  //       this.user = response.data;
-  //     }
-  //   } catch (error: any) {
-  //     console.error("Error registering user:", error);
-  //     this.error =
-  //       error.response?.data?.message ||
-  //       "Registration failed. Please try again.";
-  //   } finally {
-  //     this.loading = false;
-  //   }
-  // }
   async login(loginData: LoginData) {
     this.loading = true;
     this.error = null;
@@ -127,7 +102,6 @@ class UserViewModel {
     try {
       const body = {
         phoneNumber: loginData.phoneNumber,
-        password: loginData.password,
       };
   
       const response = await axios.post<UserData>(`${BASE_URL}user/login`, body);
@@ -135,7 +109,6 @@ class UserViewModel {
       if (response.status === 200) {
         this.registrationSuccess = true;
         this.user = response.data;
-  console.log(response.data);
   
         // Save user data and token to localStorage
         localStorage.setItem("tokenOfElectronics", response.data.token);
@@ -145,40 +118,96 @@ class UserViewModel {
             id: response.data?.user.id,
             name: response.data?.user.name,
             surname: response.data?.user.surname,
+            image:response.data?.user.image,
             email: response.data?.user.email,
             phoneNumber: response.data?.user.phoneNumber,
           })
         );
       }
     } catch (error: any) {
-      console.error("Error logging in user:", error);
       this.error =
         error.response?.data?.message || "Login failed. Please try again.";
     } finally {
       this.loading = false;
     }
   }
+  async loginWithEmail(loginData: LoginDataEmail) {
+    this.loading = true;
+    this.error = null;
+    this.registrationSuccess = false;
+    this.user = null;
   
+    try {
+      const body = {
+        email: loginData.email,
+      };
+  
+      const response = await axios.post<UserData>(`${BASE_URL}user/loginEmail`, body);
+  
+      if (response.status === 200) {
+        this.registrationSuccess = true;
+        this.user = response.data;
+  
+        // Save user data and token to localStorage
+        localStorage.setItem("tokenOfElectronics", response.data.token);
+        localStorage.setItem(
+          "ElectronicaUser",
+          JSON.stringify({
+            id: response.data?.user.id,
+            name: response.data?.user.name,
+            surname: response.data?.user.surname,
+            image:response.data?.user.image,
+            email: response.data?.user.email,
+            phoneNumber: response.data?.user.phoneNumber,
+          })
+        );
+      }
+    } catch (error: any) {
+      this.error =
+        error.response?.data?.message || "Login failed. Please try again.";
+    } finally {
+      this.loading = false;
+    }
+  }
   async verifyOtp(otp: string) {
     this.loading = true;
     this.error = null;
     try {
-      if (this.user && this.user.otp === otp) {
+      // if (this.user && this.user.otp === otp) {
         const res = await axios.post(
-          `${BASE_URL}users/verifyOtp`,
-          {},
-          {
-            headers: {
-              authorization: "Bearer " + this.user.token,
-            },
-          }
+          `${BASE_URL}otp/check`,{otp:otp}
         );
+        console.log(res.data);
+        
         if (res.status >= 200 && res.status < 300) {
-          window.localStorage.setItem("token", this.user.token);
+          // window.localStorage.setItem("token", this.user.token);
+          toast.success('Üstünlikli!')
           return true;
         }
-      }
-      this.error = "Invalid OTP. Please try again.";
+      // }
+      // this.error = "Invalid OTP. Please try again.";
+      return false;
+    } catch (error: any) {
+      this.error = "Error during OTP verification";
+      return false;
+    } finally {
+      this.loading = false;
+    }
+  }
+  async verifyEmailOtp(otp: string) {
+    this.loading = true;
+    this.error = null;
+    try {
+      // if (this.user && this.user.otp === otp) {
+        const res = await axios.post(
+          `${BASE_URL}otp/checkEmail`,{otp:otp}
+        );
+        console.log(res.data);
+        
+        if (res.status >= 200 && res.status < 300) {
+          toast.success('Üstünlikli!')
+          return true;
+        }
       return false;
     } catch (error: any) {
       this.error = "Error during OTP verification";

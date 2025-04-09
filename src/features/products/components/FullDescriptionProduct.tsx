@@ -26,7 +26,14 @@ import {
 } from "../styles/productStyle";
 import {
   addStoreDiscountGoodButton,
+  auctionImageBox,
   compareDiscountGoodsCostButton,
+  discountGoodCodeText,
+  discountGoodCompanyTitle,
+  discountGoodCost,
+  discountGoodLastCount,
+  discountGoodsTitle,
+  discountGoodTitle,
 } from "../../home/components/discountedGoods/styles/discoutGoodsStyle";
 import { observer } from "mobx-react-lite";
 import ProductViewModel from "../presentation/ProductViewModel";
@@ -37,7 +44,7 @@ import { useInView } from "react-intersection-observer";
 import ReactImageMagnify from "react-image-magnify";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 // import useFavoriteProducts from "../../Favourites/components/FavouritesProducts";
-import { BASE_URL_IMG } from "../../../api/instance";
+import { BASE_URL, BASE_URL_IMG } from "../../../api/instance";
 import {
   useAppDispatch,
   useAppSelector,
@@ -49,25 +56,109 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../../components/redux/store";
 import { observable, toJS } from "mobx";
 import toast from "react-hot-toast";
+import {
+  auctionDetailProportiesBgBox,
+  auctionDetailProportiesBox,
+} from "../../auction/styles/auctionStyles";
+import AddCommentModal from "../../home/components/feedback/components/AddCommentModal";
+import Login from "../../../components/login/Login";
+import useDrawer from "../../../components/layouts/navbar/components/useDrawer";
+import axios from "axios";
+import AppDrawer from "../../drawer/presentation/BasketDrawer";
+import { useTranslation } from "react-i18next";
+import { LazyLoadImage } from "react-lazy-load-image-component";
+import { decode } from "blurhash";
+import { formatNumber } from "../../../components/utils/allutils";
+
 interface Props {
   // productId: number; // Removed
 }
-
+const blurHashToBase64 = (
+  blurhash: string,
+  width: number = 32,
+  height: number = 32
+) => {
+  if (!blurhash) return null;
+  try {
+    const pixels = decode(blurhash, width, height);
+    const canvas = document.createElement("canvas");
+    canvas.width = width;
+    canvas.height = height;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return null;
+    const imageData = ctx.createImageData(width, height);
+    imageData.data.set(pixels);
+    ctx.putImageData(imageData, 0, 0);
+    return canvas.toDataURL();
+  } catch (e) {
+    console.error("error blurhash", e);
+    return null;
+  }
+};
 const FullDescriptionProduct: FC<Props> = observer(() => {
   const navigate = useNavigate();
   const [currentImage, setCurrentImage] = useState<string | null>(null);
   const { selectedProduct, fetchProductById, loading } = ProductViewModel;
   const { productId } = useParams();
+  const [openCommentModal, setOpenCommentModal] = useState(false);
+  const [isOrdered, setIsOrdered] = useState(false);
+  const loggedUser = localStorage.getItem("ElectronicaUser");
+  const { isOpen, openDrawer, closeDrawer } = useDrawer();
+  const [isOpened, setIsOpened] = useState<boolean>(false);
+
+  const [categoryProducts, setCategoryProducts] = useState([]);
+  const { t, i18n } = useTranslation();
   // const [expanded, setExpanded] = useState(false);
   // const { favorites, toggleFavorite } = useFavoriteProducts();
   // Intersection Observer for animation trigger
   const { ref: containerRef, inView: containerInView } = useInView({
     threshold: 0.2,
   });
+  const toggleDrawer = (open: boolean) => {
+    setIsOpened(open);
+  };
+  const getOrderedClient = async () => {
+    if (loggedUser) {
+      const userLogged = JSON.parse(loggedUser);
+      try {
+        await axios.get(`${BASE_URL}order/orders/all`).then((resp) => {
+          const data = resp.data.orders;
+          const isOrderedClient = data.filter(
+            (item: any) => item.userId == userLogged.id
+          );
+          console.log(data.filter((item: any) => item.userId == userLogged.id));
+
+          setIsOrdered(!isOrderedClient.length ? false : true);
+        });
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  };
+  const getProductsByCategory = async (categoryId: any) => {
+    try {
+      await axios
+        .get(`${BASE_URL}product/all?categoryId=${categoryId}&limit=7`)
+        .then((response) => {
+          console.log(response.data.products);
+          const data = response.data.products;
+          const filtered = data.filter((elem: any) => elem.id !== productId);
+          setCategoryProducts(filtered);
+        });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    getProductsByCategory(selectedProduct?.categoryId);
+  }, [selectedProduct?.categoryId, productId]);
+  useEffect(() => {
+    getOrderedClient();
+  }, []);
 
   useEffect(() => {
     if (productId && productId) {
-      console.log("FullDescriptionProduct - productId:", productId);
       fetchProductById(productId);
     } else {
       console.error("Invalid productId:", productId);
@@ -75,7 +166,6 @@ const FullDescriptionProduct: FC<Props> = observer(() => {
   }, [productId, fetchProductById]);
 
   useEffect(() => {
-    console.log("FullDescriptionProduct - selectedProduct:", selectedProduct);
     if (
       selectedProduct &&
       selectedProduct.imageOne
@@ -84,11 +174,17 @@ const FullDescriptionProduct: FC<Props> = observer(() => {
       setCurrentImage(selectedProduct.imageOne);
     }
   }, [selectedProduct]);
-  console.log(selectedProduct);
   const dispatch = useAppDispatch();
   const compareProducts = useAppSelector((state) => state.compare.products);
   // const smallImages = selectedProduct?.imageOne || [];
-
+  const handleOpen = () => {
+    if (loggedUser) {
+      setOpenCommentModal(true);
+    } else {
+      openDrawer();
+      toast.error("Ulgama giriň!");
+    }
+  };
   const handleToggleFavorite = (product: any) => {
     const myObservable = observable(product);
     dispatch(toggleFavorite(toJS(myObservable))); // Remove the product if it's already a favorite
@@ -96,7 +192,6 @@ const FullDescriptionProduct: FC<Props> = observer(() => {
   const favorites = useSelector(
     (state: RootState) => state.favorites.favorites
   );
-  console.log(favorites);
 
   const handleDispatch = (product: any) => {
     const myObservable = observable(product);
@@ -131,7 +226,41 @@ const FullDescriptionProduct: FC<Props> = observer(() => {
   const handleImageHover = (image: string) => {
     setCurrentImage(image);
   };
-  console.log(selectedProduct?.imageThree);
+  const productItemVariants = {
+    hidden: { opacity: 0, y: 50 },
+    visible: (delay: number) => ({
+      opacity: 1,
+      y: 0,
+      transition: { delay: delay * 0.1, duration: 0.5, ease: "easeInOut" },
+    }),
+  };
+  const getTitle = (nameTm: string, nameRu: string, nameEn: string) => {
+    const currentLanguage = i18n.language; // Get the current language (e.g., "en", "ru", "tm")
+    switch (currentLanguage) {
+      case "ru":
+        return nameRu;
+      case "tm":
+        return nameTm;
+      default:
+        return nameEn; // Default to English
+    }
+  };
+  const getTitles = (
+    nameTm: string | undefined | null,
+    nameRu: string | undefined | null,
+    nameEn: string | undefined | null
+  ) => {
+    const currentLanguage = i18n.language;
+
+    switch (currentLanguage) {
+      case "ru":
+        return nameRu || nameEn || nameTm || ""; // Fallback to other languages or empty string
+      case "tm":
+        return nameTm || nameEn || nameRu || "";
+      default:
+        return nameEn || nameRu || nameTm || "";
+    }
+  };
 
   return (
     <>
@@ -252,19 +381,19 @@ const FullDescriptionProduct: FC<Props> = observer(() => {
                     }
                   />
                 )}
-                {/* </Paper> */}
-
-                {/* {smallImages.map((image, index) => (
-                 
-                ))} */}
               </Stack>
             </Grid>
             <Grid size={{ lg: 6, md: 6, sm: 12, xs: 12 }}>
               <Typography sx={currentSelectedProductTitle}>
-                {selectedProduct?.nameTm}
+                {getTitles(
+                  selectedProduct?.nameTm,
+                  selectedProduct?.nameRu,
+                  selectedProduct?.nameEn
+                )}
               </Typography>
               <Typography>
-                Haryt kody: <span>{selectedProduct?.tags || 123456789}</span>
+                {t("home.barcode")} :{" "}
+                <span>{selectedProduct?.barcode || 123456789}</span>
               </Typography>
               <Stack spacing={2} my={3}>
                 {/* {visibleProperties.map((property: any, index) => ( */}
@@ -283,7 +412,11 @@ const FullDescriptionProduct: FC<Props> = observer(() => {
                       textTransform: "capitalize",
                     }}
                   >
-                    {selectedProduct.descriptionTm}
+                    {getTitles(
+                      selectedProduct.descriptionTm,
+                      selectedProduct.descriptionRu,
+                      selectedProduct.descriptionEn
+                    )}
                   </Typography>
                   {/* <Typography
                       sx={{
@@ -352,12 +485,53 @@ const FullDescriptionProduct: FC<Props> = observer(() => {
                   </motion.div>
                 )}
               </AnimatePresence> */}
-
+              <Stack height={300} overflow="auto" className="searchResult">
+                {Array.isArray(selectedProduct?.properties) &&
+                  selectedProduct.properties.map(
+                    (property: any, num: number) => (
+                      <Box
+                        key={property.id}
+                        sx={
+                          num % 2 === 0
+                            ? auctionDetailProportiesBgBox
+                            : auctionDetailProportiesBox
+                        }
+                      >
+                        <Stack
+                          // height="auto"
+                          direction="row"
+                          width="100%"
+                          height="100%"
+                          alignItems="center"
+                          justifyContent="space-between"
+                          spacing={3}
+                        >
+                          <Typography>
+                            {getTitles(
+                              property.keyTm,
+                              property.keyRu,
+                              property.keyEn
+                            )}
+                          </Typography>
+                          <Typography textAlign="end">
+                            {getTitles(
+                              property.valueTm,
+                              property.valueRu,
+                              property.valueEn
+                            )}
+                          </Typography>
+                        </Stack>
+                      </Box>
+                    )
+                  )}
+              </Stack>
               <Divider />
               <Stack direction="row" spacing={2} my={3}>
                 <Typography sx={productCurrentPrice}>
-                  {selectedProduct?.sellPrice -
-                    selectedProduct?.discount_priceTMT}{" "}
+                  {formatNumber(
+                    selectedProduct?.sellPrice -
+                      selectedProduct?.discount_priceTMT
+                  )}{" "}
                   TMT
                 </Typography>
                 <Typography sx={productOldPrice}>
@@ -378,7 +552,7 @@ const FullDescriptionProduct: FC<Props> = observer(() => {
                       : BasketViewModel.addToBasket(selectedProduct);
                   }}
                 >
-                  Sebede goş
+                  {t("home.addToCart")}
                 </Button>
 
                 <IconButton
@@ -449,11 +623,223 @@ const FullDescriptionProduct: FC<Props> = observer(() => {
                     alt=""
                   />
                 </IconButton>
+                <Button
+                  sx={{
+                    p: 1,
+                    color: "#B71C1C",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    // color: "#fff",
+                    border: "1px solid #B71C1C",
+                    textTransform: "revert",
+                  }}
+                  variant="outlined"
+                  onClick={handleOpen}
+                >
+                  {t("home.writeRating")}
+                </Button>
                 {/* <FavoriteButton isFavorite={favorites} onToggle={toggleFavorite} /> */}
               </Stack>
             </Grid>
           </Grid>
         </Paper>
+        <AddCommentModal
+          isOrdered={isOrdered}
+          open={openCommentModal}
+          onClose={() => setOpenCommentModal(false)}
+          productId={selectedProduct?.id}
+        />
+        <Login isOpen={isOpen} onClose={closeDrawer} />
+        <Stack
+          direction="row"
+          alignItems="center"
+          justifyContent="space-between"
+        >
+          <Typography sx={discountGoodsTitle}>
+            {t("home.sameProducts")}
+          </Typography>
+        </Stack>
+        <Grid container spacing={2} my={3} ref={containerRef}>
+          {categoryProducts.map((product: any, index) => (
+            <Grid
+              key={product.id}
+              sx={{
+                minHeight: 430,
+                justifyContent: "space-between",
+              }}
+              size={{ lg: 2, md: 3, sm: 4, xs: 6 }}
+            >
+              <motion.div
+                initial="hidden"
+                animate={containerInView ? "visible" : "hidden"}
+                custom={index}
+                variants={productItemVariants}
+                style={{
+                  position: "relative",
+                  height: "100%",
+                }}
+              >
+                <Box
+                  sx={{
+                    p: 1,
+                    height: "100%",
+                    borderRadius: "6px",
+                  }}
+                >
+                  {product.warranty && (
+                    <Box sx={{ position: "absolute", right: 10, top: 10 }}>
+                      <Stack direction="row" color="#B71C1C">
+                        <img
+                          src="/images/guarantee.png"
+                          style={{ width: 40, height: 40 }}
+                        />
+                      </Stack>
+                    </Box>
+                  )}
+                  <Box sx={auctionImageBox}>
+                    <LazyLoadImage
+                      onClick={() => navigate(`/product/${product.id}`)}
+                      src={`${BASE_URL_IMG}public/${product.imageOne}`}
+                      alt={product.title_en}
+                      placeholderSrc={blurHashToBase64(product.blurhash) || ""}
+                      effect="blur"
+                      style={{
+                        width: "85%",
+                        height: "80%",
+                        objectFit: "contain",
+                        cursor: "pointer",
+                      }}
+                    />
+                  </Box>
+
+                  <Stack my={2}>
+                    <Typography
+                      sx={discountGoodTitle}
+                      onClick={() => navigate(`/product/${product.id}`)}
+                      noWrap
+                    >
+                      {getTitle(product.nameTm, product.nameRu, product.nameEn)}
+                      {/* {product.nameTm} */}
+                    </Typography>
+                    <Typography sx={discountGoodCompanyTitle}>
+                      {product.brand?.nameTm || "Unknown Brand"}
+                    </Typography>
+                    <Stack direction="row" spacing={1} my={1}>
+                      <Typography sx={discountGoodCodeText}>
+                        {t("home.barcode")}
+                      </Typography>
+                      <Typography sx={discountGoodCodeText}>
+                        {product.barcode || "No code"}
+                      </Typography>
+                    </Stack>
+                    <Stack
+                      direction="row"
+                      justifyContent="space-between"
+                      alignItems="center"
+                    >
+                      <Typography sx={discountGoodCost}>
+                        {product.sellPrice - product.discount_priceTMT} m.
+                      </Typography>
+                      <Button variant="contained" sx={discountGoodLastCount}>
+                        {t("products.nagt")} {product.productQuantity}
+                      </Button>
+                    </Stack>
+                  </Stack>
+                  <Button
+                    variant="contained"
+                    fullWidth
+                    endIcon={<LocalGroceryStoreOutlinedIcon />}
+                    sx={addStoreDiscountGoodButton}
+                    onClick={() => {
+                      product.productQuantity <= 0
+                        ? toast.error("Ammarda haryt az mukdarda")
+                        : (BasketViewModel.addToBasket(product),
+                          toggleDrawer(true));
+                    }}
+                  >
+                    {t("home.addToCart")}
+                  </Button>
+                  <Stack
+                    direction="row"
+                    justifyContent="space-between"
+                    alignItems="center"
+                    gap={1}
+                  >
+                    <Button
+                      onClick={() => dispatch(addProduct(product))}
+                      sx={{
+                        ...compareDiscountGoodsCostButton,
+                        backgroundColor: compareProducts.some(
+                          (comp: any) => comp.id === product.id
+                        )
+                          ? "#C3000E"
+                          : "transparent",
+                        color: compareProducts.some(
+                          (comp: any) => comp.id === product.id
+                        )
+                          ? "#fff"
+                          : "#929292",
+                        "&:hover": {
+                          backgroundColor: compareProducts.some(
+                            (comp: any) => comp.id === product.id
+                          )
+                            ? "#C3000E"
+                            : "#f0f0f0",
+                        },
+                        height: 24,
+                      }}
+                    >
+                      <img
+                        src={
+                          compareProducts.some((p) => p.id === product.id)
+                            ? "/icons/compare white.svg"
+                            : "/icons/compare.svg"
+                        }
+                        alt="compare-icon"
+                        style={{ marginRight: "5px" }}
+                      />
+                      {t("home.compare")}
+                    </Button>
+
+                    <Button
+                      onClick={() => handleToggleFavorite(product)}
+                      sx={{
+                        ...compareDiscountGoodsCostButton,
+                        backgroundColor: favorites.some(
+                          (fav) => fav.id === product.id
+                        )
+                          ? "#C3000E"
+                          : "transparent",
+                        color: favorites.some((fav) => fav.id === product.id)
+                          ? "#fff"
+                          : "#929292",
+                        "&:hover": {
+                          backgroundColor: favorites.some(
+                            (fav) => fav.id === product.id
+                          )
+                            ? "#C3000E"
+                            : "#f0f0f0",
+                        },
+                      }}
+                    >
+                      <FavoriteBorderIcon
+                        sx={{
+                          fontWeight: 300,
+                          width: "12px",
+                          color: favorites.some((fav) => fav.id === product.id)
+                            ? "#fff"
+                            : "#929292",
+                        }}
+                      />
+                      {t("home.favourite")}
+                    </Button>
+                  </Stack>
+                </Box>
+              </motion.div>
+            </Grid>
+          ))}
+          <AppDrawer isOpen={isOpened} toggleDrawer={toggleDrawer} />
+        </Grid>
       </Container>
     </>
   );

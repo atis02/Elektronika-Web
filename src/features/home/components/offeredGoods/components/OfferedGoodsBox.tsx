@@ -38,6 +38,8 @@ import {
 } from "../../discountedGoods/styles/discoutGoodsStyle";
 import toast from "react-hot-toast";
 import AppDrawer from "../../../../drawer/presentation/BasketDrawer";
+import { formatNumber } from "../../../../../components/utils/allutils";
+
 // const { toggleFavorite } = useFavoriteProducts();
 // Function to convert blurhash to base64
 const blurHashToBase64 = (
@@ -89,13 +91,12 @@ const DiscountGoodBox: FC = () => {
     try {
       setIsLoading(true);
       const response = await axios.get(
-        `${BASE_URL}product/all?limit=20&page=1`
+        `${BASE_URL}product/all?limit=100&page=1`
       );
-      console.log(response.data);
 
       const products = response.data?.products;
       const discounted = products.filter(
-        (product: any) => product.status?.nameTm === "Hödürlenýän haryt"
+        (product: any) => product.status?.nameTm === "Hödürlenýän harytlar"
       );
       setDiscountedProducts(discounted);
       setIsLoading(false);
@@ -121,24 +122,6 @@ const DiscountGoodBox: FC = () => {
   const handleToggleFavorite = (product: any) => {
     dispatch(toggleFavorite(product)); // Remove the product if it's already a favorite
   };
-  // const isProductInCompare = compareProducts.some((p) => p.id === productId);
-
-  // const handleCompareClick = (productId: number) => {
-  //     isProductInCompare
-  //       ? dispatch(removeProduct(productId))
-  //       : dispatch(addProduct(product))
-  //   // setCompareStates((prevState) => ({
-  //   //   ...prevState,
-  //   //   [productId]: !prevState[productId], // Toggle the compare state
-  //   // }));
-  // };
-
-  // const handleFavoriteClick = (productId: number) => {
-  //   setFavoriteStates((prevState) => ({
-  //     ...prevState,
-  //     [productId]: !prevState[productId], // Toggle the favorite state
-  //   }));
-  // };
 
   const handleShowAll = () => {
     setShowAll(!showAll);
@@ -222,7 +205,7 @@ const DiscountGoodBox: FC = () => {
   }
 
   if (discountedProducts.length === 0) {
-    return <Typography>Hödürlenýän haryt ýok</Typography>;
+    return <Typography></Typography>;
   }
 
   const displayedProducts = showAll
@@ -274,6 +257,9 @@ const DiscountGoodBox: FC = () => {
               animate={containerInView ? "visible" : "hidden"}
               custom={index}
               variants={productItemVariants}
+              style={{
+                position: "relative",
+              }}
             >
               <Box sx={{ p: 1, borderRadius: "6px" }}>
                 {/* <Box sx={auctionTextBox}>
@@ -284,6 +270,16 @@ const DiscountGoodBox: FC = () => {
                     </Box>
                   </Stack>
                 </Box> */}
+                {product.warranty && (
+                  <Box sx={{ position: "absolute", right: 10, top: 10 }}>
+                    <Stack direction="row" color="#B71C1C">
+                      <img
+                        src="/images/guarantee.png"
+                        style={{ width: 40, height: 40 }}
+                      />
+                    </Stack>
+                  </Box>
+                )}
                 <Box sx={auctionImageBox}>
                   <LazyLoadImage
                     onClick={() => navigate(`/product/${product.id}`)}
@@ -300,6 +296,7 @@ const DiscountGoodBox: FC = () => {
                     }}
                   />
                 </Box>
+
                 <Stack my={2}>
                   <Typography
                     sx={discountGoodTitle}
@@ -309,9 +306,22 @@ const DiscountGoodBox: FC = () => {
                     {getTitle(product.nameTm, product.nameRu, product.nameEn)}
                     {/* {product.nameTm} */}
                   </Typography>
-                  <Typography sx={discountGoodCompanyTitle}>
-                    {product.brand?.nameTm || "Unknown Brand"}
-                  </Typography>
+                  <Stack direction="row" justifyContent="space-between">
+                    <Typography sx={discountGoodCompanyTitle}>
+                      {product.brand?.nameTm || "Unknown Brand"}
+                    </Typography>
+                    {product.anotherMarketProduct && (
+                      <Box sx={{ "& > img": { mr: 2, flexShrink: 0 } }}>
+                        <img
+                          loading="lazy"
+                          width="30"
+                          srcSet={`https://countryflagsapi.netlify.app/flag/${product?.anotherMarketProduct?.toUpperCase()}.svg`}
+                          src={`https://countryflagsapi.netlify.app/flag/${product?.anotherMarketProduct?.toUpperCase()}.svg`}
+                          alt=""
+                        />
+                      </Box>
+                    )}
+                  </Stack>
                   <Stack direction="row" spacing={1} my={1}>
                     <Typography sx={discountGoodCodeText}>
                       {t("home.barcode")}
@@ -326,10 +336,13 @@ const DiscountGoodBox: FC = () => {
                     alignItems="center"
                   >
                     <Typography sx={discountGoodCost}>
-                      {product.sellPrice - product.discount_priceTMT} m.
+                      {formatNumber(
+                        product.sellPrice - product.discount_priceTMT
+                      )}{" "}
+                      m.
                     </Typography>
                     <Button variant="contained" sx={discountGoodLastCount}>
-                      Nagt {product.productQuantity}
+                      {t("products.nagt")} {product.productQuantity}
                     </Button>
                   </Stack>
                 </Stack>

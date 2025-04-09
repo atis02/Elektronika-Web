@@ -13,7 +13,7 @@ const FooterLinks: FC = () => {
     {
       // title: "Nädip hasaba alynmaly",
       title: t("header.how_to_register"),
-      path: "/",
+      path: "/how-to-register",
     },
 
     {

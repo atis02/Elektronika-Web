@@ -1,23 +1,93 @@
-import { FC, useState } from "react";
+import { ChangeEvent, FC, useState } from "react";
 import {
   Box,
   Button,
-  Checkbox,
   Container,
   Stack,
   Typography,
+  TextField,
 } from "@mui/material";
 import Grid from "@mui/material/Grid2";
-import AddIcon from "@mui/icons-material/Add";
-import { addStoreDiscountGoodButton } from "../../home/components/discountedGoods/styles/discoutGoodsStyle";
 import LocalGroceryStoreOutlinedIcon from "@mui/icons-material/LocalGroceryStoreOutlined";
+import toast from "react-hot-toast";
+import axios from "axios";
+import { BASE_URL } from "../../../api/instance";
+import { addStoreDiscountGoodButton } from "../../home/components/discountedGoods/styles/discoutGoodsStyle";
+import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 const BuyPresentCard: FC = () => {
-  const [selected, setSelected] = useState<string | null>(null);
+  const { t } = useTranslation();
+  const [fromWhom, setFromWhom] = useState<string>("");
+  const [whom, setWhom] = useState<string>("");
+  const [address, setAddress] = useState<string>("");
+  const [phoneNumber, setPhoneNumber] = useState<string>("+993");
+  const [totalPrice, setTotalPrice] = useState<string>("");
+  const [desc, setDesc] = useState<string>("");
+  const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
+  const navigate = useNavigate();
+  // Check if a field is empty.
+  const isFieldEmpty = (value: string | number) =>
+    typeof value === "number" ? value === 0 : !value.trim();
 
-  const handleChange = (option: string) => {
-    setSelected(selected === option ? null : option);
+  const handlePhoneChange = (e: ChangeEvent<HTMLInputElement>) => {
+    let value = e.target.value.replace(/\D/g, ""); // Оставляем только цифры
+
+    if (!value.startsWith("993")) {
+      value = "993"; // Если пользователь стер код страны, возвращаем
+    }
+
+    if (value.length > 11) {
+      value = value.slice(0, 11); // Ограничиваем длину до 9 цифр (XX XXX-XXX)
+    }
+
+    const formattedValue = `+${value}`; // Добавляем "+"
+    setPhoneNumber(formattedValue);
   };
+  const handleSubmit = async () => {
+    setIsSubmitted(true);
+    // Validate required fields
+    if (
+      isFieldEmpty(whom) ||
+      isFieldEmpty(fromWhom) ||
+      isFieldEmpty(address) ||
+      isFieldEmpty(phoneNumber) ||
+      Number(totalPrice) < 500
+    ) {
+      toast.error("Maglumatlary giriz!");
+      return;
+    }
+
+    const loggedUser = localStorage.getItem("ElectronicaUser");
+    // if (loggedUser) {
+    const isLoggedUser = loggedUser ? JSON.parse(loggedUser) : null;
+    const body = {
+      creatorId: isLoggedUser?.id,
+      creatorName: fromWhom,
+      receipient: whom,
+      deliveryAddress: address,
+      deliveryPhoneNumber: phoneNumber,
+      totalPrice: totalPrice,
+      description: desc,
+    };
+    // }
+    try {
+      await axios
+        .post(`${BASE_URL}certificate/newCertificate`, body)
+        .then((resp) => {
+          if (resp.data.message == "Sertifikat döredildi!") {
+            toast.success("Sertifikat üstünlikli döredildi!");
+            navigate("/present-card");
+          } else {
+            toast.success("Ýalňyşlyk!");
+          }
+        });
+    } catch (error) {
+      toast.success("Ýalňyşlyk!");
+      console.log(error);
+    }
+  };
+
   return (
     <>
       <Container>
@@ -31,7 +101,7 @@ const BuyPresentCard: FC = () => {
                 fontWeight: 600,
               }}
             >
-              Купить подарочный сертификать
+              {t("certifate.buyCertificate")}
             </Typography>
             <Box
               sx={{
@@ -49,172 +119,149 @@ const BuyPresentCard: FC = () => {
         </Box>
         <Grid container my={3}>
           <Grid size={{ lg: 6, md: 6, sm: 12, xs: 12 }}>
-            <Stack>
+            <Stack spacing={1}>
               <Typography>
-                Кому <span style={{ color: "#C3000E" }}>*</span>
+                {t("certifate.whom")}{" "}
+                <span style={{ color: "#C3000E" }}>*</span>
               </Typography>
-              <input
-                type="text"
-                style={{
-                  width: "100%",
-                  height: "50px",
-                  borderRadius: "4px",
-                  border: "1px solid #929292",
-                  outline: "none",
-                  paddingLeft: "15px",
-                }}
+              <TextField
+                variant="outlined"
+                fullWidth
+                value={whom}
+                onChange={(e) => setWhom(e.target.value)}
+                error={isSubmitted && isFieldEmpty(whom)}
+                helperText={
+                  isSubmitted && isFieldEmpty(whom)
+                    ? t("certifate.mustField")
+                    : ""
+                }
               />
             </Stack>
           </Grid>
         </Grid>
         <Grid container my={3}>
           <Grid size={{ lg: 6, md: 6, sm: 12, xs: 12 }}>
-            <Stack>
+            <Stack spacing={1}>
               <Typography>
-                От кого <span style={{ color: "#C3000E" }}>*</span>
+                {t("certifate.fromWhom")}{" "}
+                <span style={{ color: "#C3000E" }}>*</span>
               </Typography>
-              <input
-                type="text"
-                style={{
-                  width: "100%",
-                  height: "50px",
-                  borderRadius: "4px",
-                  border: "1px solid #929292",
-                  outline: "none",
-                  paddingLeft: "15px",
-                }}
+              <TextField
+                variant="outlined"
+                fullWidth
+                value={fromWhom}
+                onChange={(e) => setFromWhom(e.target.value)}
+                error={isSubmitted && isFieldEmpty(fromWhom)}
+                helperText={
+                  isSubmitted && isFieldEmpty(fromWhom)
+                    ? t("certifate.mustField")
+                    : ""
+                }
               />
             </Stack>
           </Grid>
         </Grid>
         <Grid container my={3}>
           <Grid size={{ lg: 6, md: 6, sm: 12, xs: 12 }}>
-            <Stack>
+            <Stack spacing={1}>
               <Typography>
-                Сумма <span style={{ color: "#C3000E" }}>*</span>
+                {t("certifate.address")}{" "}
+                <span style={{ color: "#C3000E" }}>*</span>
+              </Typography>
+              <TextField
+                variant="outlined"
+                fullWidth
+                value={address}
+                onChange={(e) => setAddress(e.target.value)}
+                error={isSubmitted && isFieldEmpty(address)}
+                helperText={
+                  isSubmitted && isFieldEmpty(address)
+                    ? t("certifate.mustField")
+                    : ""
+                }
+              />
+            </Stack>
+          </Grid>
+        </Grid>
+        <Grid container my={3}>
+          <Grid size={{ lg: 6, md: 6, sm: 12, xs: 12 }}>
+            <Stack spacing={1}>
+              <Typography>
+                {t("certifate.phoneNumber")}{" "}
+                <span style={{ color: "#C3000E" }}>*</span>
+              </Typography>
+              <TextField
+                variant="outlined"
+                fullWidth
+                value={phoneNumber}
+                onChange={handlePhoneChange}
+                error={
+                  isSubmitted &&
+                  (isFieldEmpty(phoneNumber) || phoneNumber === "+993")
+                }
+                helperText={
+                  isSubmitted &&
+                  (phoneNumber === "+993"
+                    ? t("certifate.phoneError")
+                    : isFieldEmpty(phoneNumber)
+                    ? t("certifate.mustField")
+                    : "")
+                }
+              />
+            </Stack>
+          </Grid>
+        </Grid>
+        <Grid container my={3}>
+          <Grid size={{ lg: 6, md: 6, sm: 12, xs: 12 }}>
+            <Stack spacing={1}>
+              <Typography>
+                {t("certifate.totalPrice")}{" "}
+                <span style={{ color: "#C3000E" }}>*</span>
               </Typography>
               <Stack direction="row" spacing={1} alignItems="center">
-                <input
-                  type="text"
-                  style={{
-                    width: "135px",
-                    height: "50px",
-                    borderRadius: "4px",
-                    border: "1px solid #929292",
-                    outline: "none",
-                    paddingLeft: "15px",
-                  }}
+                <TextField
+                  variant="outlined"
+                  placeholder="0"
+                  type="number"
+                  value={totalPrice}
+                  onChange={(e) => setTotalPrice(e.target.value)}
+                  error={isSubmitted && Number(totalPrice) < 500}
+                  helperText={
+                    isSubmitted && Number(totalPrice) < 500
+                      ? t("certifate.mustValue")
+                      : t("certifate.mustValue")
+                  }
+                  sx={{ width: "265px" }}
                 />
-                <Typography>TMT</Typography>
+                {/* <Typography>TMT</Typography> */}
               </Stack>
-              <Typography color="#929292">
+              {/* <Typography color="#929292">
                 Значения должно быть от 500.0 ТМТ
-              </Typography>
+              </Typography> */}
             </Stack>
           </Grid>
         </Grid>
         <Grid container my={3}>
           <Grid size={{ lg: 6, md: 6, sm: 12, xs: 12 }}>
-            <Stack>
-              <Typography>
-                Сообщение (данный текст отобразиться на сертификате получателя)
-              </Typography>
-              <textarea
-                style={{
-                  width: "100%",
-                  height: "100px",
-                  borderRadius: "4px",
-                  border: "1px solid #929292",
-                  outline: "none",
-                  paddingLeft: "15px",
-                }}
-              />
-              <Button
-                sx={{
-                  textTransform: "none",
-                  background: "#E0E0E0",
-                  color: "#000",
-                  width: "294px",
-                  height: "40px",
-                  mt: 2,
-                }}
-                startIcon={<AddIcon />}
-              >
-                Добавить товары в подарок
-              </Button>
-            </Stack>
-          </Grid>
-        </Grid>
-        <Grid container my={3}>
-          <Grid size={{ lg: 6, md: 6, sm: 12, xs: 12 }}>
-            <Box
-              sx={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "space-between",
-                p: 2,
-                height: "50px",
-                width: "100%",
-                border: "1px solid #929292",
-                borderRadius: "4px",
-              }}
-            >
-              <Typography>Как отправить?</Typography>
-              <Stack direction="row" alignItems="center" spacing={2}>
-                <Stack direction="row" alignItems="center" spacing={1}>
-                  <Checkbox
-                    checked={selected === "email"}
-                    onChange={() => handleChange("email")}
-                    sx={{
-                      transform: "scale(0.8)",
-                      padding: "0px",
-                      color: "red",
-                      "&.Mui-checked": {
-                        color: "red",
-                      },
-                    }}
-                  />
-                  <Typography>По электронной почте</Typography>
-                </Stack>
-                <Stack direction="row" alignItems="center" spacing={1}>
-                  <Checkbox
-                    checked={selected === "mail"}
-                    onChange={() => handleChange("mail")}
-                    sx={{
-                      transform: "scale(0.8)",
-                      padding: "0px",
-                    }}
-                  />
-                  <Typography>По почте</Typography>
-                </Stack>
-              </Stack>
-            </Box>
-          </Grid>
-        </Grid>
-        <Grid container my={3}>
-          <Grid size={{ lg: 6, md: 6, sm: 12, xs: 12 }}>
-            <Stack>
-              <Typography>
-                Email получателя<span style={{ color: "#C3000E" }}> *</span>
-              </Typography>
-              <input
-                type="email"
-                style={{
-                  width: "100%",
-                  height: "50px",
-                  borderRadius: "4px",
-                  border: "1px solid #929292",
-                  outline: "none",
-                  paddingLeft: "15px",
-                }}
+            <Stack spacing={1}>
+              <Typography>{t("certifate.certificateText")} </Typography>
+              <TextField
+                variant="outlined"
+                fullWidth
+                multiline
+                rows={4}
+                placeholder="Tekst..."
+                value={desc}
+                onChange={(e) => setDesc(e.target.value)}
               />
               <Button
                 variant="contained"
                 fullWidth
                 startIcon={<LocalGroceryStoreOutlinedIcon />}
                 sx={{ ...addStoreDiscountGoodButton, width: "153px", mt: 2 }}
+                onClick={handleSubmit}
               >
-                Sebede goş
+                {t("certifate.buy")}
               </Button>
             </Stack>
           </Grid>

@@ -1,36 +1,47 @@
 import { FC } from "react";
 import { Stack } from "@mui/material";
 import PriceFilter from "./PriceFilter";
-import ColorFilter from "./ColorFilter";
 import BrendFilter from "./BrendFilter";
 import TypeFilter from "./TypeFilter";
+import CategoryHeader from "../CategoryHeader";
+import ProductViewModel from "../../../products/presentation/ProductViewModel";
 
 interface CategoryFiltersProps {
-  selectedFilters: any; // Type the selectedFilters prop
-  onCategorySelect: (filters: any) => void; // Type the function for handling filter changes
+  selectedFilters: any;
+  onCategorySelect: (filters: any) => void;
+  filteredProductsByProperty: (filters: any) => void;
+  handleCategorySelect: (filters: any) => void;
 }
 
 const CategoryFilters: FC<CategoryFiltersProps> = ({
   selectedFilters,
   onCategorySelect,
+  filteredProductsByProperty,
+  handleCategorySelect,
 }) => {
-  // Example of using selectedFilters and onCategorySelect inside this component
-  console.log("Selected Filters:", selectedFilters);
-  console.log("On Category Select function:", onCategorySelect);
+  console.log("On Category Select function:", selectedFilters);
 
   return (
     <Stack spacing={6}>
       <Stack spacing={2}>
-        <PriceFilter />
+        <CategoryHeader
+          categoryTitle={
+            ProductViewModel.products[0]?.productCategory?.nameTm || ""
+          }
+          handleCategorySelect={handleCategorySelect}
+        />
       </Stack>
       <Stack spacing={2}>
+        <PriceFilter handleCategorySelect={handleCategorySelect} />
+      </Stack>
+      {/* <Stack spacing={2}>
         <ColorFilter />
+      </Stack> */}
+      <Stack spacing={2}>
+        <BrendFilter onCategorySelect={onCategorySelect} />
       </Stack>
       <Stack spacing={2}>
-        <BrendFilter />
-      </Stack>
-      <Stack spacing={2}>
-        <TypeFilter />
+        <TypeFilter onCategorySelect={filteredProductsByProperty} />
       </Stack>
     </Stack>
   );

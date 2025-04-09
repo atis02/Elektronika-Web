@@ -1,6 +1,7 @@
 import {
   Box,
   Button,
+  CircularProgress,
   Container,
   IconButton,
   Stack,
@@ -31,6 +32,7 @@ import { BASE_URL, BASE_URL_IMG } from "../../../api/instance";
 import { useParams } from "react-router-dom";
 import AuctionTimer from "./CounDownAuction";
 import toast from "react-hot-toast";
+import { formatNumber } from "../../../components/utils/allutils";
 
 interface Product {
   imageOne: string;
@@ -39,8 +41,17 @@ interface Product {
   imageThree: string;
   imageFour: string;
   imageFive: string;
+  properties: [
+    {
+      id: string;
+      key: string;
+      productId: string;
+      value: string;
+    }
+  ];
 }
 interface MyData {
+  lastBidderId: string;
   id: string;
   product: Product;
   createdAt: string;
@@ -56,7 +67,6 @@ const AuctionDetail: FC = () => {
   const [currentBigImage, setCurrentBigImage] = useState<any>(null);
   const { openDrawer } = useDrawer();
   const [bid, setBid] = useState<any>(0);
-  console.log(bid);
 
   const [loading, setLoading] = useState(true); // Add loading state
   const [error, setError] = useState(null); // Add error state
@@ -72,7 +82,6 @@ const AuctionDetail: FC = () => {
     data?.product.imageFour,
     data?.product.imageFive,
   ];
-  console.log(smallImages);
   const handleDecrease = () => {
     const inc = bid > 0 && bid - 50;
     setBid(inc);
@@ -91,7 +100,6 @@ const AuctionDetail: FC = () => {
           setData(resp.data);
         });
     } catch (err: any) {
-      console.error("Error fetching data:", err);
       setError(err.message || "An error occurred while fetching data."); // Set the error message
     } finally {
       setLoading(false); // Set loading to false regardless of success or failure
@@ -101,21 +109,29 @@ const AuctionDetail: FC = () => {
     fetchData();
   }, []);
   if (loading) {
-    return <div style={{ height: "60vh" }}>Loading...</div>; // Display a loading message
+    return (
+      <Stack
+        style={{
+          height: "60vh",
+          width: "100vw",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        <CircularProgress />
+      </Stack>
+    );
   }
 
   if (error) {
     return <div>Error: {error}</div>; // Display an error message
   }
-  console.log(data);
   const handleJoinAuction = async (auction: any) => {
     const alreadyJoined = auction?.participants.filter(
       (item: any) => item.id === registeredUser()?.id
     );
-    console.log(alreadyJoined);
     const startDate = new Date(auction.startDateAuction);
     const isStarted = startDate <= new Date();
-    console.log(isStarted);
     if (isStarted)
       try {
         if (alreadyJoined.length == 0) {
@@ -258,7 +274,7 @@ const AuctionDetail: FC = () => {
                 </Box>
               </Grid>
             </Grid>
-            <AuctionDetailProporties />
+            <AuctionDetailProporties properties={data?.product.properties} />
           </Grid>
           <Grid size={{ lg: 4, md: 4, sm: 12, xs: 12 }}>
             <Box sx={auctionSmallBox}>
@@ -285,11 +301,11 @@ const AuctionDetail: FC = () => {
                   />
                 </IconButton>
                 <Typography sx={auctionDetailCost}>
-                  {data?.auctionProductPriceCurrent + bid}
+                  {formatNumber(data?.auctionProductPriceCurrent + bid)}
                 </Typography>
                 <IconButton
                   sx={auctionDetailIconButton}
-                  onClick={() => setBid(bid + 50)}
+                  onClick={() => setBid(bid + 10)}
                 >
                   <AddIcon
                     sx={{
@@ -308,6 +324,11 @@ const AuctionDetail: FC = () => {
               >
                 Teklip goýuň
               </Button>
+              <Typography mt={1} fontSize={12} textAlign="center">
+                {registeredUser()?.id === data?.lastBidderId
+                  ? "Siz eýýäm teklip goýduňyz"
+                  : ""}
+              </Typography>
             </Box>
           </Grid>
         </Grid>

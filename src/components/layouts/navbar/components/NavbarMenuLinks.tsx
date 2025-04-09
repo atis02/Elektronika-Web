@@ -56,6 +56,12 @@ const NavbarMenuLinks: FC = () => {
       >
         {t("navbar.auction")}
       </Typography>
+      <Typography
+        onClick={() => navigate("/present-card")}
+        sx={linkStyles(isActiveLink("/present-card"))}
+      >
+        {t("navbar.presentCard")}
+      </Typography>
     </Stack>
   );
 };

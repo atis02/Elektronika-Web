@@ -8,10 +8,24 @@ import { Swiper as SwiperClass } from "swiper/types"; // Import Swiper class for
 // import "swiper/css/navigation";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import { BASE_URL } from "../../../../../api/instance";
+import { useTranslation } from "react-i18next";
+import { useNavigate } from "react-router-dom";
 
 const MinBannerSwiper: React.FC<{ banners: any[] }> = ({ banners }) => {
   const thumbsSwiperRef = useRef<SwiperClass | null>(null); // Explicitly type the ref
-
+  const { i18n } = useTranslation();
+  const navigate = useNavigate();
+  const getTitle = (nameTm: string, nameRu: string, nameEn: string) => {
+    const currentLanguage = i18n.language;
+    switch (currentLanguage) {
+      case "ru":
+        return nameRu;
+      case "tm":
+        return nameTm;
+      default:
+        return nameEn;
+    }
+  };
   return (
     <Box sx={{ overflow: "hidden", width: "100%" }}>
       <Box
@@ -25,10 +39,9 @@ const MinBannerSwiper: React.FC<{ banners: any[] }> = ({ banners }) => {
         }}
       >
         <Swiper
-          onSwiper={(swiper) => (thumbsSwiperRef.current = swiper)} // Attach thumbs swiper instance
+          onSwiper={(swiper) => (thumbsSwiperRef.current = swiper)}
           slidesPerView={2}
           spaceBetween={10}
-          // centeredSlides={true}
           autoplay={false}
           modules={[Navigation, Thumbs, Autoplay]}
           className="gallery-thumbs-small"
@@ -37,22 +50,30 @@ const MinBannerSwiper: React.FC<{ banners: any[] }> = ({ banners }) => {
           style={{ cursor: "pointer", height: "100%" }}
         >
           {banners && Array.isArray(banners)
-            ? banners.slice(2, 4).map((banner, index) => (
-                <SwiperSlide key={`small_banners_image_key${index}`}>
-                  <LazyLoadImage
-                    // src={banner.imageUrl}
-                    src={`${BASE_URL}images/${banner.image}`}
-                    alt={`Thumbnail ${index + 1}`}
-                    // placeholderSrc={blurHashToBase64(banner.blurhash) || ""}
-                    effect="blur"
-                    style={{
-                      width: "100%",
-                      height: "100%",
-                      objectFit: "contain",
-                    }}
-                  />
-                </SwiperSlide>
-              ))
+            ? banners
+                .filter((a) => a.isMainBanner === false)
+                .map((banner, index) => (
+                  <SwiperSlide
+                    key={`small_banners_image_key${index}`}
+                    onClick={() => navigate(banner.link)}
+                  >
+                    <LazyLoadImage
+                      src={`${BASE_URL}images/${getTitle(
+                        banner.imageTm,
+                        banner.imageRu,
+                        banner.imageEn
+                      )}`}
+                      alt={`Thumbnail ${index + 1}`}
+                      // placeholderSrc={blurHashToBase64(banner.blurhash) || ""}
+                      effect="blur"
+                      style={{
+                        width: "100%",
+                        height: "100%",
+                        objectFit: "contain",
+                      }}
+                    />
+                  </SwiperSlide>
+                ))
             : null}
         </Swiper>
       </Box>

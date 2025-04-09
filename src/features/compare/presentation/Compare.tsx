@@ -8,8 +8,10 @@ import {
 import Sidebar from "../../home/components/sidebar/presentation/Sidebar";
 import CompareSlider from "../components/CompareSlider";
 import CompareDescription from "../components/CompareDescription";
+import { useTranslation } from "react-i18next";
 
 const Compare: FC = () => {
+  const { t } = useTranslation();
   return (
     <>
       <Container>
@@ -20,7 +22,7 @@ const Compare: FC = () => {
               display: { lg: "block", md: "block", sm: "none", xs: "none" },
             }}
           >
-            <Stack spacing={4}>
+            <Stack spacing={4} position="sticky" top={60} zIndex="100">
               <Box>
                 <Sidebar />
               </Box>
@@ -30,10 +32,10 @@ const Compare: FC = () => {
           <Grid size={size4_1}>
             <Typography
               textAlign={"center"}
-              my={{ lg: 2, md: 2, sm: 2, xs: 0 }}
+              my={{ lg: 1, md: 2, sm: 2, xs: 0 }}
               fontWeight={700}
             >
-              Önümi deňeşdirmek
+              {t("compare.productTitle")}
             </Typography>
             <Box>
               <CompareSlider />

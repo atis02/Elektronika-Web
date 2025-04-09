@@ -22,6 +22,7 @@ import { BASE_URL, BASE_URL_IMG } from "../../../../../api/instance";
 import dayjs from "dayjs";
 import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
 import { useNavigate } from "react-router-dom";
+import { formatNumber } from "../../../../../components/utils/allutils";
 // Function to convert blurhash to base64
 const blurHashToBase64 = (
   blurhash?: string,
@@ -71,7 +72,6 @@ const AuctionDetails: FC<AuctionDetailsProps> = ({ isLoading, blurhash }) => {
   const [loading, setLoading] = useState(true); // Add loading state
   const [error, setError] = useState(null); // Add error state
   const [showEndDate, setShowEndDate] = useState(false);
-  console.log(showEndDate);
   const navigate = useNavigate();
   useEffect(() => {
     const fetchData = async () => {
@@ -109,7 +109,6 @@ const AuctionDetails: FC<AuctionDetailsProps> = ({ isLoading, blurhash }) => {
   if (error) {
     return <div>Error: {error}</div>; // Display an error message
   }
-  console.log(data);
 
   if (isLoading) {
     return (
@@ -157,57 +156,68 @@ const AuctionDetails: FC<AuctionDetailsProps> = ({ isLoading, blurhash }) => {
     );
   }
   return (
-    <Stack bgcolor="#fff" pb={2}>
-      <Paper elevation={1} sx={sideLinkBox}>
-        <Typography sx={{ fontWeight: 700, fontSize: "12px" }}>
-          Auksion
-        </Typography>
-      </Paper>
-      <Box
-        sx={{
-          width: "100%",
-          height: "267px", // Фиксированная высота контейнера
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          backgroundPosition: "center",
-          backgroundRepeat: "no-repeat",
-          backgroundSize: "95% 65%",
-        }}
-      >
-        <LazyLoadImage
-          src={`${BASE_URL_IMG}public/${data[0]?.product.imageOne}`}
-          // src={data[0]?.product.imageOne}
-          placeholderSrc={blurHashToBase64(blurhash) || ""}
-          effect="blur"
-          style={{
-            width: "100%",
-            height: "100%",
-            objectFit: "contain",
-          }}
-        />
-      </Box>
-      <Stack mt={{ lg: 2, md: 2, sm: 0, xs: 0 }} mb={3} spacing={2}>
-        <Stack
-          direction="row"
-          alignItems="center"
-          justifyContent="space-between"
-        >
-          <Typography sx={auctionTitle}>{data[0]?.product.nameTm}</Typography>
-          <IconButton onClick={() => navigate("/auction")}>
-            <VisibilityOutlinedIcon />
-          </IconButton>
-        </Stack>
-        <Typography sx={auctionSubtitle}>
-          Goýulan wagty: {dayjs(data[0]?.createdAt).format("DD.MM.YYYY")}
-        </Typography>
-      </Stack>
-      <Stack direction="row" alignItems="center" justifyContent="center" mb={2}>
-        <Typography sx={auctionCost}>
-          {data[0]?.auctionProductPriceCurrent}
-        </Typography>
-      </Stack>
-      {/* <Stack
+    <>
+      {!data.length ? (
+        ""
+      ) : (
+        <Stack bgcolor="#fff" pb={2}>
+          <Paper elevation={1} sx={sideLinkBox}>
+            <Typography sx={{ fontWeight: 700, fontSize: "12px" }}>
+              Auksion
+            </Typography>
+          </Paper>
+          <Box
+            sx={{
+              width: "100%",
+              height: "267px", // Фиксированная высота контейнера
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              backgroundPosition: "center",
+              backgroundRepeat: "no-repeat",
+              backgroundSize: "95% 65%",
+            }}
+          >
+            <LazyLoadImage
+              src={`${BASE_URL_IMG}public/${data[0]?.product.imageOne}`}
+              // src={data[0]?.product.imageOne}
+              placeholderSrc={blurHashToBase64(blurhash) || ""}
+              effect="blur"
+              style={{
+                width: "100%",
+                height: "100%",
+                objectFit: "contain",
+              }}
+            />
+          </Box>
+          <Stack mt={{ lg: 2, md: 2, sm: 0, xs: 0 }} mb={3} spacing={2}>
+            <Stack
+              direction="row"
+              alignItems="center"
+              justifyContent="space-between"
+            >
+              <Typography sx={auctionTitle}>
+                {data[0]?.product.nameTm}
+              </Typography>
+              <IconButton onClick={() => navigate("/auction")}>
+                <VisibilityOutlinedIcon />
+              </IconButton>
+            </Stack>
+            <Typography sx={auctionSubtitle}>
+              Goýulan wagty: {dayjs(data[0]?.createdAt).format("DD.MM.YYYY")}
+            </Typography>
+          </Stack>
+          <Stack
+            direction="row"
+            alignItems="center"
+            justifyContent="center"
+            mb={2}
+          >
+            <Typography sx={auctionCost}>
+              {formatNumber(data[0]?.auctionProductPriceCurrent)} manat
+            </Typography>
+          </Stack>
+          {/* <Stack
         direction="row"
         alignItems="center"
         justifyContent="center"
@@ -238,13 +248,15 @@ const AuctionDetails: FC<AuctionDetailsProps> = ({ isLoading, blurhash }) => {
           ))}
         </AnimatePresence>
       </Stack> */}
-      <AuctionTimer
-        endDate={
-          showEndDate ? data[0]?.endDateAuction : data[0]?.startDateAuction
-        }
-        // timerId={data[0]?.auctionID}
-      />
-    </Stack>
+          <AuctionTimer
+            endDate={
+              showEndDate ? data[0]?.endDateAuction : data[0]?.startDateAuction
+            }
+            // timerId={data[0]?.auctionID}
+          />
+        </Stack>
+      )}
+    </>
   );
 };
 

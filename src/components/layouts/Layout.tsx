@@ -5,10 +5,19 @@ import { Outlet } from "react-router-dom";
 import Footer from "./footer/presentation/Footer";
 import { IconButton, Stack, useMediaQuery } from "@mui/material";
 import ScrollingText from "./Marque";
+import Help from "./Help";
+import MainPageCompare from "../../features/MainPageCompare/presentation/MainPageCompare";
+import { useAppSelector } from "../redux/customHook";
+import Popup from "./popup/presentation/Popup";
 
 const Layout: FC = () => {
+  const [openEmojiModal, setOpenEmojiModal] = useState(false);
   const isSmallScreen = useMediaQuery("(max-width: 900px)");
   const [isLoading, setIsLoading] = useState(true);
+  const compareProducts = useAppSelector((state) => state.compare.products);
+  const isOpenFastCompare = useAppSelector(
+    (state) => state.compare.isOpenFastCompare
+  );
 
   useEffect(() => {
     // Simulate loading
@@ -35,6 +44,7 @@ const Layout: FC = () => {
           right: { lg: 100, md: 180, sm: 30, xs: 18 },
           zIndex: 100,
         }}
+        onClick={() => setOpenEmojiModal(true)}
       >
         <img
           src="/images/emoji.png"
@@ -42,7 +52,7 @@ const Layout: FC = () => {
           alt=""
         />
       </IconButton>
-
+      <Popup />
       {isSmallScreen ? (
         <>
           <Header isLoading={isLoading} />
@@ -58,6 +68,17 @@ const Layout: FC = () => {
 
       <Outlet />
       <Footer />
+      <Help
+        open={openEmojiModal}
+        handleClose={() => setOpenEmojiModal(false)}
+      />
+      {compareProducts.length && isOpenFastCompare == true ? (
+        <Stack position="fixed" width="100vw" zIndex={1000} bottom={0}>
+          <MainPageCompare />
+        </Stack>
+      ) : (
+        ""
+      )}
     </Stack>
   );
 };

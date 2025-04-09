@@ -1,5 +1,3 @@
-
-
 import { makeAutoObservable } from "mobx";
 import { Product } from "../../components/redux/interface";
 
@@ -68,7 +66,10 @@ class BasketViewModel {
     const existingItemIndex = this.items.findIndex(
       (item) => item.product.id === productId
     );
-    if (existingItemIndex > -1 && this.items[existingItemIndex].productQuantity > 1) {
+    if (
+      existingItemIndex > -1 &&
+      this.items[existingItemIndex].productQuantity > 1
+    ) {
       this.items[existingItemIndex].productQuantity--;
       this.saveToLocalStorage();
     }
@@ -85,11 +86,13 @@ class BasketViewModel {
 
   get totalPrice() {
     return this.items.reduce(
-      (acc, item) => acc + (item.product.sellPrice - item.product.discount_priceTMT) * item.productQuantity,
+      (acc, item) =>
+        acc +
+        (item.product.sellPrice - item.product.discount_priceTMT) *
+          item.productQuantity,
       0
     );
   }
 }
 
 export default new BasketViewModel();
-

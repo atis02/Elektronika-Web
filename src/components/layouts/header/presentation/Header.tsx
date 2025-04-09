@@ -3,7 +3,7 @@ import HeaderLogo from "../components/HeaderLogo";
 import { Box, Container, Stack } from "@mui/material";
 import Grid from "@mui/material/Grid2";
 import { size1_4, size4_1 } from "../utils/gridSize";
-import HeaderContacts from "../components/HeaderContacts";
+import HeaderContacts from "../components/HeaderTexts";
 import { useNavigate } from "react-router-dom";
 import LangFlags from "../../../../language/LangFlags";
 import BasketM from "../components/BasketM";

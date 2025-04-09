@@ -14,42 +14,6 @@ const Sidebar: FC = () => {
   const [selectedFilters, setSelectedFilters] = useState<Filters>({});
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
-  // const [isFixed, setIsFixed] = useState(false);
-  // const [remainingScrollVh, setRemainingScrollVh] = useState<number | null>(
-  //   null
-  // );
-  // const [footerPosition, setFooterPosition] = useState<number | null>(null);
-
-  // useEffect(() => {
-  //   const handleScroll = () => {
-  //     const windowHeight = window.innerHeight;
-  //     const documentHeight = document.documentElement.scrollHeight;
-  //     const scrollTop = window.scrollY;
-  //     const remainingScroll = documentHeight - windowHeight - scrollTop;
-  //     const remainingScrollInVh = (remainingScroll / windowHeight) * 100;
-
-  //     const footer = document.getElementById("footer");
-  //     if (footer) {
-  //       const footerRect = footer.getBoundingClientRect();
-  //       setFooterPosition(footerRect.top + 160);
-  //     }
-
-  //     setIsFixed(
-  //       remainingScrollInVh <= 100 &&
-  //         (footerPosition === null || footerPosition > windowHeight)
-  //     );
-  //   };
-
-  //   handleScroll(); // Initial calculation
-  //   window.addEventListener("scroll", handleScroll);
-  //   window.addEventListener("resize", handleScroll);
-
-  //   return () => {
-  //     window.removeEventListener("scroll", handleScroll);
-  //     window.removeEventListener("resize", handleScroll);
-  //   };
-  // }, [footerPosition]);
-  console.log(selectedFilters);
 
   useEffect(() => {
     if (Object.keys(selectedFilters).length > 0) {

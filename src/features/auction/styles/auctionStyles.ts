@@ -199,7 +199,9 @@ export const auctionDetailRecomendationButton = {
 // auction detail proporties styles starts here .......
 export const auctionDetailProportiesBgBox = {
   width: "100%",
-  height: "50px",
+  minHeight: "auto",
+  // height:4
+  // height: "auto",
   display: "flex",
   alignItems: "center",
   justifyContent: "space-between",
@@ -213,7 +215,8 @@ export const auctionDetailProportiesBgBox = {
 
 export const auctionDetailProportiesBox = {
   width: "100%",
-  height: "50px",
+    minHeight: "50px",
+
   display: "flex",
   alignItems: "center",
   justifyContent: "space-between",

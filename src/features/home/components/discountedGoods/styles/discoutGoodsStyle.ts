@@ -32,7 +32,19 @@ export const auctionTextBox = {
   alignItems: "center",
   justifyContent: "center",
 };
-
+export const auctionTextBoxWarranty = {
+  background: "#fff",
+  width: "34px",
+  height: "24px",
+  color: "#2E2F38",
+  fontSize: "11px",
+  fontWeight: 600,
+  lineHeight: "15px",
+  borderRadius: "0px",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+};
 export const auctionDiscountTextCountBox = {
   background: "#2E3294",
   width: "38px",

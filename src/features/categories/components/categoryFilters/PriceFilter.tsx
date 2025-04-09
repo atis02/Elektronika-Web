@@ -4,14 +4,53 @@ import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
 import { Search } from "@mui/icons-material";
 import { defaultCostButton } from "../../styles/categoryStyle";
-
-const PriceFilter: FC = () => {
+import { useSearchParams } from "react-router-dom";
+interface Prices {
+  handleCategorySelect: (filters: any) => void;
+}
+const PriceFilter: FC<Prices> = ({ handleCategorySelect }) => {
   const [showFilters, setShowFilters] = useState(true);
+  const [focusedMinPrice, setFocusedMinPrice] = useState(true);
+  const [focusedMaxPrice, setFocusedMaxPrice] = useState(true);
+  const [searchParams] = useSearchParams();
+
+  const [minPriceProduct, setMinPriceProduct] = useState("");
+  const [maxPriceProduct, setMaxPriceProduct] = useState("");
 
   const handleClick = () => {
     setShowFilters(!showFilters);
   };
-
+  const hanldeSubmit = () => {
+    const filters = {
+      categoryId: searchParams.get("categoryId")
+        ? searchParams.get("categoryId")
+        : undefined,
+      subCategoryId: searchParams.get("subCategoryId")
+        ? searchParams.get("subCategoryId")
+        : undefined,
+      segmentId: searchParams.get("segmentId")
+        ? searchParams.get("segmentId")
+        : undefined,
+      brandId: searchParams.get("brandId")
+        ? searchParams.get("brandId")
+        : undefined,
+      minPrice: minPriceProduct,
+      maxPrice: maxPriceProduct,
+    };
+    handleCategorySelect(filters);
+  };
+  const handleSet = (numb: any) => {
+    focusedMaxPrice;
+    if (focusedMinPrice) {
+      setMinPriceProduct(numb);
+      setFocusedMinPrice(false);
+      setFocusedMaxPrice(true);
+    } else {
+      setMaxPriceProduct(numb);
+      setFocusedMinPrice(true);
+      setFocusedMaxPrice(false);
+    }
+  };
   return (
     <>
       <Stack sx={{ cursor: "pointer" }}>
@@ -44,6 +83,9 @@ const PriceFilter: FC = () => {
                 outline: "none",
                 padding: "15px 12px",
               }}
+              value={minPriceProduct}
+              onChange={(e: any) => setMinPriceProduct(e.target.value)}
+              onFocus={() => setFocusedMinPrice(true)}
             />
 
             <Typography>-</Typography>
@@ -57,6 +99,9 @@ const PriceFilter: FC = () => {
                 outline: "none",
                 padding: "15px 12px",
               }}
+              value={maxPriceProduct}
+              onChange={(e: any) => setMaxPriceProduct(e.target.value)}
+              onFocus={() => setFocusedMaxPrice(true)}
             />
             <IconButton
               sx={{
@@ -68,26 +113,47 @@ const PriceFilter: FC = () => {
                 padding: "15px",
                 "&:hover": { background: "#929292" },
               }}
+              onClick={hanldeSubmit}
             >
               <Search />
             </IconButton>
           </Stack>
           <Stack direction="row" alignItems="center" spacing={1}>
-            <Button variant="outlined" sx={defaultCostButton}>
+            <Button
+              variant="outlined"
+              sx={defaultCostButton}
+              onClick={() => handleSet(1000)}
+            >
               1000
             </Button>
-            <Button variant="outlined" sx={defaultCostButton}>
+            <Button
+              onClick={() => handleSet(2000)}
+              variant="outlined"
+              sx={defaultCostButton}
+            >
               2000
             </Button>
-            <Button variant="outlined" sx={defaultCostButton}>
+            <Button
+              onClick={() => handleSet(5000)}
+              variant="outlined"
+              sx={defaultCostButton}
+            >
               5000
             </Button>
           </Stack>
           <Stack direction="row" alignItems="center" spacing={1}>
-            <Button variant="outlined" sx={defaultCostButton}>
+            <Button
+              onClick={() => handleSet(10000)}
+              variant="outlined"
+              sx={defaultCostButton}
+            >
               10 000
             </Button>
-            <Button variant="outlined" sx={defaultCostButton}>
+            <Button
+              onClick={() => handleSet(20000)}
+              variant="outlined"
+              sx={defaultCostButton}
+            >
               20 000
             </Button>
           </Stack>
