@@ -33,6 +33,7 @@ import { useParams } from "react-router-dom";
 import AuctionTimer from "./CounDownAuction";
 import toast from "react-hot-toast";
 import { formatNumber } from "../../../components/utils/allutils";
+import { useTranslation } from "react-i18next";
 
 interface Product {
   imageOne: string;
@@ -73,7 +74,7 @@ const AuctionDetail: FC = () => {
   const registeredUser = () => {
     return JSON.parse(localStorage.getItem("ElectronicaUser") ?? "[]");
   };
-
+  const { t } = useTranslation();
   const params = useParams();
   const smallImages = [
     data?.product.imageOne,
@@ -186,10 +187,10 @@ const AuctionDetail: FC = () => {
               {data?.product.nameTm}
             </Typography>
             <Typography sx={auctionDetailProductSubtitle}>
-              Ýagdaý: <span>Täze</span>
+              {t("auction.state")} <span>{t("auction.new")}</span>
             </Typography>
             <Typography sx={auctionDetailProductSubtitle}>
-              Başlangyç baha:{" "}
+              {t("auction.startPrice")}{" "}
               <span style={{ color: "#C3000E" }}>
                 {" "}
                 {data?.auctionProductPriceStart}
@@ -280,8 +281,8 @@ const AuctionDetail: FC = () => {
             <Box sx={auctionSmallBox}>
               <Stack direction="row" justifyContent="center" mt={-4}>
                 <Typography sx={auctionDetailRecomendationTitle}>
-                  Teklip möçberi
-                  <span style={{ color: "#C3000E" }}> 50 TMT</span>
+                  {t("auction.bidPrice")}
+                  <span style={{ color: "#C3000E" }}> 10 TMT</span>
                 </Typography>
               </Stack>
               <Stack
@@ -322,11 +323,11 @@ const AuctionDetail: FC = () => {
                 disabled={bid == 0}
                 onClick={() => handleJoinAuction(data)}
               >
-                Teklip goýuň
+                {t("auction.toBid")}
               </Button>
               <Typography mt={1} fontSize={12} textAlign="center">
                 {registeredUser()?.id === data?.lastBidderId
-                  ? "Siz eýýäm teklip goýduňyz"
+                  ? t("auction.alreadyBid")
                   : ""}
               </Typography>
             </Box>

@@ -14,13 +14,10 @@ interface CategoryFiltersProps {
 }
 
 const CategoryFilters: FC<CategoryFiltersProps> = ({
-  selectedFilters,
   onCategorySelect,
   filteredProductsByProperty,
   handleCategorySelect,
 }) => {
-  console.log("On Category Select function:", selectedFilters);
-
   return (
     <Stack spacing={6}>
       <Stack spacing={2}>

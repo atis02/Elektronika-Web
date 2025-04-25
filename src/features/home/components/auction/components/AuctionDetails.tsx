@@ -23,6 +23,7 @@ import dayjs from "dayjs";
 import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
 import { useNavigate } from "react-router-dom";
 import { formatNumber } from "../../../../../components/utils/allutils";
+import { useTranslation } from "react-i18next";
 // Function to convert blurhash to base64
 const blurHashToBase64 = (
   blurhash?: string,
@@ -54,6 +55,8 @@ interface AuctionDetailsProps {
 interface Product {
   imageOne: string;
   nameTm: string;
+  nameEn: string;
+  nameRu: string;
   // ... other product properties
 }
 
@@ -73,6 +76,7 @@ const AuctionDetails: FC<AuctionDetailsProps> = ({ isLoading, blurhash }) => {
   const [error, setError] = useState(null); // Add error state
   const [showEndDate, setShowEndDate] = useState(false);
   const navigate = useNavigate();
+  const { t, i18n } = useTranslation();
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true); // Set loading to true before fetching
@@ -109,7 +113,17 @@ const AuctionDetails: FC<AuctionDetailsProps> = ({ isLoading, blurhash }) => {
   if (error) {
     return <div>Error: {error}</div>; // Display an error message
   }
-
+  const getTitle = (nameTm: string, nameRu: string, nameEn: string) => {
+    const currentLanguage = i18n.language; // Get the current language (e.g., "en", "ru", "tm")
+    switch (currentLanguage) {
+      case "ru":
+        return nameRu;
+      case "tm":
+        return nameTm;
+      default:
+        return nameEn; // Default to English
+    }
+  };
   if (isLoading) {
     return (
       <>
@@ -163,7 +177,7 @@ const AuctionDetails: FC<AuctionDetailsProps> = ({ isLoading, blurhash }) => {
         <Stack bgcolor="#fff" pb={2}>
           <Paper elevation={1} sx={sideLinkBox}>
             <Typography sx={{ fontWeight: 700, fontSize: "12px" }}>
-              Auksion
+              {t("auction.auctionTitle")}
             </Typography>
           </Paper>
           <Box
@@ -197,14 +211,19 @@ const AuctionDetails: FC<AuctionDetailsProps> = ({ isLoading, blurhash }) => {
               justifyContent="space-between"
             >
               <Typography sx={auctionTitle}>
-                {data[0]?.product.nameTm}
+                {getTitle(
+                  data[0]?.product.nameTm,
+                  data[0]?.product.nameRu,
+                  data[0]?.product.nameEn
+                )}
               </Typography>
               <IconButton onClick={() => navigate("/auction")}>
                 <VisibilityOutlinedIcon />
               </IconButton>
             </Stack>
             <Typography sx={auctionSubtitle}>
-              Goýulan wagty: {dayjs(data[0]?.createdAt).format("DD.MM.YYYY")}
+              {t("auction.createdDate")}{" "}
+              {dayjs(data[0]?.createdAt).format("DD.MM.YYYY")}
             </Typography>
           </Stack>
           <Stack

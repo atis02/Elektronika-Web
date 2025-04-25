@@ -1,12 +1,15 @@
 export const headerContactTitle = {
   fontSize: "13px",
   fontWeight: 700,
+  minWidth: "120px",
 };
 
 export const headerContactSubTitle = {
-  fontSize: "13px",
+  fontSize: "12px",
   fontWeight: 400,
-  color: "#2E2F38",
+  width: "260px",
+
+  color: "#fff",
 };
 
 export const headerContacttitleContainer = {

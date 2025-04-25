@@ -46,10 +46,8 @@ class BasketViewModel {
   }
 
   removeFromBasket(productId: string) {
-    console.log("Removing product with UUID:", productId);
     this.items = this.items.filter((item) => item.product.id !== productId);
     this.saveToLocalStorage();
-    console.log("Updated items:", this.items);
   }
 
   increaseQuantity(productId: string) {

@@ -2,42 +2,16 @@ import { FC, useState } from "react";
 import { Box, Stack, Typography } from "@mui/material";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import { useTranslation } from "react-i18next";
+import { useCategories } from "../../../../hooks/category/useCategory";
 
 // Example Data Structure
-const categoriesData = [
-  {
-    name: "TW we multimediya",
-    subcategories: [
-      {
-        name: "TVs",
-        brands: ["Samsung", "LG", "Sony"],
-      },
-      {
-        name: "Speakers",
-        brands: ["Bose", "JBL", "Sony"],
-      },
-    ],
-  },
-  {
-    name: "Telefonlar we Gadjetler",
-    subcategories: [
-      {
-        name: "Smartphones",
-        brands: ["iPhone", "Samsung Galaxy", "OnePlus"],
-      },
-      {
-        name: "Wearables",
-        brands: ["Apple Watch", "Fitbit", "Garmin"],
-      },
-    ],
-  },
-];
 
 const NavbarMenuCategories: FC = () => {
+  const { categories, isLoading: isCategoriesLoading } = useCategories();
   const [openCategories, setOpenCategories] = useState<Record<string, boolean>>(
     {}
   );
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   const toggleCategory = (name: string) => {
     setOpenCategories((prevState) => ({
@@ -57,51 +31,98 @@ const NavbarMenuCategories: FC = () => {
   const renderSubcategories = (subcategories: any[]) => (
     <Stack spacing={1} mt={2} pl={2}>
       {subcategories.map((subcategory) => (
-        <Box key={subcategory.name}>
+        <Box
+          key={getTitle(
+            subcategory.nameRu,
+            subcategory.nameTm,
+            subcategory.nameEn
+          )}
+        >
           <Stack
             direction="row"
             alignItems="center"
             justifyContent="space-between"
-            onClick={() => toggleCategory(subcategory.name)}
+            onClick={() =>
+              toggleCategory(
+                getTitle(
+                  subcategory.nameRu,
+                  subcategory.nameTm,
+                  subcategory.nameEn
+                )
+              )
+            }
           >
-            <Typography>{subcategory.name}</Typography>
+            <Typography>
+              {getTitle(
+                subcategory.nameRu,
+                subcategory.nameTm,
+                subcategory.nameEn
+              )}
+            </Typography>
             <KeyboardArrowDownIcon
               sx={{
-                transform: openCategories[subcategory.name]
+                transform: openCategories[
+                  getTitle(
+                    subcategory.nameRu,
+                    subcategory.nameTm,
+                    subcategory.nameEn
+                  )
+                ]
                   ? "rotate(180deg)"
                   : "rotate(0deg)",
                 transition: "transform 0.5s ease",
               }}
             />
           </Stack>
-          {openCategories[subcategory.name] && renderBrands(subcategory.brands)}
+          {openCategories[
+            getTitle(subcategory.nameRu, subcategory.nameTm, subcategory.nameEn)
+          ] && renderBrands(subcategory.brands)}
         </Box>
       ))}
     </Stack>
   );
-
+  const getTitle = (nameTm: string, nameRu: string, nameEn: string) => {
+    const currentLanguage = i18n.language; // Get the current language (e.g., "en", "ru", "tm")
+    switch (currentLanguage) {
+      case "ru":
+        return nameRu;
+      case "tm":
+        return nameTm;
+      default:
+        return nameEn; // Default to English
+    }
+  };
   const renderCategories = (categories: any[]) => (
     <Stack mt={2} spacing={2}>
       {categories.map((category) => (
-        <Box key={category.name}>
+        <Box key={getTitle(category.nameRu, category.nameTm, category.nameEn)}>
           <Stack
             direction="row"
             alignItems="center"
             justifyContent="space-between"
-            onClick={() => toggleCategory(category.name)}
+            onClick={() =>
+              toggleCategory(
+                getTitle(category.nameRu, category.nameTm, category.nameEn)
+              )
+            }
           >
-            <Typography>{category.name}</Typography>
+            <Typography>
+              {getTitle(category.nameRu, category.nameTm, category.nameEn)}
+            </Typography>
             <KeyboardArrowDownIcon
               sx={{
-                transform: openCategories[category.name]
+                transform: openCategories[
+                  getTitle(category.nameRu, category.nameTm, category.nameEn)
+                ]
                   ? "rotate(180deg)"
                   : "rotate(0deg)",
                 transition: "transform 0.5s ease",
               }}
             />
           </Stack>
-          {openCategories[category.name] &&
-            renderSubcategories(category.subcategories)}
+          {openCategories[
+            getTitle(category.nameRu, category.nameTm, category.nameEn)
+          ] && renderSubcategories(category.subCategories)}
         </Box>
       ))}
     </Stack>
@@ -135,7 +156,9 @@ const NavbarMenuCategories: FC = () => {
           }}
         />
       </Stack>
-      {openCategories["root"] && renderCategories(categoriesData)}
+      {!isCategoriesLoading &&
+        openCategories["root"] &&
+        renderCategories(categories)}
     </Box>
   );
 };

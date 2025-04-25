@@ -9,7 +9,7 @@ interface RegistrationData {
   lastName: string;
   phoneNumber: string;
   isNotify?: boolean;
-  email:string;
+  email: string;
 }
 interface LoginData {
   phoneNumber: string;
@@ -30,14 +30,14 @@ interface UserData {
   token: string;
   createdAt: string;
   updatedAt: string;
-  user:{
-    id:string
-    name:string
-    surname:string
-    email:string
-    phoneNumber:string
-    image:string
-  }
+  user: {
+    id: string;
+    name: string;
+    surname: string;
+    email: string;
+    phoneNumber: string;
+    image: string;
+  };
 }
 
 class UserViewModel {
@@ -63,14 +63,12 @@ class UserViewModel {
       }
       formData.append("name", registrationData.firstName);
       formData.append("surname", registrationData.lastName);
-     if(registrationData.phoneNumber ==='+993'){
-
-       formData.append("email", registrationData.email);
-      }else{
-
+      if (registrationData.phoneNumber === "+993") {
+        formData.append("email", registrationData.email);
+      } else {
         formData.append("phoneNumber", registrationData.phoneNumber);
       }
-        
+
       const response = await axios.post<UserData>(
         `${BASE_URL}user/registration`,
         formData,
@@ -98,18 +96,21 @@ class UserViewModel {
     this.error = null;
     this.registrationSuccess = false;
     this.user = null;
-  
+
     try {
       const body = {
         phoneNumber: loginData.phoneNumber,
       };
-  
-      const response = await axios.post<UserData>(`${BASE_URL}user/login`, body);
-  
+
+      const response = await axios.post<UserData>(
+        `${BASE_URL}user/login`,
+        body
+      );
+
       if (response.status === 200) {
         this.registrationSuccess = true;
         this.user = response.data;
-  
+
         // Save user data and token to localStorage
         localStorage.setItem("tokenOfElectronics", response.data.token);
         localStorage.setItem(
@@ -118,7 +119,7 @@ class UserViewModel {
             id: response.data?.user.id,
             name: response.data?.user.name,
             surname: response.data?.user.surname,
-            image:response.data?.user.image,
+            image: response.data?.user.image,
             email: response.data?.user.email,
             phoneNumber: response.data?.user.phoneNumber,
           })
@@ -136,18 +137,21 @@ class UserViewModel {
     this.error = null;
     this.registrationSuccess = false;
     this.user = null;
-  
+
     try {
       const body = {
         email: loginData.email,
       };
-  
-      const response = await axios.post<UserData>(`${BASE_URL}user/loginEmail`, body);
-  
+
+      const response = await axios.post<UserData>(
+        `${BASE_URL}user/loginEmail`,
+        body
+      );
+
       if (response.status === 200) {
         this.registrationSuccess = true;
         this.user = response.data;
-  
+
         // Save user data and token to localStorage
         localStorage.setItem("tokenOfElectronics", response.data.token);
         localStorage.setItem(
@@ -156,7 +160,7 @@ class UserViewModel {
             id: response.data?.user.id,
             name: response.data?.user.name,
             surname: response.data?.user.surname,
-            image:response.data?.user.image,
+            image: response.data?.user.image,
             email: response.data?.user.email,
             phoneNumber: response.data?.user.phoneNumber,
           })
@@ -174,16 +178,13 @@ class UserViewModel {
     this.error = null;
     try {
       // if (this.user && this.user.otp === otp) {
-        const res = await axios.post(
-          `${BASE_URL}otp/check`,{otp:otp}
-        );
-        console.log(res.data);
-        
-        if (res.status >= 200 && res.status < 300) {
-          // window.localStorage.setItem("token", this.user.token);
-          toast.success('Üstünlikli!')
-          return true;
-        }
+      const res = await axios.post(`${BASE_URL}otp/check`, { otp: otp });
+
+      if (res.status >= 200 && res.status < 300) {
+        // window.localStorage.setItem("token", this.user.token);
+        toast.success("Üstünlikli!");
+        return true;
+      }
       // }
       // this.error = "Invalid OTP. Please try again.";
       return false;
@@ -199,15 +200,12 @@ class UserViewModel {
     this.error = null;
     try {
       // if (this.user && this.user.otp === otp) {
-        const res = await axios.post(
-          `${BASE_URL}otp/checkEmail`,{otp:otp}
-        );
-        console.log(res.data);
-        
-        if (res.status >= 200 && res.status < 300) {
-          toast.success('Üstünlikli!')
-          return true;
-        }
+      const res = await axios.post(`${BASE_URL}otp/checkEmail`, { otp: otp });
+
+      if (res.status >= 200 && res.status < 300) {
+        toast.success("Üstünlikli!");
+        return true;
+      }
       return false;
     } catch (error: any) {
       this.error = "Error during OTP verification";

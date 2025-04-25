@@ -1,4 +1,5 @@
 export const size4_1 = { lg: 9, md: 9, sm: 12, xs: 12 };
+export const size4_2 = { lg: 7, md: 7, sm: 12, xs: 12 };
 
 export const size1_4 = { lg: 3, md: 3, sm: 12, xs: 12 };
 

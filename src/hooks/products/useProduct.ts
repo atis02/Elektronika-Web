@@ -107,14 +107,18 @@ export const useProduct = (
     lastAddedDiscountedProducts: data?.products
       ? getLastAddedDiscountedProducts(
           data.products,
-          !data?.products.filter(
-            (product: Product) => product.discount_pricePercent > 0
-          ).length ||
-            !data?.products.filter(
+          !data.products.some(
+            (product: any) => product.discount_priceTMT > 0
+          ) ||
+            !data.products.some(
               (product: any) =>
-                product.status?.nameTm === "Hödürlenýän harytlar"
-            ).length
-            ? 2
+                product.statusId === "56143a81-cfa6-4c52-a74b-957d94b0c058"
+            ) ||
+            !data.products.some(
+              (product: any) =>
+                product.statusId === "4021a947-6bd2-4ef0-ac51-4548c28e42e8"
+            )
+            ? 7
             : 7
         )
       : [],

@@ -15,7 +15,7 @@
   "header": {
     "header_subtitle": "Electronics and Household Appliances",
     "work_time": "Working Hours",
-    "work_hours": "Monday - Friday: 09:00 AM - 06:00 PM; Saturday: 09:00 AM - 01:00 PM",
+    "work_hours": "Monday - Friday: 09:00 AM - 06:00 PM Saturday: 09:00 AM - 01:00 PM",
     "address_title": "Our Address",
     "our_address": "Ashgabat, Bitarap Turkmenistan Street 183",
     "pageDoesntExist":"Oops! The page you`re looking for doesn`t exist.",
@@ -35,7 +35,8 @@
     "barcode":"Barcode",
     "mainPage":"Main Page",
     "delivery":"Delivery",
-    "lastAddedProducts":"Last added products"
+    "lastAddedProducts":"Last added products",
+    "newGoods":"New Products"
 
   },
   "howRegister":{
@@ -47,8 +48,8 @@
     "contacts":"Contacts",
     "apps":"Mobile Apps",
     "socialLinks":"Social links",
-    "address":"Ashgabat, Bitarap Turkmenistan Avenue, 183"
-
+    "address":"Ashgabat, Bitarap Turkmenistan Avenue, 183",
+    "links":"Additional"
 
   },
   "aboutDelivery":"Delivery information.",
@@ -88,6 +89,25 @@
 },
 "compare":{
   "productTitle":"Compare Products"
+},
+"auction":{
+  "auctionTitle":"Auction",
+  "createdDate":"Created Date:",
+  "alreadyParticipated":"You already joined" ,
+  "join":"Participate",
+  "price":"Price",
+  "auctionDesc":"Register for participate",
+  "state":"Status:",
+  "startPrice":"Start price:",
+  "bidPrice":"Sum of bid",
+  "toBid":"Place a bid",
+  "alreadyBid":"You already placed a bid" ,
+  "new":"New",
+  "countDownDay":"Day",
+  "countDownHour":"Hour",
+  "countDownMinut":"Minute",
+  "countDownSecond":"Second"
+
 },
 "certifate":{
   "phoneError":"Phone number can't be only +993 ",

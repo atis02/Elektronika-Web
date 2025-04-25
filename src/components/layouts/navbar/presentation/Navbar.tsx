@@ -1,12 +1,13 @@
 import { Box, Container, Stack } from "@mui/material";
 import { FC, useEffect, useState } from "react";
-import NavLinks from "../components/NavLinks";
 import NavbarRightSide from "../components/NavbarRightSide";
 import NavbarMenu from "../components/NavbarMenu";
-import NavbarSearch from "../../navbarSearch/NavbarSearch";
+import Header from "../../header/presentation/Header";
+import MobileSearch from "../components/MobileSearch";
 
 const Navbar: FC = () => {
   const [scrolled, setScrolled] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -21,7 +22,12 @@ const Navbar: FC = () => {
       window.removeEventListener("scroll", handleScroll);
     };
   }, []);
-
+  useEffect(() => {
+    // Simulate loading
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 1000);
+  }, []);
   return (
     <>
       <Box
@@ -38,7 +44,7 @@ const Navbar: FC = () => {
                 boxShadow: "0",
                 backgroundColor: "transparent",
               }),
-          height: "54px",
+          height: "64px",
           display: { lg: "block", md: "block", sm: "none", xs: "none" },
           color: "#fff",
           backgroundColor: "#B71C1C",
@@ -50,10 +56,11 @@ const Navbar: FC = () => {
               display: "flex",
               alingItems: "center",
               justifyContent: "space-between",
-              height: "64px",
+              height: "74px",
             }}
           >
-            <NavLinks />
+            <Header isLoading={isLoading} />
+            {/* <NavLinks /> */}
             <NavbarRightSide />
           </Box>
         </Container>
@@ -72,7 +79,8 @@ const Navbar: FC = () => {
             spacing={1}
           >
             <NavbarMenu />
-            <NavbarSearch />
+            {/* <NavbarSearch /> */}
+            <MobileSearch isLoading={isLoading} />
           </Stack>
         </Container>
       </Box>

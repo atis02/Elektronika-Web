@@ -29,18 +29,9 @@ const MuiDatePicker: React.FC<MyComponentProps> = ({
       deliveryDate: null,
     }));
   };
-  console.log(value);
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
-      {/* <DatePicker
-        label={"Eltip bermeli sene"} // Use label prop or default "Date"
-        value={value}
-        onChange={handleChange}
-        onError={errors.deliveryDate}
-        format="DD.MM.YYYY"
-        // renderInput={(params:any) => <TextField {...params} />}
-      /> */}
       <DatePicker
         label="Eltip bermeli sene"
         value={value}

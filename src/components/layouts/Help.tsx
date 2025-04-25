@@ -1,7 +1,7 @@
-import { FC, useEffect, useState } from "react";
+import { FC } from "react";
 import { Box, Button, Modal, Stack } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
-import HeaderContactsSearch from "./header/components/HeaderContacts";
+import HelpWidget from "./HelpWidget";
 
 interface ModalProps {
   handleClose: () => void;
@@ -13,21 +13,15 @@ const Help: FC<ModalProps> = ({ open, handleClose }) => {
     top: "50%",
     left: "50%",
     transform: "translate(-50%, -50%)",
-    width: { lg: "35%", md: "80%", sm: "80%", xs: "90%" },
-    height: { lg: "80%", md: "80%", sm: "90%", xs: "90%" },
+    width: { lg: "30%", md: "50%", sm: "80%", xs: "90%" },
+    height: { lg: "45%", md: "65%", sm: "90%", xs: "50%" },
     bgcolor: "background.paper",
     border: "1px solid gray",
     boxShadow: 24,
     borderRadius: 3,
     p: 2,
   };
-  const [isLoading, setIsLoading] = useState(true);
 
-  useEffect(() => {
-    setTimeout(() => {
-      setIsLoading(false);
-    }, 1000);
-  }, []);
   return (
     <Modal
       open={open}
@@ -43,7 +37,8 @@ const Help: FC<ModalProps> = ({ open, handleClose }) => {
           </Button>
         </Stack>
         <Stack>
-          <HeaderContactsSearch isLoading={isLoading} />
+          {/* <HeaderContactsSearch isLoading={isLoading} /> */}
+          <HelpWidget />
         </Stack>
       </Box>
     </Modal>

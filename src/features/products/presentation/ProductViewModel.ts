@@ -19,7 +19,11 @@ interface Brands {
 }
 
 interface Properties {
+  keyEn: string;
+  keyRu: string;
   keyTm: string;
+  valueEn: string[];
+  valueRu: string[];
   valueTm: string[];
 }
 interface ApiResponse {
@@ -139,9 +143,7 @@ class ProductViewModel {
     this.error = null;
     try {
       const url = `${BASE_URL}product/getOne?id=${productId}`; // Changed this line
-      console.log(`Fetching product with ID: ${productId} from URL: ${url}`);
       const response = await axios.get(url);
-      console.log("API Response:", response.data); // Log the response data
       this.selectedProduct = response.data;
     } catch (error: any) {
       console.error("Error fetching product by ID:", error);

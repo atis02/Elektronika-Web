@@ -6,21 +6,6 @@ import LocalGroceryStoreOutlinedIcon from "@mui/icons-material/LocalGroceryStore
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import axios from "axios";
 import { BASE_URL, BASE_URL_IMG } from "../../../../../api/instance";
-import {
-  addStoreDiscountGoodButton,
-  auctionDiscountTextCountBox,
-  auctionImageBox,
-  auctionTextBox,
-  auctionTextBoxWarranty,
-  compareDiscountGoodsCostButton,
-  discountGoodCodeText,
-  discountGoodCompanyTitle,
-  discountGoodCost,
-  discountGoodLastCount,
-  discountGoodsSeeAllButton,
-  discountGoodsTitle,
-  discountGoodTitle,
-} from "../styles/discoutGoodsStyle";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useInView } from "react-intersection-observer";
@@ -37,10 +22,27 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../../../../components/redux/store";
 import { toggleFavorite } from "../../../../../components/redux/favouriteSlice";
 import { useTranslation } from "react-i18next";
+import {
+  addStoreDiscountGoodButton,
+  // auctionDiscountTextCountBox,
+  auctionImageBox,
+  auctionTextBoxWarranty,
+  // auctionTextBox,
+  compareDiscountGoodsCostButton,
+  discountGoodCodeText,
+  discountGoodCompanyTitle,
+  discountGoodCost,
+  discountGoodLastCount,
+  discountGoodsSeeAllButton,
+  discountGoodsTitle,
+  discountGoodTitle,
+} from "../../discountedGoods/styles/discoutGoodsStyle";
 import toast from "react-hot-toast";
 import AppDrawer from "../../../../drawer/presentation/BasketDrawer";
 import { formatNumber } from "../../../../../components/utils/allutils";
-import DoneIcon from "@mui/icons-material/Done";
+
+// const { toggleFavorite } = useFavoriteProducts();
+// Function to convert blurhash to base64
 const blurHashToBase64 = (
   blurhash: string,
   width: number = 32,
@@ -64,25 +66,18 @@ const blurHashToBase64 = (
   }
 };
 
-const DiscountGoodBox: FC = () => {
+const NewGoodBox: FC = () => {
   const [discountedProducts, setDiscountedProducts] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isError, setIsError] = useState<boolean>(false);
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const navigate = useNavigate();
-  const { t, i18n } = useTranslation();
   const [page, setPage] = useState(1);
   const [showAll, setShowAll] = useState(false);
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+  const { t, i18n } = useTranslation();
   const tableContainerRef = useRef<HTMLDivElement | null>(null);
 
-  const toggleDrawer = (open: boolean) => {
-    setIsOpen(open);
-  };
-
-  const { ref: containerRef, inView: containerInView } = useInView({
-    threshold: 0.2,
-  });
   const fetchItems = async () => {
     setLoading(true);
     try {
@@ -90,18 +85,15 @@ const DiscountGoodBox: FC = () => {
         `${BASE_URL}product/all?limit=20&page=${page}`
       );
       // setTotalItems(response.data);
-
+      const filteredProducts = response.data?.products.filter(
+        (item: any) => item.statusId === "4021a947-6bd2-4ef0-ac51-4548c28e42e8"
+      );
       if (page === 1) {
-        const products = response.data?.products;
-        const discountedProducts = products.filter(
-          (product: any) => product.discount_priceTMT > 0
-        );
-
-        setDiscountedProducts(discountedProducts);
+        setDiscountedProducts(filteredProducts);
       } else {
         setDiscountedProducts((prevItems) => [
           ...prevItems,
-          ...discountedProducts,
+          ...filteredProducts,
         ]);
       }
     } catch (error: unknown) {
@@ -140,6 +132,16 @@ const DiscountGoodBox: FC = () => {
     }
   }, []);
 
+  // useEffect(() => {
+  //   if (page > 1) {
+  //     fetchItems();
+  //   }
+  // }, [page]);
+
+  const { inView: containerInView } = useInView({
+    threshold: 0.2,
+  });
+
   const dispatch = useAppDispatch();
   const compareProducts = useAppSelector((state) => state.compare.products);
 
@@ -164,6 +166,9 @@ const DiscountGoodBox: FC = () => {
     }),
   };
 
+  const toggleDrawer = (open: boolean) => {
+    setIsOpen(open);
+  };
   if (isLoading) {
     return (
       <Grid container spacing={2} my={3}>
@@ -224,7 +229,7 @@ const DiscountGoodBox: FC = () => {
   if (isError) {
     return (
       <Typography variant="body1" color="error">
-        Error loading products.
+        Ýalňyşlyk
       </Typography>
     );
   }
@@ -238,22 +243,17 @@ const DiscountGoodBox: FC = () => {
     : discountedProducts.slice(0, 4);
 
   const getTitle = (nameTm: string, nameRu: string, nameEn: string) => {
-    const currentLanguage = i18n.language; // Get the current language (e.g., "en", "ru", "tm")
+    const currentLanguage = i18n.language;
     switch (currentLanguage) {
       case "ru":
         return nameRu;
       case "tm":
         return nameTm;
       default:
-        return nameEn; // Default to English
+        return nameEn;
     }
   };
-  const isExist = (product: any) => {
-    const isInBasket = BasketViewModel.items.some(
-      (item) => item.product.id === product.id
-    );
-    return isInBasket ? <DoneIcon /> : <LocalGroceryStoreOutlinedIcon />;
-  };
+
   return (
     <Stack
       ref={tableContainerRef}
@@ -264,18 +264,8 @@ const DiscountGoodBox: FC = () => {
       className="productScroll"
       maxHeight="100vh"
     >
-      <Stack
-        direction="row"
-        alignItems="center"
-        position="sticky"
-        top={0}
-        zIndex={100}
-        justifyContent="space-between"
-        bgcolor="#fff"
-      >
-        <Typography sx={discountGoodsTitle}>
-          {t("home.discountedGoods")}
-        </Typography>
+      <Stack direction="row" alignItems="center" justifyContent="space-between">
+        <Typography sx={discountGoodsTitle}>{t("home.newGoods")}</Typography>
         <Button
           sx={{
             ...discountGoodsSeeAllButton,
@@ -291,7 +281,7 @@ const DiscountGoodBox: FC = () => {
           {t("home.seeAll")}
         </Button>
       </Stack>
-      <Grid container spacing={2} my={3} ref={containerRef}>
+      <Grid container spacing={2} my={0}>
         {displayedProducts.map((product: any, index) => (
           <Grid key={product.id} size={{ lg: 3, md: 4, sm: 6, xs: 6 }}>
             <motion.div
@@ -299,26 +289,26 @@ const DiscountGoodBox: FC = () => {
               animate={containerInView ? "visible" : "visible"}
               custom={index}
               variants={productItemVariants}
+              style={{
+                position: "relative",
+              }}
             >
               <Box sx={{ p: 1, borderRadius: "6px" }}>
-                <Stack direction="row" justifyContent="space-between">
-                  <Box sx={auctionTextBox}>
-                    <Stack direction="row" pl={5}>
-                      <Box sx={auctionTextBox}> {t("home.sale")}</Box>
-                      <Box sx={auctionDiscountTextCountBox}>
-                        - {product.discount_pricePercent.toFixed(0)}%
-                      </Box>
-                    </Stack>
-                  </Box>
+                <Stack direction="row" justifyContent="flex-end">
                   {product.warranty && (
                     <Box
                       sx={{
                         ...auctionTextBoxWarranty,
                         flexDirection: "column",
-                        position: "relative",
+                        position: "absolute",
+                        zIndex: 100,
                       }}
                     >
-                      <Stack direction="row" color="#B71C1C">
+                      <Stack
+                        direction="row"
+                        position="absolute"
+                        color="#B71C1C"
+                      >
                         <img
                           src="/images/guarantee.png"
                           style={{ width: 40, height: 40 }}
@@ -350,6 +340,7 @@ const DiscountGoodBox: FC = () => {
                     }}
                   />
                 </Box>
+
                 <Stack my={2}>
                   <Typography
                     sx={discountGoodTitle}
@@ -357,6 +348,7 @@ const DiscountGoodBox: FC = () => {
                     noWrap
                   >
                     {getTitle(product.nameTm, product.nameRu, product.nameEn)}
+                    {/* {product.nameTm} */}
                   </Typography>
                   <Stack direction="row" justifyContent="space-between">
                     <Typography sx={discountGoodCompanyTitle}>
@@ -401,7 +393,7 @@ const DiscountGoodBox: FC = () => {
                 <Button
                   variant="contained"
                   fullWidth
-                  endIcon={isExist(product)}
+                  endIcon={<LocalGroceryStoreOutlinedIcon />}
                   sx={addStoreDiscountGoodButton}
                   onClick={() => {
                     product.productQuantity <= 0
@@ -419,7 +411,12 @@ const DiscountGoodBox: FC = () => {
                   gap={1}
                 >
                   <Button
-                    onClick={() => dispatch(addProduct(product))}
+                    // onClick={() => handleCompareClick(product.id)}
+                    onClick={() =>
+                      // isProductInCompare
+                      //   ? dispatch(removeProduct(product.id)):
+                      dispatch(addProduct(product))
+                    }
                     sx={{
                       ...compareDiscountGoodsCostButton,
                       backgroundColor: compareProducts.some(
@@ -445,7 +442,8 @@ const DiscountGoodBox: FC = () => {
                     <img
                       src={
                         compareProducts.some((p) => p.id === product.id)
-                          ? "/icons/compare white.svg"
+                          ? // compareStates[product.id]
+                            "/icons/compare white.svg"
                           : "/icons/compare.svg"
                       }
                       alt="compare-icon"
@@ -453,8 +451,30 @@ const DiscountGoodBox: FC = () => {
                     />
                     {t("home.compare")}
                   </Button>
+                  {/* <Button
+                    onClick={() => toggleFavorite(product)}
+                    sx={{
+                      color: favorites.includes(product)
+                        ? "#C3000E"
+                        : "inherit",
+                      borderRadius: "50%",
 
+                      transition: "background-color 0.3s, transform 0.2s",
+                      transform: favorites ? "scale(1.1)" : "scale(1)",
+                    }}
+                  >
+                    {favorites.includes(product) ? (
+                      <FavoriteIcon />
+                    ) : (
+                      <FavoriteBorderIcon
+                        sx={{
+                          color: "#C3000E",
+                        }}
+                      />
+                    )}
+                  </Button> */}
                   <Button
+                    // onClick={() => handleFavoriteClick(product.id)}
                     onClick={() => handleToggleFavorite(product)}
                     sx={{
                       ...compareDiscountGoodsCostButton,
@@ -497,4 +517,4 @@ const DiscountGoodBox: FC = () => {
   );
 };
 
-export default DiscountGoodBox;
+export default NewGoodBox;

@@ -11,7 +11,6 @@ import CategoryProductsBox from "../components/categoryProducts/CategoryProducts
 import { observer } from "mobx-react-lite";
 import { useSearchParams } from "react-router-dom";
 import ProductViewModel from "../../products/presentation/ProductViewModel";
-import { toJS } from "mobx";
 import { Product } from "../../../components/redux/interface";
 
 const Categories: FC = observer(() => {
@@ -49,7 +48,6 @@ const Categories: FC = observer(() => {
     ProductViewModel.setFilters(filters);
     ProductViewModel.fetchFilteredProducts();
   };
-  console.log(toJS(ProductViewModel.products));
 
   const filteredProducts = (id: string) => {
     const products = ProductViewModel.products;
@@ -74,16 +72,8 @@ const Categories: FC = observer(() => {
     }
   };
 
-  console.log(filtered);
-
   return (
     <Container>
-      {/* <CategoryHeader
-        categoryTitle={
-          ProductViewModel.products[0]?.productCategory?.nameTm || ""
-        }
-        handleCategorySelect={handleCategorySelect}
-      /> */}
       <Grid container width="100%" my={2} spacing={3}>
         <Grid size={size1_4}>
           <CategoryFilters

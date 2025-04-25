@@ -24,7 +24,6 @@ const AddCommentModal: React.FC<AddCommentModalProps> = ({
     const loggedUser = localStorage.getItem("ElectronicaUser");
     if (loggedUser) {
       const isLogged = JSON.parse(loggedUser);
-      console.log(isOrdered);
 
       if (isOrdered) {
         try {
@@ -34,7 +33,6 @@ const AddCommentModal: React.FC<AddCommentModalProps> = ({
             productId: productId,
           };
           await axios.post(`${BASE_URL}comment/add`, body).then((resp) => {
-            console.log(resp.data);
             if (resp.data.message == "Komment döredildi!") {
               toast.success("Üstünlikli!");
               onClose();

@@ -15,7 +15,7 @@ export const discountGoodsSeeAllButton = {
 
 export const auctionImageBox = {
   height: { lg: "150px", md: "120px", sm: "120px", xs: "120px" },
-  my: { lg: 2, md: 2, sm: 1, xs: 1 },
+  my: { lg: -1, md: 2, sm: 1, xs: 1 },
   background: "#f7f7f7",
 };
 
@@ -67,10 +67,10 @@ export const discountGoodTitle = {
 };
 
 export const discountGoodCompanyTitle = {
-  color: "#0470C4",
+  color: "#464646",
   fontSize: "14px",
   fontWeight: 600,
-  textTransform:'uppercase'
+  textTransform: "uppercase",
 };
 
 export const discountGoodCodeText = {

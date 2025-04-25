@@ -26,7 +26,7 @@ interface SearchedProducts {
   }[];
 }
 
-const HeaderContactsSearch: FC<HeaderContactsProps> = ({ isLoading }) => {
+const MobileSearch: FC<HeaderContactsProps> = ({ isLoading }) => {
   const [searchValue, setSearchValue] = useState("");
   const [result, setResult] = useState<SearchedProducts | undefined>(undefined);
   const [debouncedValue, setDebouncedValue] = useState("");
@@ -113,7 +113,7 @@ const HeaderContactsSearch: FC<HeaderContactsProps> = ({ isLoading }) => {
   };
 
   return (
-    <Stack position="relative" ref={searchRef}>
+    <Stack position="relative" ref={searchRef} width="100%">
       <TextField
         fullWidth
         placeholder={t("header.search")}
@@ -123,9 +123,9 @@ const HeaderContactsSearch: FC<HeaderContactsProps> = ({ isLoading }) => {
         onChange={(e) => setSearchValue(e.target.value)}
         onFocus={() => setIsSearchOpen(true)}
         InputProps={{
-          startAdornment: (
+          endAdornment: (
             <InputAdornment position="start">
-              <SearchIcon sx={{ color: "#fff" }} />
+              <SearchIcon sx={{ color: "#464646" }} />
             </InputAdornment>
           ),
         }}
@@ -135,13 +135,13 @@ const HeaderContactsSearch: FC<HeaderContactsProps> = ({ isLoading }) => {
               borderColor: "#f7f7f7",
             },
             "& input": {
-              color: "#e3e3e3",
+              color: "#464646",
             },
             "& fieldset": {
-              borderColor: "#e3e3e3",
+              borderColor: "#464646",
             },
             "&:hover fieldset": {
-              borderColor: "#e3e3e3",
+              borderColor: "#B71C1C",
             },
           },
           "& input::placeholder": {
@@ -203,4 +203,4 @@ const HeaderContactsSearch: FC<HeaderContactsProps> = ({ isLoading }) => {
   );
 };
 
-export default HeaderContactsSearch;
+export default MobileSearch;

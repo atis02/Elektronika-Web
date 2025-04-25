@@ -172,7 +172,6 @@ const CompleteOrder: FC = () => {
           quantity: elem.productQuantity,
         })),
       };
-      console.log(body);
 
       try {
         setLoading(true);
@@ -180,7 +179,6 @@ const CompleteOrder: FC = () => {
           await axios.post(`${BASE_URL}order/payByCard`, body).then((resp) => {
             if (resp.data.message === "Order created successfully") {
               setLoading(false);
-              console.log(resp.data);
               if (selectedOption === "Altyn Asyr") {
                 setTimeout(() => {
                   window.location.href = resp.data.paymentUrl;

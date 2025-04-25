@@ -32,11 +32,8 @@ const HowToOrder: FC = () => {
   );
 
   const handleToggleFavorite = (product: any) => {
-    console.log(product);
-
     dispatch(removeProduct(product)); // Remove the product if it's already a favorite
   };
-  console.log(favorites);
 
   return (
     <Container>

@@ -14,6 +14,7 @@ import AuctionTimer from "./CounDownAuction";
 import toast from "react-hot-toast";
 import useDrawer from "../../../components/layouts/navbar/components/useDrawer";
 import Login from "../../../components/login/Login";
+import { useTranslation } from "react-i18next";
 
 interface Product {
   imageOne: string;
@@ -36,7 +37,7 @@ interface MyData {
 const AuctionCard: FC = () => {
   const navigate = useNavigate();
   const { isOpen, openDrawer, closeDrawer } = useDrawer();
-
+  const { t } = useTranslation();
   const [data, setData] = useState<MyData[]>([]);
   const [loading, setLoading] = useState(true); // Add loading state
   const [error, setError] = useState(null); // Add error state
@@ -82,7 +83,6 @@ const AuctionCard: FC = () => {
     const alreadyJoined = auction?.participants.filter(
       (item: any) => item.id === registeredUser()?.id
     );
-    console.log(alreadyJoined);
     if (alreadyJoined.length) {
       navigate(`/auction-detail/${auction.id}`);
     } else {
@@ -159,7 +159,8 @@ const AuctionCard: FC = () => {
                       {auction.product?.nameTm}
                     </Typography>
                     <Typography sx={autionProductTitle}>
-                      Bahasy: <b>{auction.auctionProductPriceCurrent} manat</b>
+                      {t("auction.price")}{" "}
+                      <b>{auction.auctionProductPriceCurrent} manat</b>
                     </Typography>
                     <Button
                       onClick={() => handleJoinAuction(auction)}
@@ -170,8 +171,8 @@ const AuctionCard: FC = () => {
                       {auction?.participants.filter(
                         (item: any) => item.id === registeredUser()?.id
                       ).length
-                        ? "Siz eýýäm gatnaşýarsyňyz"
-                        : "Gatnaşmak"}
+                        ? t("auction.alreadyParticipated")
+                        : t("auction.join")}
                     </Button>
                   </Stack>
                 </Box>

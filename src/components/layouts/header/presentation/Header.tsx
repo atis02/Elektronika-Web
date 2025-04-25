@@ -20,18 +20,23 @@ const Header: FC<HeaderProps> = ({ isLoading }) => {
       <Box
         sx={{ display: { lg: "block", md: "block", sm: "none", xs: "none" } }}
       >
-        <Container>
-          <Box sx={{ display: "flex", height: "70px", alignItems: "center" }}>
-            <Grid container width="100%">
-              <Grid size={size1_4}>
-                <HeaderLogo />
-              </Grid>
-              <Grid size={size4_1}>
-                <HeaderContacts isLoading={isLoading} />
-              </Grid>
+        <Box
+          sx={{
+            display: "flex",
+            height: "70px",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <Grid container width="100%">
+            <Grid size={size1_4}>
+              <HeaderLogo />
             </Grid>
-          </Box>
-        </Container>
+            <Grid size={size4_1}>
+              <HeaderContacts isLoading={isLoading} />
+            </Grid>
+          </Grid>
+        </Box>
       </Box>
       <Box
         sx={{

@@ -62,7 +62,7 @@ const Layout: FC = () => {
         <>
           <Navbar />
           <ScrollingText />
-          <Header isLoading={isLoading} />
+          {/* <Header isLoading={isLoading} /> */}
         </>
       )}
 

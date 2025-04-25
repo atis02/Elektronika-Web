@@ -17,7 +17,6 @@ const Auction: FC = () => {
         }
         setIsLoading(false);
       } catch (error) {
-        console.log("error fetchin blurhash:", error);
         setIsLoading(false);
       }
     };

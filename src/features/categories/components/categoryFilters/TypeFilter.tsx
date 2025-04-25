@@ -1,4 +1,3 @@
-import { ChangeEvent, FC, useState } from "react";
 import {
   Divider,
   FormControlLabel,
@@ -10,24 +9,36 @@ import {
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
 import ProductViewModel from "../../../products/presentation/ProductViewModel";
-import { toJS } from "mobx";
+import { useTranslation } from "react-i18next";
+import { ChangeEvent, FC, useState } from "react";
 
 interface BrandFiltersProps {
   onCategorySelect: (filters: string | null) => void;
 }
+
 const TypeFilter: FC<BrandFiltersProps> = ({ onCategorySelect }) => {
+  const { i18n } = useTranslation();
   const [showFilters, setShowFilters] = useState<{ [keyTm: string]: boolean }>(
     {}
   );
   const [selectedProperties, setSelectedProperties] = useState<{
     [keyTm: string]: string | null;
   }>({});
+
+  const getTitle = (tm: string, ru: string, en: string) => {
+    const lang = i18n.language;
+    if (lang === "tm") return tm;
+    if (lang === "ru") return ru;
+    return en;
+  };
+
   const handleClick = (keyTm: string) => {
-    setShowFilters((prevShowFilters) => ({
-      ...prevShowFilters,
-      [keyTm]: !prevShowFilters[keyTm],
+    setShowFilters((prev) => ({
+      ...prev,
+      [keyTm]: !prev[keyTm],
     }));
   };
+
   const handlePropertyChange = (
     e: ChangeEvent<HTMLInputElement>,
     keyTm: string
@@ -36,66 +47,58 @@ const TypeFilter: FC<BrandFiltersProps> = ({ onCategorySelect }) => {
     setSelectedProperties((prev) => ({ ...prev, [keyTm]: newValue }));
     onCategorySelect(newValue);
   };
-  console.log(toJS(ProductViewModel.properties));
 
   return (
     <>
-      {ProductViewModel.properties?.map((elem) => (
-        <>
-          <Stack sx={{ cursor: "pointer" }}>
-            <Stack
-              direction="row"
-              alignItems="center"
-              justifyContent="space-between"
-              px={1}
-              onClick={() => handleClick(elem.keyTm)}
-            >
-              <Typography color="#2E2F38">{elem.keyTm}</Typography>
-              {!showFilters[elem.keyTm] ? (
-                <ArrowDropDownIcon sx={{ width: "20px", color: "#2E2F38" }} />
-              ) : (
-                <ArrowDropUpIcon sx={{ width: "20px", color: "#2E2F38" }} />
-              )}
+      {ProductViewModel.properties?.map((elem, idx) => {
+        const displayKey = getTitle(elem.keyTm, elem.keyRu, elem.keyEn);
+        const values =
+          i18n.language === "tm"
+            ? elem.valueTm
+            : i18n.language === "ru"
+            ? elem.valueRu
+            : elem.valueEn;
+
+        return (
+          <div key={idx}>
+            <Stack sx={{ cursor: "pointer" }}>
+              <Stack
+                direction="row"
+                alignItems="center"
+                justifyContent="space-between"
+                px={1}
+                onClick={() => handleClick(elem.keyTm)}
+              >
+                <Typography color="#2E2F38">{displayKey}</Typography>
+                {showFilters[elem.keyTm] ? (
+                  <ArrowDropUpIcon sx={{ width: "20px", color: "#2E2F38" }} />
+                ) : (
+                  <ArrowDropDownIcon sx={{ width: "20px", color: "#2E2F38" }} />
+                )}
+              </Stack>
+              <Divider color="#2E2F38" />
             </Stack>
-            <Divider color="#2E2F38" />
-          </Stack>
-          {showFilters[elem.keyTm] && (
-            // <>
-            //   {elem.values?.map((valueTm) => (
-            //     <Stack direction="row" alignItems="center" spacing={2}>
-            //       <RadioGroup
-            //         aria-labelledby="demo-radio-buttons-group-label"
-            //         name={`${elem.keyTm}-radio-group`}
-            //         value={selectedProperties[elem.keyTm]}
-            //         onChange={(e) => handlePropertyChange(e, elem.keyTm)}
-            //       >
-            //         <FormControlLabel
-            //           value={valueTm}
-            //           control={<Radio />}
-            //           label={valueTm}
-            //         />
-            //       </RadioGroup>
-            //     </Stack>
-            //   ))}
-            // </>
-            <RadioGroup
-              aria-labelledby="radio-group"
-              name={`${elem.keyTm}-radio-group`}
-              value={selectedProperties[elem.keyTm] || ""}
-              onChange={(e) => handlePropertyChange(e, elem.keyTm)}
-            >
-              {elem.valueTm?.map((value: any) => (
-                <FormControlLabel
-                  key={value}
-                  value={value}
-                  control={<Radio />}
-                  label={value}
-                />
-              ))}
-            </RadioGroup>
-          )}
-        </>
-      ))}
+
+            {showFilters[elem.keyTm] && (
+              <RadioGroup
+                aria-labelledby="radio-group"
+                name={`${elem.keyTm}-radio-group`}
+                value={selectedProperties[elem.keyTm] || ""}
+                onChange={(e) => handlePropertyChange(e, elem.keyTm)}
+              >
+                {values?.map((value: string, i: number) => (
+                  <FormControlLabel
+                    key={i}
+                    value={value}
+                    control={<Radio />}
+                    label={value}
+                  />
+                ))}
+              </RadioGroup>
+            )}
+          </div>
+        );
+      })}
     </>
   );
 };

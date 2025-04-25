@@ -32,9 +32,15 @@ const HeaderContacts: FC<HeaderContactsProps> = ({ isLoading }) => {
   }
 
   return (
-    <Stack direction="row" justifyContent="space-between">
+    <Stack
+      direction="row"
+      gap={3}
+      ml={2}
+      alignItems="center"
+      justifyContent="space-between"
+    >
       <Stack>
-        <Typography sx={headerContactTitle}>{t("header.work_time")}</Typography>
+        {/* <Typography sx={headerContactTitle}>{t("header.work_time")}</Typography> */}
         <Typography sx={headerContactSubTitle}>
           {t("header.work_hours")}
         </Typography>

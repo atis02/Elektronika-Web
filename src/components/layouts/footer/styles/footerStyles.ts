@@ -1,7 +1,7 @@
 export const footerBox = {
   background: "#404040",
   padding: "30px 0px 5px 0px",
-  position:'relative',
+  position: "relative",
   // zIndex:'1000'
 };
 
@@ -9,7 +9,7 @@ export const footersubLogo = {
   color: "#fff",
   fontSize: "16px",
   fontWeight: 400,
-  lineHeight: "22px",
+  lineHeight: "20px",
 };
 
 export const footerTitle = {

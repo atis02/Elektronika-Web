@@ -108,9 +108,7 @@ const FullDescriptionProduct: FC<Props> = observer(() => {
 
   const [categoryProducts, setCategoryProducts] = useState([]);
   const { t, i18n } = useTranslation();
-  // const [expanded, setExpanded] = useState(false);
-  // const { favorites, toggleFavorite } = useFavoriteProducts();
-  // Intersection Observer for animation trigger
+
   const { ref: containerRef, inView: containerInView } = useInView({
     threshold: 0.2,
   });
@@ -126,7 +124,6 @@ const FullDescriptionProduct: FC<Props> = observer(() => {
           const isOrderedClient = data.filter(
             (item: any) => item.userId == userLogged.id
           );
-          console.log(data.filter((item: any) => item.userId == userLogged.id));
 
           setIsOrdered(!isOrderedClient.length ? false : true);
         });
@@ -140,7 +137,6 @@ const FullDescriptionProduct: FC<Props> = observer(() => {
       await axios
         .get(`${BASE_URL}product/all?categoryId=${categoryId}&limit=7`)
         .then((response) => {
-          console.log(response.data.products);
           const data = response.data.products;
           const filtered = data.filter((elem: any) => elem.id !== productId);
           setCategoryProducts(filtered);
@@ -409,7 +405,7 @@ const FullDescriptionProduct: FC<Props> = observer(() => {
                       width: "55%",
                       wordWrap: "break-word",
                       whiteSpace: "pre-wrap",
-                      textTransform: "capitalize",
+                      textTransform: "revert",
                     }}
                   >
                     {getTitles(
@@ -418,73 +414,8 @@ const FullDescriptionProduct: FC<Props> = observer(() => {
                       selectedProduct.descriptionEn
                     )}
                   </Typography>
-                  {/* <Typography
-                      sx={{
-                        width: "65%",
-                        wordWrap: "break-word",
-                        textAlign: "right",
-                      }}
-                    >
-                      {property.value_tm}
-                    </Typography> */}
                 </Stack>
-                {/* ))} */}
               </Stack>
-
-              {/* <AnimatePresence>
-                {hiddenProperties.length > 0 && (
-                  <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    transition={{ duration: 0.3 }}
-                  >
-                    <Accordion
-                      expanded={expanded}
-                      onChange={() => handleAccordionChange(!expanded)}
-                    >
-                      <AccordionSummary
-                        expandIcon={<ExpandMoreIcon />}
-                        aria-controls="panel1a-content"
-                        id="panel1a-header"
-                      >
-                        <Typography>Show All Properties</Typography>
-                      </AccordionSummary>
-                      <AccordionDetails>
-                        <Stack spacing={2}>
-                          {hiddenProperties.map((property: any, index) => (
-                            <Stack
-                              key={index}
-                              direction="row"
-                              alignItems="center"
-                              justifyContent="space-between"
-                            >
-                              <Typography
-                                sx={{
-                                  ...currentSelectedProductProportiesTitle,
-                                  width: "35%",
-                                  wordWrap: "break-word",
-                                }}
-                              >
-                                {property.title_en}
-                              </Typography>
-                              <Typography
-                                sx={{
-                                  width: "65%",
-                                  wordWrap: "break-word",
-                                  textAlign: "right",
-                                }}
-                              >
-                                {property.value_tm}
-                              </Typography>
-                            </Stack>
-                          ))}
-                        </Stack>
-                      </AccordionDetails>
-                    </Accordion>
-                  </motion.div>
-                )}
-              </AnimatePresence> */}
               <Stack height={300} overflow="auto" className="searchResult">
                 {Array.isArray(selectedProduct?.properties) &&
                   selectedProduct.properties.map(

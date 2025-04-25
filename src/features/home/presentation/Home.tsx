@@ -15,6 +15,7 @@ import GoodOfWeek from "../components/goodOfWeek/presentation/GoodOfWeek";
 // import OfferedGoods from "../components/offeredGoods/presentation/OfferedGoods";
 import OurPartners from "../components/ourPartners/presentation/OurPartners";
 import OfferedGoods from "../components/offeredGoods/presentation/OfferedGoods";
+import NewGoods from "../components/newGoods/presentation/DiscountedGoods";
 
 const Home: FC = () => {
   return (
@@ -44,6 +45,9 @@ const Home: FC = () => {
         <Grid size={size4_1}>
           <Box>
             <Banner />
+          </Box>
+          <Box my={3}>
+            <NewGoods />
           </Box>
           <Box my={3}>
             <DiscountedGoods />

@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import { useTranslation } from "react-i18next";
 
 interface TimeRemaining {
   complete: boolean;
@@ -127,7 +128,7 @@ const CountdownTimer: React.FC<AuctionTimerProps> = ({ endDate, timerId }) => {
 
     return { complete, days, seconds, minutes, hours };
   };
-
+  const { t } = useTranslation();
   const updateAllSegments = () => {
     const timeRemainingBits = getTimeRemaining(targetDate.getTime());
 
@@ -182,7 +183,7 @@ const CountdownTimer: React.FC<AuctionTimerProps> = ({ endDate, timerId }) => {
             </div>
           </div>
         </div>
-        <p>Gün</p>
+        <p>{t("auction.countDownDay")}</p>
       </div>
       <div className="time-section" id={`hours-${timerId}`}>
         <div className="time-group">
@@ -207,7 +208,7 @@ const CountdownTimer: React.FC<AuctionTimerProps> = ({ endDate, timerId }) => {
             </div>
           </div>
         </div>
-        <p>Sagat</p>
+        <p>{t("auction.countDownHour")}</p>
       </div>
 
       <div className="time-section" id={`minutes-${timerId}`}>
@@ -233,7 +234,7 @@ const CountdownTimer: React.FC<AuctionTimerProps> = ({ endDate, timerId }) => {
             </div>
           </div>
         </div>
-        <p>Minut</p>
+        <p>{t("auction.countDownMinut")}</p>
       </div>
 
       <div className="time-section" id={`seconds-${timerId}`}>
@@ -259,7 +260,7 @@ const CountdownTimer: React.FC<AuctionTimerProps> = ({ endDate, timerId }) => {
             </div>
           </div>
         </div>
-        <p>Sekunt</p>
+        <p>{t("auction.countDownSecond")}</p>
       </div>
     </div>
   );

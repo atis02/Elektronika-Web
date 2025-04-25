@@ -25,7 +25,6 @@ const PopupComponent: React.FC = () => {
   const fetchPopupData = async () => {
     try {
       const response = await axios.get(`${BASE_URL}popup/all`);
-      console.log(response.data.popup);
 
       if (response.data && response.data.popup.length > 0) {
         const latestPopup = response.data.popup[0];

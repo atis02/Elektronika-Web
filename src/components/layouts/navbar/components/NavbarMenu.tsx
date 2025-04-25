@@ -8,11 +8,11 @@ import {
   Typography,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
-import NavbarMenuCategories from "./NavbarMenuCategories";
 import NavbarMenuLinks from "./NavbarMenuLinks";
 import useDrawer from "./useDrawer";
 import Login from "../../../login/Login";
 import LoginIcon from "@mui/icons-material/Login";
+import CatalogMenu from "./MobileCatalog";
 
 const NavbarMenu: FC = () => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
@@ -40,12 +40,13 @@ const NavbarMenu: FC = () => {
       <Drawer anchor="right" open={isDrawerOpen} onClose={toggleDrawer(false)}>
         <Box
           sx={{
-            width: 250,
+            width: "100vw",
             minHeight: "100vh",
             backgroundColor: "#fff",
           }}
         >
-          <NavbarMenuCategories />
+          {/* <NavbarMenuCategories /> */}
+          <CatalogMenu onClose={toggleDrawer(false)} />
           <Divider />
           <Divider />
           <NavbarMenuLinks />

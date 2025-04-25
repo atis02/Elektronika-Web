@@ -10,7 +10,6 @@ import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
 const UserProfileData: React.FC = () => {
   const loggedUser = localStorage.getItem("ElectronicaUser");
   const isLogged = loggedUser ? JSON.parse(loggedUser) : "";
-  console.log(isLogged);
   const [surname, setSurname] = useState<string>(isLogged?.surname);
   const [name, setName] = useState<string>(isLogged?.name);
   const [phoneNumber, setPhoneNumber] = useState<string>(isLogged?.phoneNumber);
@@ -19,7 +18,6 @@ const UserProfileData: React.FC = () => {
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
-    console.log("Form Data:", surname);
   };
   const style = {
     height: 45,

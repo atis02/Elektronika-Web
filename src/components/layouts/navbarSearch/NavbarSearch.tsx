@@ -26,6 +26,7 @@ const NavbarSearch: FC = () => {
           },
         }}
       />
+
       <SearchIcon sx={{ color: "#718096", marginRight: "8px" }} />
     </Stack>
   );

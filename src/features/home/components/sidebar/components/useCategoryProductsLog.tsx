@@ -16,13 +16,6 @@ export const useCategoryProductsLog = ({
 }: UseCategoryProductsLogProps) => {
   useEffect(() => {
     if (category && products && !isLoading && !isError) {
-      const filteredProducts = products.filter(
-        (product: any) => product.category_id === category.id
-      );
-      console.log(
-        `Products for category "${category.title_en}" (ID: ${category.id}):`,
-        filteredProducts
-      );
     } else if (category && isLoading) {
       console.log("Loading products...");
     } else if (category && isError) {

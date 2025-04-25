@@ -84,7 +84,6 @@ const BuyPresentCard: FC = () => {
         });
     } catch (error) {
       toast.success("Ýalňyşlyk!");
-      console.log(error);
     }
   };
 

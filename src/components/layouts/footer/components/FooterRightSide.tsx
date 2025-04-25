@@ -7,6 +7,8 @@ import FooterContact from "./FooterContact";
 import FooterMobileApps from "./FooterMobileApps";
 import FooterSocialLinks from "./FooterSocialLinks";
 import { useTranslation } from "react-i18next";
+import NavLinks from "../../navbar/components/NavLinks";
+import i18n from "../../../../language/i18n";
 
 const FooterRightSide: FC = () => {
   const { t } = useTranslation();
@@ -55,24 +57,49 @@ const FooterRightSide: FC = () => {
             <FooterLinks />
           </Box>
         </Stack>
+        <Stack spacing={2}>
+          <FooterTitle text={t("footer.links")} />
+          <Box>
+            <NavLinks />
+          </Box>
+        </Stack>
         <Stack maxWidth={215} spacing={2}>
           <FooterTitle text={t("footer.contacts")} />
           <Box>
             <FooterContact />
           </Box>
         </Stack>
-        <Stack spacing={2}>
-          <FooterTitle text={t("footer.apps")} />
-          <Box>
-            <FooterMobileApps />
-          </Box>
-        </Stack>
-        <Stack spacing={2}>
-          <FooterTitle text={t("footer.socialLinks")} />
-          <Box>
-            <FooterSocialLinks />
-          </Box>
-        </Stack>
+        {i18n.language === "ru" ? (
+          <Stack spacing={3}>
+            <Stack spacing={2}>
+              <FooterTitle text={t("footer.apps")} />
+              <Box>
+                <FooterMobileApps />
+              </Box>
+            </Stack>
+            <Stack spacing={2}>
+              <FooterTitle text={t("footer.socialLinks")} />
+              <Box>
+                <FooterSocialLinks />
+              </Box>
+            </Stack>
+          </Stack>
+        ) : (
+          <>
+            <Stack spacing={2}>
+              <FooterTitle text={t("footer.apps")} />
+              <Box>
+                <FooterMobileApps />
+              </Box>
+            </Stack>
+            <Stack spacing={2}>
+              <FooterTitle text={t("footer.socialLinks")} />
+              <Box>
+                <FooterSocialLinks />
+              </Box>
+            </Stack>
+          </>
+        )}
       </Stack>
     </>
   );

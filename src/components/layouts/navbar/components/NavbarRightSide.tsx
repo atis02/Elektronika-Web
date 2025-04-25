@@ -39,14 +39,13 @@ const NavbarRightSide: FC = observer(() => {
   }, [items.length]);
 
   const handleCloseSnackbar = (
-    event?: React.SyntheticEvent | Event,
+    _?: React.SyntheticEvent | Event,
     reason?: string
   ) => {
     if (reason === "clickaway") {
       return;
     }
     setMessage(null);
-    console.log(event);
   };
   return (
     <>
@@ -113,11 +112,11 @@ const NavbarRightSide: FC = observer(() => {
               width: 20,
               height: 20,
               marginLeft: 3,
-              backgroundColor: "#fff", // Custom background color
-              color: "#C3000E", // Custom text color
-              fontSize: "0.75rem", // Optional: Adjust text size
-              fontWeight: "bold", // Optional: Bold text
-              border: "1px solid #C3000E", // Optional: Add a border for better visibility
+              backgroundColor: "#fff",
+              color: "#C3000E",
+              fontSize: "0.75rem",
+              fontWeight: "bold",
+              border: "1px solid #C3000E",
             },
           }}
         >

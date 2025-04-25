@@ -27,11 +27,12 @@ export interface Product {
     productQuantity: number;
     properties: [
       {
-        key: string;
-        id: string;
-        name: string;
-        value: string;
-        productId: string;
+        keyEn: string;
+        keyRu: string;
+        keyTm: string;
+        valueEn: string[];
+        valueRu: string[];
+        valueTm: string[];
       }
     ];
   };

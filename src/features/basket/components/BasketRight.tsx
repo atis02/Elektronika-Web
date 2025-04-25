@@ -1,31 +1,8 @@
 import { FC } from "react";
 import { Box, Stack, Typography } from "@mui/material";
 import { auctionSmallBox } from "../../auction/styles/auctionStyles";
-// import { useNavigate } from "react-router-dom";
-// import toast from "react-hot-toast";
 
 const BasketRight: FC = () => {
-  // const navigate = useNavigate();
-
-  // const handleSubmitToOrder = () => {
-  //   const basketDataLocalStroge = localStorage.getItem("basket");
-
-  //   if (basketDataLocalStroge) {
-  //     const parsed = JSON.parse(basketDataLocalStroge);
-  //     const exist = parsed.find((elem: any) => elem.productQuantity === 0);
-  //     if (!parsed.length) {
-  //       toast.error("Haryt ýok!");
-  //       return;
-  //     }
-  //     if (!exist) {
-  //       navigate("/complete-order");
-  //     } else {
-  //       toast.error("Ammarda haryt az mukdarda");
-  //     }
-  //   } else {
-  //     console.log("No basket data found in localStorage.");
-  //   }
-  // };
   return (
     <>
       <Box sx={auctionSmallBox}>

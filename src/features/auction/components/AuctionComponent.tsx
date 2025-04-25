@@ -4,8 +4,10 @@ import { deliveryNavigateTitle } from "../../delivery/styles/deliveryStyle";
 import { auctionBox } from "../styles/auctionStyles";
 import AuctionCard from "./AuctionCard";
 import { Link as RouterLink } from "react-router-dom"; // Importing RouterLink for navigation
+import { useTranslation } from "react-i18next";
 
 const AuctionComponent: FC = () => {
+  const { t } = useTranslation();
   return (
     <Container>
       <Typography sx={deliveryNavigateTitle}>
@@ -43,7 +45,7 @@ const AuctionComponent: FC = () => {
                 fontWeight: 600,
               }}
             >
-              Auksion
+              {t("auction.auctionTitle")}
             </Typography>
             <Typography
               sx={{
@@ -52,7 +54,7 @@ const AuctionComponent: FC = () => {
                 fontWeight: 400,
               }}
             >
-              Auksiona gatnaşmak üçin agza boluň
+              {t("auction.auctionDesc")}
             </Typography>
           </Stack>
         </Box>

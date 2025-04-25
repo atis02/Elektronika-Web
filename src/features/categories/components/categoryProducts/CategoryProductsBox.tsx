@@ -26,69 +26,6 @@ import toast from "react-hot-toast";
 import AppDrawer from "../../../drawer/presentation/BasketDrawer";
 import { useTranslation } from "react-i18next";
 
-// interface Product {
-//   id: number;
-//   title_tm: string;
-//   title_ru: string;
-//   title_en: string;
-//   desc_tm: string;
-//   desc_ru: string;
-//   desc_en: string;
-//   price: number;
-//   old_price: number;
-//   discount_percentage: number;
-//   discounted_price: number;
-//   stock: number;
-//   is_active: boolean;
-//   weight: number;
-//   width: number;
-//   height: number;
-//   depth: number;
-//   images: string[];
-//   size: string;
-//   color: string;
-//   tags: string;
-//   views: number;
-//   rating: number;
-//   brand_id: number;
-//   category_id: number;
-//   segment_id: number;
-//   created_at: string;
-//   updated_at: string;
-//   brand: {
-//     id: number;
-//     imageUrl: string;
-//     title_tm: string;
-//     title_ru: string;
-//     title_en: string;
-//     desc_tm: string;
-//     desc_ru: string;
-//     desc_en: string;
-//   };
-//   category: {
-//     id: number;
-//     imageUrl: string;
-//     title_tm: string;
-//     title_ru: string;
-//     title_en: string;
-//     desc_tm: string;
-//     desc_ru: string;
-//     desc_en: string;
-//     category_id: number;
-//   };
-//   segment: {
-//     id: number;
-//     imageUrl: string;
-//     title_tm: string;
-//     title_ru: string;
-//     title_en: string;
-//     desc_tm: string;
-//     desc_ru: string;
-//     desc_en: string;
-//     subcategory_id: number;
-//   };
-//   properties: any[];
-// }
 interface CategoryProductsBoxProps {
   products: Product[] | undefined;
 }

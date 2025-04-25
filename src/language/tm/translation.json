@@ -16,7 +16,7 @@
   "header": {
     "header_subtitle": "Elektronika we öý enjamlary",
     "work_time": "Iş wagty",
-    "work_hours": "Duşenbe - Anna: 09:00 - 18:00; Şenbe: 09:00 - 13:00",
+    "work_hours": "Duşenbe - Anna: 09:00 - 18:00 Şenbe: 09:00 - 13:00",
     "address_title": "Salgymyz",
     "our_address": "Aşgabat, Bitarap Türkmenistan şaýoly 183",
     "pageDoesntExist":"Gözleýan sahypaňyz ýok.",
@@ -26,12 +26,32 @@
 
 
   },
+  "auction":{
+    "auctionTitle":"Auksion",
+    "createdDate":"Goýulan wagty:",
+    "alreadyParticipated":"Siz eýýäm gatnaşýarsyňyz" ,
+    "join":"Gatnaşmak" ,
+    "price":"Bahasy",
+    "auctionDesc":"Auksiona gatnaşmak üçin agza boluň",
+    "state":"Ýagdaýy:",
+    "startPrice":"Başlangyç baha:",
+    "bidPrice":"Teklip möçberi",
+    "toBid":"Teklip goýuň",
+    "alreadyBid":"Siz eýýäm teklip goýduňyz",
+    "new":"Täze",
+    "countDownDay":"Gün",
+    "countDownHour":"Sagat",
+    "countDownMinut":"Minut",
+    "countDownSecond":"Sekunt"
+  },
   "footer":{
     "footerFastHelp":"Tiz kömek",
     "contacts":"Habarlaşmak üçin",
     "apps":"Mobil goşundylar",
     "socialLinks":"Sosial ulgam",
-     "address":"Aşgabat, Bitarap Türkmenistan şaýoly, 183"
+     "address":"Aşgabat, Bitarap Türkmenistan şaýoly, 183",
+    "links":"Goşmaça"
+
 
   },
   "home":{
@@ -48,7 +68,9 @@
     "favourite":"Saýlanan",
     "barcode":"Barkody",
     "mainPage":"Baş sahypa",
-    "delivery":"Eltip berme"
+    "delivery":"Eltip berme",
+    "newGoods":"Täze harytlar"
+
   },
   "howRegister":{
     "how-to-register":"Saýtda nädip hasaba alynmaly.",

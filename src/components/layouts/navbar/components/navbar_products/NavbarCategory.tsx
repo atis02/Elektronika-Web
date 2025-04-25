@@ -83,7 +83,6 @@ const NavbarCategory: FC = () => {
 
   const handleSubcategoryClick = (subcategory: any) => {
     navigate(`/categories?subCategoryId=${subcategory}`);
-    console.log(subcategory.id);
   };
   const blurHashToBase64 = (
     blurhash: string,

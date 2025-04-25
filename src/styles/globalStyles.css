@@ -45,7 +45,9 @@ body {
     transform: translateX(-100%);
   }
 }
-
+.productScroll::-webkit-scrollbar {
+  display: none;
+}
 .searchResult::-webkit-scrollbar {
   width: 4px;
   background-color: #fff;

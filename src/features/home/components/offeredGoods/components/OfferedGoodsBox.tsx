@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from "react";
+import { FC, useEffect, useRef, useState } from "react";
 import { Box, Button, Stack, Typography, Skeleton } from "@mui/material";
 import Grid from "@mui/material/Grid2";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
@@ -26,6 +26,7 @@ import {
   addStoreDiscountGoodButton,
   // auctionDiscountTextCountBox,
   auctionImageBox,
+  auctionTextBoxWarranty,
   // auctionTextBox,
   compareDiscountGoodsCostButton,
   discountGoodCodeText,
@@ -70,47 +71,77 @@ const DiscountGoodBox: FC = () => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isError, setIsError] = useState<boolean>(false);
   const [isOpen, setIsOpen] = useState<boolean>(false);
-
+  const [page, setPage] = useState(1);
+  const [showAll, setShowAll] = useState(false);
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const { t, i18n } = useTranslation();
-  // const [compareStates, setCompareStates] = useState<Record<number, boolean>>(
-  //   {}
-  // );
-  // const [favoriteStates, setFavoriteStates] = useState<Record<number, boolean>>(
-  //   {}
-  // );
-  const [showAll, setShowAll] = useState(false);
+  const tableContainerRef = useRef<HTMLDivElement | null>(null);
 
-  // Intersection Observer for animation trigger
-  const { ref: containerRef, inView: containerInView } = useInView({
-    threshold: 0.2,
-  });
-
-  // Fetch discounted products with a fixed limit of 4
-  const fetchDiscountedProducts = async () => {
+  const fetchItems = async () => {
+    setLoading(true);
     try {
-      setIsLoading(true);
       const response = await axios.get(
-        `${BASE_URL}product/all?limit=100&page=1`
+        `${BASE_URL}product/all?limit=20&page=${page}`
+      );
+      // setTotalItems(response.data);
+      const filteredProducts = response.data?.products.filter(
+        (item: any) => item.statusId === "56143a81-cfa6-4c52-a74b-957d94b0c058"
       );
 
-      const products = response.data?.products;
-      const discounted = products.filter(
-        (product: any) => product.status?.nameTm === "Hödürlenýän harytlar"
-      );
-      setDiscountedProducts(discounted);
-      setIsLoading(false);
-    } catch (error) {
-      console.log(error);
-
+      if (page === 1) {
+        setDiscountedProducts(filteredProducts);
+      } else {
+        setDiscountedProducts((prevItems) => [
+          ...prevItems,
+          ...filteredProducts,
+        ]);
+      }
+    } catch (error: unknown) {
       setIsError(true);
-      setIsLoading(false);
+      console.error(error);
+    }
+    setIsLoading(false);
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    fetchItems();
+  }, [page]);
+
+  const handleScroll = () => {
+    if (tableContainerRef.current) {
+      const { scrollHeight, scrollTop, clientHeight } =
+        tableContainerRef.current;
+
+      if (scrollHeight - scrollTop <= clientHeight + 100) {
+        if (!loading && showAll) {
+          setPage((prev) => prev + 1);
+        }
+      }
     }
   };
 
   useEffect(() => {
-    fetchDiscountedProducts();
+    if (tableContainerRef.current) {
+      tableContainerRef.current.addEventListener("scroll", handleScroll);
+      return () => {
+        if (tableContainerRef.current) {
+          tableContainerRef.current.removeEventListener("scroll", handleScroll);
+        }
+      };
+    }
   }, []);
+
+  // useEffect(() => {
+  //   if (page > 1) {
+  //     fetchItems();
+  //   }
+  // }, [page]);
+
+  const { inView: containerInView } = useInView({
+    threshold: 0.2,
+  });
 
   const dispatch = useAppDispatch();
   const compareProducts = useAppSelector((state) => state.compare.products);
@@ -212,24 +243,28 @@ const DiscountGoodBox: FC = () => {
     ? discountedProducts
     : discountedProducts.slice(0, 4);
 
-  // addToCart;
-  // compare;
-  // favourite;
-  // barcode;
   const getTitle = (nameTm: string, nameRu: string, nameEn: string) => {
-    const currentLanguage = i18n.language; // Get the current language (e.g., "en", "ru", "tm")
+    const currentLanguage = i18n.language;
     switch (currentLanguage) {
       case "ru":
         return nameRu;
       case "tm":
         return nameTm;
       default:
-        return nameEn; // Default to English
+        return nameEn;
     }
   };
 
   return (
-    <>
+    <Stack
+      ref={tableContainerRef}
+      onScroll={handleScroll}
+      sx={{
+        overflowY: "auto",
+      }}
+      className="productScroll"
+      maxHeight="100vh"
+    >
       <Stack direction="row" alignItems="center" justifyContent="space-between">
         <Typography sx={discountGoodsTitle}>
           {t("home.offeredProducts")}
@@ -249,12 +284,12 @@ const DiscountGoodBox: FC = () => {
           {t("home.seeAll")}
         </Button>
       </Stack>
-      <Grid container spacing={2} my={3} ref={containerRef}>
+      <Grid container spacing={2} my={0}>
         {displayedProducts.map((product: any, index) => (
           <Grid key={product.id} size={{ lg: 3, md: 4, sm: 6, xs: 6 }}>
             <motion.div
               initial={showAll ? "hidden" : {}}
-              animate={containerInView ? "visible" : "hidden"}
+              animate={containerInView ? "visible" : "visible"}
               custom={index}
               variants={productItemVariants}
               style={{
@@ -262,24 +297,36 @@ const DiscountGoodBox: FC = () => {
               }}
             >
               <Box sx={{ p: 1, borderRadius: "6px" }}>
-                {/* <Box sx={auctionTextBox}>
-                  <Stack direction="row" pl={5}>
-                    <Box sx={auctionTextBox}> {t("home.sale")}</Box>
-                    <Box sx={auctionDiscountTextCountBox}>
-                      -{product.discount_pricePercent.toFixed(0)}%
+                <Stack direction="row" justifyContent="flex-end">
+                  {product.warranty && (
+                    <Box
+                      sx={{
+                        ...auctionTextBoxWarranty,
+                        flexDirection: "column",
+                        position: "absolute",
+                        zIndex: 100,
+                      }}
+                    >
+                      <Stack
+                        direction="row"
+                        position="absolute"
+                        color="#B71C1C"
+                      >
+                        <img
+                          src="/images/guarantee.png"
+                          style={{ width: 40, height: 40 }}
+                        />
+                      </Stack>
+                      <Typography
+                        fontSize={13}
+                        position="absolute"
+                        bottom={-18}
+                      >
+                        {product.warranty}
+                      </Typography>
                     </Box>
-                  </Stack>
-                </Box> */}
-                {product.warranty && (
-                  <Box sx={{ position: "absolute", right: 10, top: 10 }}>
-                    <Stack direction="row" color="#B71C1C">
-                      <img
-                        src="/images/guarantee.png"
-                        style={{ width: 40, height: 40 }}
-                      />
-                    </Stack>
-                  </Box>
-                )}
+                  )}
+                </Stack>
                 <Box sx={auctionImageBox}>
                   <LazyLoadImage
                     onClick={() => navigate(`/product/${product.id}`)}
@@ -469,7 +516,7 @@ const DiscountGoodBox: FC = () => {
         ))}
         <AppDrawer isOpen={isOpen} toggleDrawer={toggleDrawer} />
       </Grid>
-    </>
+    </Stack>
   );
 };
 
