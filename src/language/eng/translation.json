@@ -11,7 +11,38 @@
     "navbar-text":"Hormatly ulanyjylar! Saýtyň işleýşi dükanyň işleýşi bilen deň däldir. Ähli skidkalar we bonuslar diňe saýtda hereket edýär.",
     "presentCard":"Present sertificate"
   },
-
+  "login":{
+    "myProfile":"My profile",
+    "logout":"Logout",
+    "login":"Login",
+    "register":"Sign up",
+    "phoneNumber":"Phone number",
+    "email":"Email",
+    "successProvided":"Successfully confirmed!",
+    "forgotPass":"Forgot password",
+    "Login":"Sign in",
+    "noAccount":"I do not have account",
+    "registerFor":"sign in",
+    "wantTogetNotify":"Are you want to get notification?",
+    "Register":"Sign up",
+    "alreadyHaveAccount":"You already registered?",
+    "imageUpload":"Upload picture",
+    "sendOTP":"Send verification code",
+    "resend":"Resend code "
+  },
+  "basket":{
+    "noProduct":"Empty basket",
+    "basket":"Basket",
+    "clearAll":"Clear All",
+    "total":"Total:",
+    "coupon":"Coupon code",
+    "couponCode":"Type Coupon code",
+    "paymentType":"Choose payment type",
+    "nagt":"Cash",
+    "card":"Payment by card via Terminal",
+    "altyn":"Online payment (Altyn Asyr)",
+    "order":"Order"
+  },
   "header": {
     "header_subtitle": "Electronics and Household Appliances",
     "work_time": "Working Hours",

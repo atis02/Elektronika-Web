@@ -6,12 +6,12 @@ import DeliveryType from "./DeliveryType";
 import PaymentOptionSelector from "./PaymentOptionSelector";
 import { auctionParticipateButton } from "../../auction/styles/auctionStyles";
 import { v4 as uuidv4 } from "uuid";
-import { Product } from "../../../components/redux/interface";
 import axios from "axios";
 import { BASE_URL } from "../../../api/instance";
 import toast from "react-hot-toast";
 import BasketViewModel from "../../../store/basket/BasketViewModel";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 interface orderStatus {
   id: string;
@@ -21,7 +21,7 @@ const CompleteOrder: FC = () => {
   const [selectedCard, setSelectedCard] = useState<number | null>(null);
   const [hasError, setHasError] = useState<boolean>(false);
   const [orderStatus, setOrderStatus] = useState<orderStatus[]>([]);
-
+  const { t } = useTranslation();
   const [formData, setFormData] = useState({
     customerName: "",
     customerSurname: "",
@@ -40,10 +40,11 @@ const CompleteOrder: FC = () => {
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
   const [showError, setShowError] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
-  const [products] = useState<Product[]>(() => {
-    const basket = localStorage.getItem("basket");
-    return basket ? JSON.parse(basket) : [];
-  });
+  // const [products] = useState<Product[]>(() => {
+  //   const basket = localStorage.getItem("basket");
+  //   return basket ? JSON.parse(basket) : [];
+  // });
+  const { items } = BasketViewModel;
   const navigate = useNavigate();
   useEffect(() => {
     const orderStatuses = async () => {
@@ -59,24 +60,10 @@ const CompleteOrder: FC = () => {
     };
     orderStatuses();
   }, []);
-  // useEffect(() => {
-  //   const orderDeliveryCity = async () => {
-  //     try {
-  //       const response = await axios.get(`${BASE_URL}order/deliveryCity/all`);
-  //       // const filtered = response.data?.status.filter(
-  //       //   (status: any) => status.nameTm == "Barlagda"
-  //       // );
-  //       setDeliveryCity(response.data.deliveryPrice);
-  //     } catch (error) {
-  //       console.error(error);
-  //     }
-  //   };
-  //   orderDeliveryCity();
-  // }, []);
 
   const handleCheckboxChange = (cardId: number) => {
     setSelectedCard((prev) => (prev === cardId ? null : cardId));
-    if (hasError) setHasError(false); // Clear error when a valid selection is made
+    if (hasError) setHasError(false);
   };
   const validateForm = () => {
     const newErrors = {
@@ -93,17 +80,6 @@ const CompleteOrder: FC = () => {
     return !Object.values(newErrors).includes(true);
   };
 
-  // const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
-  //   const { name, value } = e.target;
-  //   setFormData((prevData) => ({
-  //     ...prevData,
-  //     [name]: value,
-  //   }));
-  //   setErrors((prevErrors) => ({
-  //     ...prevErrors,
-  //     [name]: value.trim() === "",
-  //   }));
-  // };
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
 
@@ -114,10 +90,7 @@ const CompleteOrder: FC = () => {
 
     setErrors((prevErrors) => ({
       ...prevErrors,
-      [name]:
-        name === "customerPhoneNumber"
-          ? !/^(\+993)(\d{8})$/.test(value) // must be +993 followed by exactly 8 digits
-          : value.trim() === "",
+      [name]: value.trim() === "",
     }));
   };
 
@@ -140,7 +113,7 @@ const CompleteOrder: FC = () => {
       setHasError(true);
     } else if (!selectedOption) {
       setShowError(true);
-    } else if (!products.length) {
+    } else if (!items.length) {
       toast.error("Sebetdiňiz boş!");
     } else {
       const body = {
@@ -155,19 +128,19 @@ const CompleteOrder: FC = () => {
         notes: "",
         deliveryType:
           selectedCard == 1
-            ? "Express"
+            ? "Экспресс"
             : selectedCard == 2
-            ? "Turkmen pochta"
+            ? "Туркмен почта"
             : selectedCard == 3
-            ? "Courier"
+            ? "Курьер"
             : selectedCard == 4
-            ? "Pickup"
+            ? "Самовывоз"
             : "",
         customerName: formData.customerName,
         customerSurname: formData.customerSurname,
         customerPhoneNumber: formData.customerPhoneNumber,
         orderRegion: formData.orderRegion,
-        items: products.map((elem) => ({
+        items: items.map((elem) => ({
           productId: elem.product?.id,
           quantity: elem.productQuantity,
         })),
@@ -216,6 +189,7 @@ const CompleteOrder: FC = () => {
         <Box my={2}>
           <CompleteTitle />
           <DeliveryAddress
+            setErrors={setErrors}
             errors={errors}
             handleInputChange={handleInputChange}
             formData={formData}
@@ -238,11 +212,10 @@ const CompleteOrder: FC = () => {
               variant="contained"
               fullWidth
             >
-              {loading ? <CircularProgress /> : "Sargyt etmek"}
+              {loading ? <CircularProgress /> : t("basket.order")}
             </Button>
           </Stack>
         </Box>
-        {/* <CreditCardForm /> */}
       </Container>
     </>
   );

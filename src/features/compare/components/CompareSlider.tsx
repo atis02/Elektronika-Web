@@ -61,7 +61,10 @@ const CompareSlider: FC = () => {
 
                   <Box sx={compareImagebox}>
                     <img
-                      src={`${BASE_URL_IMG}public/${selectedImage}`}
+                      src={
+                        `${BASE_URL_IMG}public/${selectedImage}` ||
+                        "/images/logo2.png"
+                      }
                       // src={selectedImage}
                       className="compareSliderImage"
                       alt="compare current image"
@@ -74,35 +77,6 @@ const CompareSlider: FC = () => {
                       </IconButton>
                     </Stack>
                   </Box>
-                  {/* <Box sx={compareDotsBox}>
-                    {elem?.images.map((image, index) => (
-                      <Box
-                        key={index}
-                        sx={
-                          image === currentImages[elem.id]
-                            ? compareActiveDots
-                            : comparePassiveDots
-                        }
-                      />
-                    ))}
-                  </Box> */}
-
-                  {/* <Box sx={compareDotsBox}>
-                    {elem?.images.map((image, index) => (
-                      <Box
-                        key={index}
-                        sx={compareExtraImageBox}
-                        onClick={() => handleImageClick(String(elem.id), image)} // Pass product id and clicked image
-                      > */}
-                  {/* <img
-                    src={`${BASE_URL_IMG}public/${elem.imageOne}`}
-                    // src={elem.imageOne}
-                    className="compareSliderImage"
-                    alt={`compare extra image `}
-                  /> */}
-                  {/* //   </Box>
-                    // ))} */}
-                  {/* </Box> */}
                 </Box>
               </Grid>
             );

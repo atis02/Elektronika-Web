@@ -4,14 +4,14 @@ import Grid from "@mui/material/Grid2";
 import { useTranslation } from "react-i18next";
 
 interface DeliveryTypeProps {
-  errors?: {
+  errors: {
     customerName: boolean;
     shippingAddress: boolean;
     orderRegion: boolean;
     orderCity: boolean;
     customerPhoneNumber: boolean;
   };
-  formData?: {
+  formData: {
     customerName: string;
     customerSurname: string;
     shippingAddress: string;
@@ -20,42 +20,66 @@ interface DeliveryTypeProps {
     customerPhoneNumber: string;
   };
   handleInputChange: (e: ChangeEvent<HTMLInputElement>) => void;
+  setErrors: React.Dispatch<
+    React.SetStateAction<{
+      customerName: boolean;
+      shippingAddress: boolean;
+      orderRegion: boolean;
+      orderCity: boolean;
+      customerPhoneNumber: boolean;
+    }>
+  >;
 }
+
 const DeliveryAddress: FC<DeliveryTypeProps> = ({
-  errors = {
-    customerName: false,
-    shippingAddress: false,
-    orderRegion: false,
-    orderCity: false,
-    customerPhoneNumber: false,
-  },
-  formData = {
-    customerName: "",
-    customerSurname: "",
-    shippingAddress: "",
-    orderRegion: "",
-    orderCity: "",
-    customerPhoneNumber: "+993",
-  },
+  errors,
+  formData,
   handleInputChange,
+  setErrors,
 }) => {
   const { t } = useTranslation();
 
   const handlePhoneChange = (e: ChangeEvent<HTMLInputElement>) => {
-    let value = e.target.value.replace(/\D/g, ""); // Keep only digits
+    let digitsOnly = e.target.value.replace(/\D/g, "");
 
-    if (!value.startsWith("993")) {
-      value = "993"; // If country code is erased, reset to '993'
+    if (!digitsOnly.startsWith("993")) {
+      const currentPrefix = digitsOnly.substring(0, 3);
+      if (currentPrefix !== "993") {
+        digitsOnly = "993" + digitsOnly.substring(3);
+      }
     }
 
-    if (value.length > 11) {
-      value = value.slice(0, 11); // Limit to 9 digits (XX XXX-XXX)
+    const MAX_TOTAL_DIGITS = 11;
+    if (digitsOnly.length > MAX_TOTAL_DIGITS) {
+      digitsOnly = digitsOnly.slice(0, MAX_TOTAL_DIGITS);
     }
 
-    const formattedValue = `+${value}`; // Add '+' sign
+    let formattedValue = "+";
+    const countryCode = digitsOnly.substring(0, 3);
+    const localNumber = digitsOnly.substring(3);
+    formattedValue += countryCode;
 
-    // Set error if phone number is only +993
-    const isPhoneValid = formattedValue !== "+993";
+    if (localNumber.length > 0) {
+      formattedValue += " " + localNumber.substring(0, 2);
+      if (localNumber.length > 2) {
+        formattedValue += " " + localNumber.substring(2, 4);
+        if (localNumber.length > 4) {
+          formattedValue += " " + localNumber.substring(4, 6);
+          if (localNumber.length > 6) {
+            formattedValue += " " + localNumber.substring(6, 8);
+          }
+        }
+      }
+    }
+
+    const localRegex = /^[6-7][0-9]\d{6}$/;
+    const isLocalNumberValid = localRegex.test(localNumber);
+
+    // Обновляем errors через setErrors
+    setErrors((prev) => ({
+      ...prev,
+      customerPhoneNumber: !isLocalNumberValid,
+    }));
 
     const newEvent = {
       target: {
@@ -64,12 +88,9 @@ const DeliveryAddress: FC<DeliveryTypeProps> = ({
       },
     } as ChangeEvent<HTMLInputElement>;
 
-    // Update errors based on phone number validity
     handleInputChange(newEvent);
-
-    // Update the error state for customerPhoneNumber
-    errors.customerPhoneNumber = isPhoneValid;
   };
+  console.log(errors);
 
   return (
     <>
@@ -87,7 +108,6 @@ const DeliveryAddress: FC<DeliveryTypeProps> = ({
             type: "tel",
             label: t("order.phone"),
             name: "customerPhoneNumber",
-            val: "+993",
           },
         ].map((input, index) => (
           <Grid key={input.name} size={{ lg: 4, md: 4, sm: 6, xs: 12 }}>
@@ -95,29 +115,19 @@ const DeliveryAddress: FC<DeliveryTypeProps> = ({
               label={input.label}
               name={input.name}
               value={formData[input.name as keyof typeof formData]}
-              onChange={index === 5 ? handlePhoneChange : handleInputChange} // Adjusted index to 5
+              onChange={index === 5 ? handlePhoneChange : handleInputChange}
               fullWidth
               type={input.type}
               error={errors[input.name as keyof typeof errors]}
               variant="outlined"
               sx={{
                 "& .MuiOutlinedInput-root": {
-                  "& fieldset": {
-                    borderColor: "lightgray",
-                  },
-                  "&:hover fieldset": {
-                    borderColor: "lightgray",
-                  },
-                  "&.Mui-focused fieldset": {
-                    borderColor: "lightgray",
-                  },
+                  "& fieldset": { borderColor: "lightgray" },
+                  "&:hover fieldset": { borderColor: "lightgray" },
+                  "&.Mui-focused fieldset": { borderColor: "lightgray" },
                 },
-                "& .MuiInputLabel-root": {
-                  color: "#2E2F38",
-                },
-                "& .MuiInputLabel-root.Mui-focused": {
-                  color: "#2E2F38",
-                },
+                "& .MuiInputLabel-root": { color: "#2E2F38" },
+                "& .MuiInputLabel-root.Mui-focused": { color: "#2E2F38" },
               }}
             />
           </Grid>

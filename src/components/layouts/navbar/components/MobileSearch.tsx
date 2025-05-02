@@ -183,7 +183,10 @@ const MobileSearch: FC<HeaderContactsProps> = ({ isLoading }) => {
                   }}
                 >
                   <img
-                    src={`${BASE_URL_IMG}public/${elem.imageOne}`}
+                    src={
+                      `${BASE_URL_IMG}public/${elem.imageOne}` ||
+                      "/images/logo2.png"
+                    }
                     alt={elem.nameTm}
                     style={{ width: "20%", objectFit: "cover" }}
                   />

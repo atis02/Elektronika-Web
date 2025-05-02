@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Button, CircularProgress, Stack } from "@mui/material";
+import { useTranslation } from "react-i18next";
 
 interface ButtonWithTimerProps {
   phoneNumber: string;
@@ -18,7 +19,7 @@ const ButtonWithTimer: React.FC<ButtonWithTimerProps> = ({
 }) => {
   const [timer, setTimer] = useState<number | null>(null);
   const [remainingTime, setRemainingTime] = useState<number>(timerDuration);
-
+  const { t } = useTranslation();
   const startTimer = () => {
     setTimer(
       setInterval(() => {
@@ -34,9 +35,10 @@ const ButtonWithTimer: React.FC<ButtonWithTimerProps> = ({
     );
     setRemainingTime(timerDuration);
   };
+  console.log(phoneNumber);
 
   const handleButtonClick = () => {
-    sendOTP(phoneNumber);
+    sendOTP(`+993${phoneNumber}`);
     if (!timer) {
       startTimer();
     }
@@ -67,9 +69,9 @@ const ButtonWithTimer: React.FC<ButtonWithTimerProps> = ({
           <CircularProgress size={25} />
         </Stack>
       ) : timer ? (
-        `Gaýtadan ugratmak (${remainingTime}s)`
+        `${t("login.resend")}(${remainingTime}s)`
       ) : (
-        "tassyklaýyş kody ugrat"
+        t("login.sendOTP")
       )}
     </Button>
   );

@@ -149,7 +149,10 @@ const AuctionCard: FC = () => {
                     }}
                   >
                     <img
-                      src={`${BASE_URL_IMG}public/${auction?.product.imageOne}`}
+                      src={
+                        `${BASE_URL_IMG}public/${auction?.product.imageOne}` ||
+                        "/images/logo2.png"
+                      }
                       style={{ width: 200, height: 211 }}
                       alt="auction1 "
                     />

@@ -1,8 +1,8 @@
 export const fullDescriptionPaper = {
   width: "100%",
   minHeight: "70vh",
-  p: 3,
-  my: 5,
+  p: 2,
+  my: 2,
 };
 
 export const backPaper = {

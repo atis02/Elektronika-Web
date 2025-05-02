@@ -49,17 +49,7 @@ const NavbarRightSide: FC = observer(() => {
   };
   return (
     <>
-      {/* {isSearchOpen ? (
-        <NavbarSearchGlobal onClose={handleSearchToggle} />
-      ) : ( */}
       <Stack direction="row" alignItems="center" spacing={2}>
-        {/* <img
-          src="/navbarIcons/search.svg"
-          style={{ cursor: "pointer" }}
-          alt="search"
-          onClick={handleSearchToggle}
-        /> */}
-
         {UserViewModel.user?.profileImage ? (
           <img
             src={`${profileImage}`}
@@ -81,7 +71,6 @@ const NavbarRightSide: FC = observer(() => {
             onClick={openDrawer}
           />
         )}
-        {/* <p>{favorites.map((item) => item.title_en)}</p> */}
         <Badge
           badgeContent={favorites.length}
           sx={{
@@ -127,28 +116,7 @@ const NavbarRightSide: FC = observer(() => {
             style={{ cursor: "pointer" }}
           />
         </Badge>
-        {/* <Badge
-          badgeContent={0}
-          sx={{
-            "& .MuiBadge-badge": {
-              width: 20,
-              height: 20,
-              marginLeft: 3,
-              backgroundColor: "#fff", // Custom background color
-              color: "#C3000E", // Custom text color
-              fontSize: "0.75rem", // Optional: Adjust text size
-              fontWeight: "bold", // Optional: Bold text
-              border: "1px solid #C3000E", // Optional: Add a border for better visibility
-            },
-          }}
-        >
-          <img
-            onClick={() => navigate("/present-card")}
-            src="/images/gift.png"
-            style={{ cursor: "pointer", width: 24, height: 24 }}
-            alt="heart"
-          />
-        </Badge> */}
+
         <Badge
           badgeContent={compareProducts.length}
           sx={{
@@ -174,7 +142,6 @@ const NavbarRightSide: FC = observer(() => {
 
         <Language />
       </Stack>
-      {/* )} */}
       <Snackbar
         open={!!message}
         autoHideDuration={3000}

@@ -10,18 +10,11 @@ const NavLinks: FC = () => {
   const { t } = useTranslation();
 
   return (
-    <Stack
-      direction="column"
-      spacing={1.1}
-      // alignItems="center"
-    >
-      {/* <NavbarCategory /> */}
-      {/* Navigation Links */}
+    <Stack direction="column" spacing={1.1}>
       <Typography
         onClick={() => navigate("/delivery")} // Relative path
         sx={{
           ...navLinks,
-          // fontWeight: isActiveLink("/delivery") ? 700 : 400,
           ...footerLinksStyle,
         }}
       >

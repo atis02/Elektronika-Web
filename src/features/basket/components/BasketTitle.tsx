@@ -1,7 +1,10 @@
 import { FC } from "react";
 import { Typography, Box } from "@mui/material";
+import { useTranslation } from "react-i18next";
 
 const BasketTitle: FC = () => {
+  const { t } = useTranslation();
+
   return (
     <Box sx={{ position: "relative", display: "inline-block" }}>
       <Typography
@@ -12,7 +15,7 @@ const BasketTitle: FC = () => {
           fontWeight: 600,
         }}
       >
-        Sebet
+        {t("basket.basket")}
       </Typography>
       <Box
         sx={{

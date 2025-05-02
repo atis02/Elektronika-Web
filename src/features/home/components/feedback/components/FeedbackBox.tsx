@@ -35,20 +35,26 @@ interface Comment {
 
 const fetcher = async <T,>(url: string): Promise<T> => {
   const res = await axios.get(url);
-  return res.data;
+  const filtered = res.data.filter((item: any) => item.isActive == true);
+  return filtered;
 };
 const Feedbacks: FC = () => {
   const [openCommentModal, setOpenCommentModal] = useState(false);
   const navigate = useNavigate();
   const loggedUser = localStorage.getItem("ElectronicaUser");
   const { isOpen, openDrawer, closeDrawer } = useDrawer();
-  const { data, error } = useSWR<Comment[]>(`${BASE_URL}comment/all`, fetcher);
+  const { data, isLoading, error } = useSWR<Comment[]>(
+    `${BASE_URL}comment/all`,
+    fetcher
+  );
   if (error) return <div>Error loading feedbacks.</div>;
-  if (!data) return <div>Loading feedbacks...</div>;
+  if (isLoading) return <div>Loading feedbacks...</div>;
+  if (!data?.length) return;
+  console.log(data);
 
   const sliderSettings = {
-    dots: true,
-    infinite: true,
+    dots: data.length > 1 && true,
+    infinite: data.length > 1 && true,
     speed: 500,
     slidesToShow: 1,
     height: "100%",
@@ -80,42 +86,46 @@ const Feedbacks: FC = () => {
   return (
     <Box sx={{ my: 1 }}>
       <Slider {...sliderSettings}>
-        {data.slice(0, 8).map((comment) => (
-          <Stack
-            key={comment.id}
-            sx={{
-              display: "flex",
-              flexDirection: "column",
-              height: "100%",
-              alignItems: "end",
-              justifyContent: "flex-start",
-            }}
-          >
-            <Stack direction="row" justifyContent="center" my={2} mt={0}>
-              <img src="/icons/“.svg" alt="feedback icon" />
-            </Stack>
-            <Typography sx={feedbackMessage}>{comment.description}</Typography>
-            <Stack direction="row" alignItems="center" spacing={2} mt={2}>
-              <Avatar
-                sx={feedbackAvatar}
-                alt={comment.commentator?.name}
-                onClick={() =>
-                  comment.productId && navigate(`/product/${comment.productId}`)
-                }
-                src={
-                  `${BASE_URL_IMG}public/${comment.commentator?.image}` ||
-                  "./images/avatar2.webp"
-                }
-              />
-              <Stack>
-                <Typography sx={feedbackMessage}>
-                  {comment.commentator?.name} {comment.commentator?.surname}
-                </Typography>
-                <Typography sx={feedbackTypeText}>Musderi</Typography>
+        {data.length > 0 &&
+          data.map((comment) => (
+            <Stack
+              key={comment.id}
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                height: "100%",
+                alignItems: "end",
+                justifyContent: "flex-start",
+              }}
+            >
+              <Stack direction="row" justifyContent="center" my={2} mt={0}>
+                <img src="/icons/“.svg" alt="feedback icon" />
+              </Stack>
+              <Typography sx={feedbackMessage}>
+                {comment.description}
+              </Typography>
+              <Stack direction="row" alignItems="center" spacing={2} mt={2}>
+                <Avatar
+                  sx={feedbackAvatar}
+                  alt={comment.commentator?.name}
+                  onClick={() =>
+                    comment.productId &&
+                    navigate(`/product/${comment.productId}`)
+                  }
+                  src={
+                    `${BASE_URL_IMG}public/${comment.commentator?.image}` ||
+                    "/images/logo2.png"
+                  }
+                />
+                <Stack>
+                  <Typography sx={feedbackMessage}>
+                    {comment.commentator?.name} {comment.commentator?.surname}
+                  </Typography>
+                  <Typography sx={feedbackTypeText}>Musderi</Typography>
+                </Stack>
               </Stack>
             </Stack>
-          </Stack>
-        ))}
+          ))}
       </Slider>
       <Stack alignItems="end">
         <IconButton

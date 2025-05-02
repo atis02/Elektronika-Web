@@ -10,6 +10,7 @@ import {
   TextField,
   Snackbar,
   Alert,
+  InputAdornment,
 } from "@mui/material";
 import ClearIcon from "@mui/icons-material/Clear";
 import { observer } from "mobx-react-lite";
@@ -20,6 +21,7 @@ import OtpVerification from "./OtpVerification";
 import axios from "axios";
 import { BASE_URL } from "../../api/instance";
 import ButtonWithTimer from "./ButtonWithTimer";
+import { useTranslation } from "react-i18next";
 // import OtpVerification from "./OtpVerification";
 
 interface LoginProps {
@@ -35,7 +37,7 @@ const Login: FC<LoginProps> = observer(({ isOpen, onClose }) => {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
-  const [phoneNumber, setPhoneNumber] = useState("+993");
+  const [phoneNumber, setPhoneNumber] = useState("");
   // const [password, setPassword] = useState("");
   const [file, setFile] = useState<File | null>(null);
   const [selectedFileName, setSelectedFileName] = useState<string | null>(null);
@@ -50,7 +52,7 @@ const Login: FC<LoginProps> = observer(({ isOpen, onClose }) => {
   const [loading, setLoading] = useState<boolean>(false);
   const [successfullyVerificated, setSuccesfullyVerficated] = useState(false);
   const [error, setError] = useState(false);
-
+  const { t } = useTranslation();
   const storedUser = localStorage.getItem("ElectronicaUser");
   let user = storedUser ? JSON.parse(storedUser) || [] : [];
   const navigate = useNavigate();
@@ -83,7 +85,7 @@ const Login: FC<LoginProps> = observer(({ isOpen, onClose }) => {
     e.preventDefault();
     setSnackbarMessage(null);
     setSnackbarOpen(false);
-    if (!isTurkmenPhoneNumber(phoneNumber) && !isEmail(email)) {
+    if (!isTurkmenPhoneNumber(`+993${phoneNumber}`) && !isEmail(email)) {
       setError(true);
       return toast.error("Telefon belgisi nädogry!");
     }
@@ -131,14 +133,13 @@ const Login: FC<LoginProps> = observer(({ isOpen, onClose }) => {
 
   const handleOtpVerificationClose = () => {
     setIsOtpVerificationOpen(false);
-    // setActiveTab("register");
   };
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setSnackbarMessage(null); // Clear previous messages
     setSnackbarOpen(false);
-    if (!isTurkmenPhoneNumber(phoneNumber) && !isEmail(email)) {
+    if (!isTurkmenPhoneNumber(`+993${phoneNumber}`) && !isEmail(email)) {
       setError(true);
       return toast.error("Telefon belgisi nädogry!");
     }
@@ -147,7 +148,7 @@ const Login: FC<LoginProps> = observer(({ isOpen, onClose }) => {
       return toast.error("Telefon belgi ýa-da email tassykla!");
     }
     try {
-      if (phoneNumber === "+993") {
+      if (phoneNumber === "") {
         await UserViewModel.loginWithEmail({
           email,
         });
@@ -158,8 +159,6 @@ const Login: FC<LoginProps> = observer(({ isOpen, onClose }) => {
       }
 
       if (UserViewModel.registrationSuccess) {
-        // setIsOtpVerificationOpen(true);
-        // setSnackbarMessage("Üstünlikli giriş!");
         toast.success("Üstünlikli giriş!");
         setSnackbarSeverity("success");
         setSnackbarOpen(true);
@@ -186,24 +185,20 @@ const Login: FC<LoginProps> = observer(({ isOpen, onClose }) => {
   };
   function isTurkmenPhoneNumber(phoneNumber: string) {
     const turkmenRegex = /^\+993([6-7][0-9])\d{6}$/;
-    return turkmenRegex.test(phoneNumber);
+    const trimmedPhoneNumber = phoneNumber.trim();
+    return turkmenRegex.test(trimmedPhoneNumber);
   }
+
   function isEmail(email: string) {
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     return emailRegex.test(email);
   }
   const sendOTP = (phoneNumberWithCountryCode: string) => {
-    function removeCountryCode(phoneNumber: string) {
-      if (phoneNumber.startsWith("+993")) {
-        return phoneNumber.substring(4);
-      }
-      return phoneNumber;
-    }
     try {
       const otpSending = async () => {
         await axios
           .post(`${BASE_URL}otp/add`, {
-            phone: removeCountryCode(phoneNumberWithCountryCode),
+            phone: phoneNumberWithCountryCode,
           })
           .then((resp) => {
             if (resp.data.message == "OTP generated successfully!") {
@@ -296,7 +291,7 @@ const Login: FC<LoginProps> = observer(({ isOpen, onClose }) => {
                 }}
                 onClick={() => navigate("/account")}
               >
-                Profilim
+                {t("login.myProfile")}
               </Button>
               <Button
                 variant="contained"
@@ -310,7 +305,7 @@ const Login: FC<LoginProps> = observer(({ isOpen, onClose }) => {
                   fontSize: 16,
                 }}
               >
-                Çykmak
+                {t("login.logout")}
               </Button>
             </Stack>
           </Stack>
@@ -339,7 +334,7 @@ const Login: FC<LoginProps> = observer(({ isOpen, onClose }) => {
                   borderRadius: "4px",
                 }}
               >
-                Ulgama gir
+                {t("login.login")}
               </Button>
               <Button
                 variant="contained"
@@ -354,7 +349,7 @@ const Login: FC<LoginProps> = observer(({ isOpen, onClose }) => {
                   borderRadius: "4px",
                 }}
               >
-                Agza bol
+                {t("login.register")}
               </Button>
             </Stack>
 
@@ -384,7 +379,7 @@ const Login: FC<LoginProps> = observer(({ isOpen, onClose }) => {
                           borderRadius: "4px",
                         }}
                       >
-                        Telefon belgi
+                        {t("login.phoneNumber")}
                       </Button>
                       <Button
                         variant="contained"
@@ -406,20 +401,41 @@ const Login: FC<LoginProps> = observer(({ isOpen, onClose }) => {
                           borderRadius: "4px",
                         }}
                       >
-                        Email
+                        {t("login.email")}
                       </Button>
                     </Stack>
                     {activeTabDirection === "phoneNumber" ? (
                       <>
                         <TextField
                           type="text"
-                          label="Telefon belgi"
+                          label={t("login.phoneNumber")}
+                          variant="outlined"
                           value={phoneNumber}
-                          onChange={(e) => setPhoneNumber(e.target.value)}
+                          onChange={(e) => {
+                            const newValue = e.target.value;
+                            if (newValue.length <= 8) {
+                              setPhoneNumber(newValue);
+                            }
+                          }}
+                          InputProps={{
+                            startAdornment: (
+                              <InputAdornment position="start">
+                                <Stack
+                                  borderRight="1px solid lightgray"
+                                  sx={{ paddingRight: 0.5 }}
+                                >
+                                  +993
+                                </Stack>
+                              </InputAdornment>
+                            ),
+                          }}
                           sx={{
                             background: "#F5F5F5",
                             "& fieldset": {
                               border: "1px solid #F5F5F5",
+                            },
+                            "& .MuiInputBase-input": {
+                              paddingLeft: "-5px",
                             },
                           }}
                           disabled={successfullyVerificated == true}
@@ -431,7 +447,7 @@ const Login: FC<LoginProps> = observer(({ isOpen, onClose }) => {
                           <ButtonWithTimer
                             phoneNumber={phoneNumber}
                             isTurkmenPhoneNumber={() =>
-                              isTurkmenPhoneNumber(phoneNumber)
+                              isTurkmenPhoneNumber(`+993${phoneNumber}`)
                             }
                             loading={loading}
                             sendOTP={() => sendOTP(phoneNumber)}
@@ -442,7 +458,7 @@ const Login: FC<LoginProps> = observer(({ isOpen, onClose }) => {
                             fontSize={14}
                             color="green"
                           >
-                            Üstünlikli tassynyldy!
+                            {t("login.successProvided")}
                           </Typography>
                         )}
                       </>
@@ -475,40 +491,12 @@ const Login: FC<LoginProps> = observer(({ isOpen, onClose }) => {
                             fontSize={14}
                             color="green"
                           >
-                            Üstünlikli tassynyldy!
+                            {t("login.successProvided")}
                           </Typography>
                         )}
                       </>
                     )}
                   </Stack>
-                  {/* <TextField
-                    type="text"
-                    label="Telefon belgi"
-                    value={phoneNumber}
-                    onChange={(e) => setPhoneNumber(e.target.value)}
-                    sx={{
-                      background: "#F5F5F5",
-                      "& fieldset": {
-                        border: "none",
-                      },
-                    }}
-                    fullWidth
-                    required
-                  /> */}
-                  {/* <TextField
-                    type="password"
-                    label="Açar söz"
-                    sx={{
-                      background: "#F5F5F5",
-                      "& fieldset": {
-                        border: "none",
-                      },
-                    }}
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    fullWidth
-                    required
-                  /> */}
                 </Stack>
                 <Stack
                   direction="row"
@@ -521,7 +509,7 @@ const Login: FC<LoginProps> = observer(({ isOpen, onClose }) => {
                     fontSize="14px"
                     sx={{ textDecoration: "underline", cursor: "pointer" }}
                   >
-                    Açar sözi unutdym
+                    {t("login.forgotPass")}
                   </Typography>
                 </Stack>
                 <Button
@@ -537,7 +525,7 @@ const Login: FC<LoginProps> = observer(({ isOpen, onClose }) => {
                     borderRadius: "4px",
                   }}
                 >
-                  Girmek
+                  {t("login.Login")}
                 </Button>
                 <Stack
                   direction="row"
@@ -546,14 +534,16 @@ const Login: FC<LoginProps> = observer(({ isOpen, onClose }) => {
                   spacing={1}
                   my={2}
                 >
-                  <Typography fontSize="14px">Hasabyňyz ýok bolsa</Typography>
+                  <Typography fontSize="14px">
+                    {t("login.noAccount")}
+                  </Typography>
                   <Typography
                     onClick={() => setActiveTab("register")}
                     fontSize="14px"
                     fontWeight={600}
                     sx={{ cursor: "pointer" }}
                   >
-                    agza boluň
+                    {t("login.registerFor")}
                   </Typography>
                 </Stack>
               </Box>
@@ -562,7 +552,7 @@ const Login: FC<LoginProps> = observer(({ isOpen, onClose }) => {
                 <Stack spacing={1} width="100%">
                   <TextField
                     type="text"
-                    label="Ady"
+                    label={t("order.name")}
                     value={firstName}
                     onChange={(e) => setFirstName(e.target.value)}
                     sx={{
@@ -576,7 +566,7 @@ const Login: FC<LoginProps> = observer(({ isOpen, onClose }) => {
                   />
                   <TextField
                     type="text"
-                    label="Familiýa"
+                    label={t("order.surname")}
                     value={lastName}
                     onChange={(e) => setLastName(e.target.value)}
                     sx={{
@@ -610,7 +600,7 @@ const Login: FC<LoginProps> = observer(({ isOpen, onClose }) => {
                           borderRadius: "4px",
                         }}
                       >
-                        Telefon belgi
+                        {t("login.phoneNumber")}
                       </Button>
                       <Button
                         variant="contained"
@@ -632,20 +622,40 @@ const Login: FC<LoginProps> = observer(({ isOpen, onClose }) => {
                           borderRadius: "4px",
                         }}
                       >
-                        Email
+                        {t("login.email")}
                       </Button>
                     </Stack>
                     {activeTabDirection === "phoneNumber" ? (
                       <>
                         <TextField
                           type="text"
-                          label="Telefon belgi"
+                          label={t("login.phoneNumber")}
                           value={phoneNumber}
-                          onChange={(e) => setPhoneNumber(e.target.value)}
+                          onChange={(e) => {
+                            const newValue = e.target.value;
+                            if (newValue.length <= 8) {
+                              setPhoneNumber(newValue);
+                            }
+                          }}
+                          InputProps={{
+                            startAdornment: (
+                              <InputAdornment position="start">
+                                <Stack
+                                  borderRight="1px solid lightgray"
+                                  sx={{ paddingRight: 0.5 }}
+                                >
+                                  +993
+                                </Stack>
+                              </InputAdornment>
+                            ),
+                          }}
                           sx={{
                             background: "#F5F5F5",
                             "& fieldset": {
                               border: "1px solid #F5F5F5",
+                            },
+                            "& .MuiInputBase-input": {
+                              paddingLeft: "-5px",
                             },
                           }}
                           disabled={successfullyVerificated == true}
@@ -657,7 +667,7 @@ const Login: FC<LoginProps> = observer(({ isOpen, onClose }) => {
                           <ButtonWithTimer
                             phoneNumber={phoneNumber}
                             isTurkmenPhoneNumber={() =>
-                              isTurkmenPhoneNumber(phoneNumber)
+                              isTurkmenPhoneNumber(`+993${phoneNumber}`)
                             }
                             loading={loading}
                             sendOTP={() => sendOTP(phoneNumber)}
@@ -668,7 +678,7 @@ const Login: FC<LoginProps> = observer(({ isOpen, onClose }) => {
                             fontSize={14}
                             color="green"
                           >
-                            Üstünlikli tassynyldy!
+                            {t("login.successProvided")}
                           </Typography>
                         )}
                       </>
@@ -676,7 +686,7 @@ const Login: FC<LoginProps> = observer(({ isOpen, onClose }) => {
                       <>
                         <TextField
                           type="email"
-                          label="E-mail"
+                          label={t("login.email")}
                           value={email}
                           onChange={(e) => setEmail(e.target.value)}
                           sx={{
@@ -701,27 +711,12 @@ const Login: FC<LoginProps> = observer(({ isOpen, onClose }) => {
                             fontSize={14}
                             color="green"
                           >
-                            Üstünlikli tassynyldy!
+                            {t("login.successProvided")}
                           </Typography>
                         )}
                       </>
                     )}
                   </Stack>
-
-                  {/* <TextField
-                    type="password"
-                    label="Parol"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    sx={{
-                      background: "#F5F5F5",
-                      "& fieldset": {
-                        border: "none",
-                      },
-                    }}
-                    fullWidth
-                    required
-                  /> */}
                 </Stack>
                 <input
                   type="file"
@@ -751,7 +746,7 @@ const Login: FC<LoginProps> = observer(({ isOpen, onClose }) => {
                     },
                   }}
                 >
-                  {selectedFileName || "Surat ýükle"}
+                  {selectedFileName || t("login.imageUpload")}
                 </Button>
                 {selectedFileName && (
                   <Typography variant="caption" ml={1}>
@@ -773,7 +768,7 @@ const Login: FC<LoginProps> = observer(({ isOpen, onClose }) => {
                     onChange={handleCheckboxChange}
                   />
                   <Typography fontSize="14px">
-                    Bildiriş almaga razymy?
+                    {t("login.wantTogetNotify")}
                   </Typography>
                 </Stack>
                 <Button
@@ -790,7 +785,9 @@ const Login: FC<LoginProps> = observer(({ isOpen, onClose }) => {
                     borderRadius: "4px",
                   }}
                 >
-                  {UserViewModel.loading ? "Registering..." : "Registrasiýa"}
+                  {UserViewModel.loading
+                    ? "Registering..."
+                    : t("login.Register")}
                 </Button>
                 <Stack
                   direction="row"
@@ -800,7 +797,7 @@ const Login: FC<LoginProps> = observer(({ isOpen, onClose }) => {
                   my={2}
                 >
                   <Typography fontSize="14px">
-                    Siziň öňden hasabyňyz bar!
+                    {t("login.alreadyHaveAccount")}
                   </Typography>
                   <Typography
                     onClick={() => setActiveTab("login")}
@@ -808,7 +805,7 @@ const Login: FC<LoginProps> = observer(({ isOpen, onClose }) => {
                     fontWeight={600}
                     sx={{ cursor: "pointer" }}
                   >
-                    Ulgama girmek
+                    {t("login.login")}
                   </Typography>
                 </Stack>
               </Box>

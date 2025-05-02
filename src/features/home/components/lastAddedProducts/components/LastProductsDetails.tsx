@@ -73,7 +73,10 @@ const LastProductsDetails: FC = () => {
                   <Stack direction="row" spacing={1}>
                     <Box sx={lastAddedProductsImageBox}>
                       <img
-                        src={`${BASE_URL_IMG}public/${product.imageOne}`}
+                        src={
+                          `${BASE_URL_IMG}public/${product.imageOne}` ||
+                          "/images/logo2.png"
+                        }
                         style={{
                           width: "50px",
                           height: "50px",

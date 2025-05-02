@@ -193,7 +193,10 @@ const AuctionDetails: FC<AuctionDetailsProps> = ({ isLoading, blurhash }) => {
             }}
           >
             <LazyLoadImage
-              src={`${BASE_URL_IMG}public/${data[0]?.product.imageOne}`}
+              src={
+                `${BASE_URL_IMG}public/${data[0]?.product.imageOne}` ||
+                "/images/logo2.png"
+              }
               // src={data[0]?.product.imageOne}
               placeholderSrc={blurHashToBase64(blurhash) || ""}
               effect="blur"

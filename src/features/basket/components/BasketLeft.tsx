@@ -21,9 +21,11 @@ import { BASE_URL, BASE_URL_IMG } from "../../../api/instance";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import toast from "react-hot-toast";
+import { t } from "i18next";
 
 const BasketLeft: FC = observer(() => {
   const { items, totalPrice } = BasketViewModel;
+
   const navigate = useNavigate();
   const basketDataLocalStroge = localStorage.getItem("basket");
 
@@ -75,8 +77,6 @@ const BasketLeft: FC = observer(() => {
 
             return localItem;
           });
-
-          // Use BasketViewModel action to set items to ensure MobX reactivity
           BasketViewModel.setItems(updatedItems);
         }
       } catch (error) {
@@ -115,7 +115,7 @@ const BasketLeft: FC = observer(() => {
         fontSize={20}
         fontWeight={600}
       >
-        Sebediňiz boş
+        {t("basket.noProduct")}
       </Typography>
     </Stack>
   ) : (
@@ -126,13 +126,13 @@ const BasketLeft: FC = observer(() => {
         justifyContent="space-between"
         alignItems="center"
       >
-        <Typography>Sebet</Typography>
+        <Typography>{t("basket.basket")}</Typography>
         <Button
           startIcon={<AutoDeleteOutlinedIcon sx={{ color: "#B71C1C" }} />}
           sx={clearAllBasketButton}
           onClick={() => BasketViewModel.clearBasket()}
         >
-          Hemmesini pozmak
+          {t("basket.clearAll")}
         </Button>
       </Stack>
       <Divider />
@@ -156,7 +156,10 @@ const BasketLeft: FC = observer(() => {
             <Stack direction="row" alignItems="center" spacing={2}>
               <img
                 style={{ width: "70px" }}
-                src={`${BASE_URL_IMG}public/${item.product?.imageOne}`}
+                src={
+                  `${BASE_URL_IMG}public/${item.product?.imageOne}` ||
+                  "/images/logo2.png"
+                }
                 alt="basket pictures"
               />
               <Typography sx={{ fontSize: "14px" }}>
@@ -216,7 +219,7 @@ const BasketLeft: FC = observer(() => {
       <Divider />
       <Stack direction="row" justifyContent="flex-end" m={3}>
         <Typography>
-          Jemi: <b>{totalPrice.toFixed(2)}</b>
+          {t("basket.total")} <b>{totalPrice.toFixed(2)}</b>
         </Typography>
       </Stack>
     </Paper>

@@ -1,8 +1,10 @@
 import { FC } from "react";
 import { Box, Stack, Typography } from "@mui/material";
 import { auctionSmallBox } from "../../auction/styles/auctionStyles";
+import { useTranslation } from "react-i18next";
 
 const BasketRight: FC = () => {
+  const { t } = useTranslation();
   return (
     <>
       <Box sx={auctionSmallBox}>
@@ -14,12 +16,12 @@ const BasketRight: FC = () => {
             mt: "-30px",
           }}
         >
-          Kupon kody ýaz
+          {t("basket.coupon")}
         </Typography>
         <Stack spacing={2} my={3} height={100}>
           <input
             type="text"
-            placeholder="Kupon koduny giriziň"
+            placeholder={t("basket.couponCode")}
             style={{
               height: "45px",
               padding: "10px 17px",
@@ -28,14 +30,6 @@ const BasketRight: FC = () => {
               borderRadius: "6px",
             }}
           />
-          {/* <Button
-            sx={auctionParticipateButton}
-            onClick={handleSubmitToOrder}
-            variant="contained"
-            fullWidth
-          >
-            Sargyt etmek
-          </Button> */}
         </Stack>
       </Box>
     </>

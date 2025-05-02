@@ -125,7 +125,10 @@ const CategoryProductsBox: FC<CategoryProductsBoxProps> = ({ products }) => {
                   >
                     <img
                       onClick={() => navigate(`/product/${product.id}`)}
-                      src={`${BASE_URL_IMG}public/${product.imageOne}`}
+                      src={
+                        `${BASE_URL_IMG}public/${product.imageOne}` ||
+                        "/images/logo2.png"
+                      }
                       alt={product.title_en}
                       style={{
                         width: "90%",

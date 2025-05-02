@@ -110,6 +110,7 @@ const HeaderContactsSearch: FC<HeaderContactsProps> = ({ isLoading }) => {
     display: "-webkit-box",
     WebkitLineClamp: 1,
     WebkitBoxOrient: "vertical",
+    color: "#464646",
   };
 
   return (
@@ -179,11 +180,14 @@ const HeaderContactsSearch: FC<HeaderContactsProps> = ({ isLoading }) => {
                   sx={{ cursor: "pointer" }}
                   onClick={() => {
                     navigate(`/product/${elem.id}`);
-                    setIsSearchOpen(false); // Закрываем после клика
+                    setIsSearchOpen(false);
                   }}
                 >
                   <img
-                    src={`${BASE_URL_IMG}public/${elem.imageOne}`}
+                    src={
+                      `${BASE_URL_IMG}public/${elem.imageOne}` ||
+                      "/images/logo2.png"
+                    }
                     alt={elem.nameTm}
                     style={{ width: "20%", objectFit: "cover" }}
                   />

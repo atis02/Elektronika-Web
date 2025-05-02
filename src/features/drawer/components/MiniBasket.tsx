@@ -170,7 +170,10 @@ const MiniBasket: FC = observer(() => {
             >
               <img
                 style={{ width: "70px", height: 60, objectFit: "contain" }}
-                src={`${BASE_URL_IMG}public/${item.product?.imageOne}`}
+                src={
+                  `${BASE_URL_IMG}public/${item.product?.imageOne}` ||
+                  "/images/logo2.png"
+                }
                 alt="basket pictures"
               />
               <Typography sx={{ fontSize: "14px" }}>

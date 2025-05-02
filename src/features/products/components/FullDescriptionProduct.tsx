@@ -211,14 +211,6 @@ const FullDescriptionProduct: FC<Props> = observer(() => {
     );
   }
 
-  // const handleAccordionChange = (panel: boolean) => {
-  //   setExpanded(panel);
-  // };
-
-  // const visibleProperties = selectedProduct.properties?.slice(0, 4) || [];
-  // const hiddenProperties = selectedProduct.properties?.slice(4) || [];
-
-  // Handle hover change for image
   const handleImageHover = (image: string) => {
     setCurrentImage(image);
   };

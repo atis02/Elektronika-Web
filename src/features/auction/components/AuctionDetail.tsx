@@ -247,7 +247,10 @@ const AuctionDetail: FC = () => {
                         >
                           <img
                             // src={image}
-                            src={`${BASE_URL_IMG}public/${image}`}
+                            src={
+                              `${BASE_URL_IMG}public/${image}` ||
+                              "/images/logo2.png"
+                            }
                             style={{ width: "100%" }}
                             alt={`small-${index + 1}`}
                           />
@@ -264,11 +267,13 @@ const AuctionDetail: FC = () => {
                       height: "100%",
                       objectFit: "contain",
                     }}
-                    src={`${BASE_URL_IMG}public/${
-                      currentBigImage !== null
-                        ? currentBigImage
-                        : data?.product.imageOne
-                    }`}
+                    src={
+                      `${BASE_URL_IMG}public/${
+                        currentBigImage !== null
+                          ? currentBigImage
+                          : data?.product.imageOne
+                      }` || "/images/logo2.png"
+                    }
                     // src={currentBigImage}
                     alt="big"
                   />

@@ -53,7 +53,7 @@ const Header: FC<HeaderProps> = ({ isLoading }) => {
           >
             <img
               onClick={() => navigate("/")}
-              src="/icons/logo.svg"
+              src="/navbarIcons/logo.svg"
               style={{ width: "150px", height: "28px" }}
               alt=""
             />

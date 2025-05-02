@@ -3,6 +3,7 @@ import { Box, Checkbox, Typography } from "@mui/material";
 import Grid from "@mui/material/Grid2";
 import { motion } from "framer-motion";
 import { useInView } from "react-intersection-observer";
+import { useTranslation } from "react-i18next";
 
 interface DeliveryTypeProps {
   selectedOption: string; // Adjust this type based on your actual data type
@@ -14,6 +15,8 @@ const PaymentOptionSelector: FC<DeliveryTypeProps> = ({
   handleOptionChange,
   selectedOption,
 }) => {
+  const { t } = useTranslation();
+
   const { ref, inView } = useInView({
     triggerOnce: true,
     threshold: 0.2,
@@ -28,42 +31,44 @@ const PaymentOptionSelector: FC<DeliveryTypeProps> = ({
           mt: 2,
         }}
       >
-        Töleg görnüşini saýlaň
+        {t("basket.paymentType")}
       </Typography>
       <Grid container spacing={2} my={1} ref={ref}>
-        {["Nagt", "Kart bilen töleg", "Altyn Asyr"].map((option, index) => (
-          <Grid key={option} size={{ lg: 2.4, md: 4, sm: 6, xs: 12 }}>
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: inView ? 1 : 0, y: inView ? 0 : 20 }}
-              transition={{ duration: 0.5 + index * 0.2, ease: "easeOut" }}
-            >
-              <Box
-                sx={{
-                  width: "100%",
-                  height: "35px",
-                  padding: 1,
-                  borderRadius: "2px",
-                  border: `1px solid ${showError ? "red" : "#2E2F38"}`,
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "10px",
-                  cursor: "pointer",
-                }}
-                onClick={() => handleOptionChange(option)}
+        {[t("basket.nagt"), t("basket.card"), t("basket.altyn")].map(
+          (option, index) => (
+            <Grid key={option} size={{ lg: 4, md: 4, sm: 6, xs: 12 }}>
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: inView ? 1 : 0, y: inView ? 0 : 20 }}
+                transition={{ duration: 0.5 + index * 0.2, ease: "easeOut" }}
               >
-                <Checkbox
-                  checked={selectedOption === option}
+                <Box
                   sx={{
-                    transform: "scale(0.8)",
-                    padding: "0px",
+                    width: "100%",
+                    height: "35px",
+                    padding: 1,
+                    borderRadius: "2px",
+                    border: `1px solid ${showError ? "red" : "#2E2F38"}`,
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "10px",
+                    cursor: "pointer",
                   }}
-                />
-                <Typography sx={{ fontSize: "14px" }}>{option}</Typography>
-              </Box>
-            </motion.div>
-          </Grid>
-        ))}
+                  onClick={() => handleOptionChange(option)}
+                >
+                  <Checkbox
+                    checked={selectedOption === option}
+                    sx={{
+                      transform: "scale(0.8)",
+                      padding: "0px",
+                    }}
+                  />
+                  <Typography sx={{ fontSize: "14px" }}>{option}</Typography>
+                </Box>
+              </motion.div>
+            </Grid>
+          )
+        )}
       </Grid>
 
       {/* Submit button to trigger validation */}

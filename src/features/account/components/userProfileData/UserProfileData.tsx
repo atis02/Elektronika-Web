@@ -151,7 +151,7 @@ const UserProfileData: React.FC = () => {
             >
               <a target="_blank" href={`${BASE_URL_IMG}public/${image}`}>
                 <LazyLoadImage
-                  src={`${BASE_URL_IMG}public/${image}`}
+                  src={`${BASE_URL_IMG}public/${image}` || "/images/logo2.png"}
                   // src={product.imagesOne || "fallback-image.jpg"}
                   alt="profile picture"
                   placeholderSrc={bigPlaceholder}

@@ -54,6 +54,25 @@
 
 
   },
+  "login":{
+    "myProfile":"Profilim",
+    "logout":"Çykmak",
+    "login":"Ulgama gir",
+    "register":"Agza bol",
+    "phoneNumber":"Telefon belgi",
+    "email":"Email",
+    "successProvided":"Üstünlikli tassynyldy!",
+    "forgotPass":"Açar sözi unutdym",
+    "Login":"Girmek",
+    "noAccount":"Hasabyňyz ýok bolsa",
+    "registerFor":"agza boluň",
+    "wantTogetNotify":"Bildiriş almaga razymy?",
+    "Register":"Registrasiýa",
+    "alreadyHaveAccount":"Siziň öňden hasabyňyz bar!",
+    "imageUpload":"Surat ýükle",
+    "sendOTP":"tassyklaýyş kody ugrat",
+    "resend":"Gaýtadan ugratmak "
+  },
   "home":{
     "sameProducts":"Meňzeş harytlar",
 
@@ -71,6 +90,19 @@
     "delivery":"Eltip berme",
     "newGoods":"Täze harytlar"
 
+  },
+  "basket":{
+    "noProduct":"Sebediňiz boş",
+    "basket":"Sebet",
+    "clearAll":"Hemmesini pozmak",
+    "total":"Jemi:",
+    "coupon":"Kupon kody ýaz",
+    "couponCode":"Kupon koduny giriziň",
+    "paymentType":"Töleg görnüşini saýlaň",
+    "nagt":"Nagt",
+    "card":"Terminal arkaly kart bilen töleg",
+    "altyn":"Onlaýn töleg (Altyn Asyr)",
+    "order":"Sargyt etmek"
   },
   "howRegister":{
     "how-to-register":"Saýtda nädip hasaba alynmaly.",
@@ -96,7 +128,7 @@
   "orderComplete":"Sargyt tamamlamak",   
   "orderAddress":"Eltip berme adresi",
   "name":"Ady",
-  "surname":"Familiýasy",
+  "surname":"Familiýa",
   "adress":"Adres",
   "velayat":"Welaýat",
   "city/district":"Şäher / Etrap",

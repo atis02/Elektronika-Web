@@ -19,6 +19,7 @@ export interface Product {
     nameEn: string;
     nameRu: string;
   };
+  blurhash?: string;
   isActive: boolean;
   createdAt: string;
   updatedAt: string;

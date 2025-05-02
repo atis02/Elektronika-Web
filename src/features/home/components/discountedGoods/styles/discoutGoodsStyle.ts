@@ -17,6 +17,9 @@ export const auctionImageBox = {
   height: { lg: "150px", md: "120px", sm: "120px", xs: "120px" },
   my: { lg: -1, md: 2, sm: 1, xs: 1 },
   background: "#f7f7f7",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
 };
 
 export const auctionTextBox = {

@@ -10,7 +10,6 @@ const Products: FC<ProductsProps> = ({ selectedSubcategory }) => {
   return (
     <div>
       <Typography>Products for {selectedSubcategory.title_tm}</Typography>
-      {/* Add logic to display products here */}
     </div>
   );
 };

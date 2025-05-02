@@ -81,7 +81,10 @@ const HowToOrder: FC = () => {
                       >
                         <img
                           // src={product?.imageOne || "fallback-image.jpg"}
-                          src={`${BASE_URL_IMG}public/${product?.imageOne}`}
+                          src={
+                            `${BASE_URL_IMG}public/${product?.imageOne}` ||
+                            "/images/logo2.png"
+                          }
                           style={{
                             width: "90%",
                             height: "90%",

@@ -197,7 +197,10 @@ const WeeksGood: FC = () => {
                   spacing={1}
                 >
                   <LazyLoadImage
-                    src={`${BASE_URL_IMG}public/${discountedProducts?.imageOne}`}
+                    src={
+                      `${BASE_URL_IMG}public/${discountedProducts?.imageOne}` ||
+                      "/images/logo2.png"
+                    }
                     placeholderSrc={bigPlaceholder}
                     style={{
                       width: "95px",
@@ -215,7 +218,10 @@ const WeeksGood: FC = () => {
                   />
                   {discountedProducts?.imageTwo && (
                     <LazyLoadImage
-                      src={`${BASE_URL_IMG}public/${discountedProducts?.imageTwo}`}
+                      src={
+                        `${BASE_URL_IMG}public/${discountedProducts?.imageTwo}` ||
+                        "/images/logo2.png"
+                      }
                       placeholderSrc={bigPlaceholder}
                       style={{
                         width: "95px",
@@ -234,7 +240,10 @@ const WeeksGood: FC = () => {
                   )}
                   {discountedProducts?.imageThree && (
                     <LazyLoadImage
-                      src={`${BASE_URL_IMG}public/${discountedProducts?.imageThree}`}
+                      src={
+                        `${BASE_URL_IMG}public/${discountedProducts?.imageThree}` ||
+                        "/images/logo2.png"
+                      }
                       placeholderSrc={bigPlaceholder}
                       style={{
                         width: "95px",
@@ -253,7 +262,10 @@ const WeeksGood: FC = () => {
                   )}
                   {discountedProducts?.imageFour && (
                     <LazyLoadImage
-                      src={`${BASE_URL_IMG}public/${discountedProducts?.imageFour}`}
+                      src={
+                        `${BASE_URL_IMG}public/${discountedProducts?.imageFour}` ||
+                        "/images/logo2.png"
+                      }
                       placeholderSrc={bigPlaceholder}
                       style={{
                         width: "95px",
@@ -278,9 +290,11 @@ const WeeksGood: FC = () => {
                     variants={imageVariants}
                   >
                     <LazyLoadImage
-                      src={`${BASE_URL_IMG}public/${
-                        currentImage || discountedProducts?.imageOne
-                      }`}
+                      src={
+                        `${BASE_URL_IMG}public/${
+                          currentImage || discountedProducts?.imageOne
+                        }` || "/images/logo2.png"
+                      }
                       placeholderSrc={bigPlaceholder}
                       style={{
                         width: "100%",
