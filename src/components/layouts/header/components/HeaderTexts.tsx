@@ -1,36 +1,16 @@
 import { FC } from "react";
-import { Stack, Typography, Skeleton } from "@mui/material";
+import { Stack, Typography } from "@mui/material";
 import {
   headerContactSubTitle,
   headerContactTitle,
 } from "../styles/headerStyles";
-import { useTranslation } from "react-i18next";
+import { Trans } from "react-i18next";
 import HeaderContactsSearch from "./HeaderContacts";
 
 interface HeaderContactsProps {
   isLoading: boolean;
 }
 const HeaderContacts: FC<HeaderContactsProps> = ({ isLoading }) => {
-  const { t } = useTranslation();
-  if (isLoading) {
-    return (
-      <Stack direction="row" justifyContent="space-between">
-        <Stack>
-          <Skeleton variant="text" sx={{ fontSize: "1.5rem" }} width={150} />
-          <Skeleton variant="text" sx={{ fontSize: "1rem" }} width={100} />
-        </Stack>
-        <Stack>
-          <Skeleton variant="text" sx={{ fontSize: "1.5rem" }} width={150} />
-          <Skeleton variant="text" sx={{ fontSize: "1rem" }} width={100} />
-        </Stack>
-        <Stack>
-          <Skeleton variant="text" sx={{ fontSize: "1.5rem" }} width={150} />
-          <Skeleton variant="text" sx={{ fontSize: "1.5rem" }} width={150} />
-        </Stack>
-      </Stack>
-    );
-  }
-
   return (
     <Stack
       direction="row"
@@ -40,9 +20,8 @@ const HeaderContacts: FC<HeaderContactsProps> = ({ isLoading }) => {
       justifyContent="space-between"
     >
       <Stack>
-        {/* <Typography sx={headerContactTitle}>{t("header.work_time")}</Typography> */}
         <Typography sx={headerContactSubTitle}>
-          {t("header.work_hours")}
+          <Trans i18nKey="header.work_hours" components={{ 1: <br /> }} />
         </Typography>
       </Stack>
       <HeaderContactsSearch isLoading={isLoading} />

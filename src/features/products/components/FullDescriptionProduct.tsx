@@ -9,6 +9,8 @@ import {
   Paper,
   Stack,
   Typography,
+  useMediaQuery,
+  useTheme,
 } from "@mui/material";
 import Grid from "@mui/material/Grid2";
 import LocalGroceryStoreOutlinedIcon from "@mui/icons-material/LocalGroceryStoreOutlined";
@@ -26,7 +28,6 @@ import {
 } from "../styles/productStyle";
 import {
   addStoreDiscountGoodButton,
-  auctionImageBox,
   compareDiscountGoodsCostButton,
   discountGoodCodeText,
   discountGoodCompanyTitle,
@@ -37,13 +38,10 @@ import {
 } from "../../home/components/discountedGoods/styles/discoutGoodsStyle";
 import { observer } from "mobx-react-lite";
 import ProductViewModel from "../presentation/ProductViewModel";
-// import { Accordion, AccordionSummary, AccordionDetails } from "@mui/material";
-// import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { motion } from "framer-motion";
 import { useInView } from "react-intersection-observer";
 import ReactImageMagnify from "react-image-magnify";
 import FavoriteIcon from "@mui/icons-material/Favorite";
-// import useFavoriteProducts from "../../Favourites/components/FavouritesProducts";
 import { BASE_URL, BASE_URL_IMG } from "../../../api/instance";
 import {
   useAppDispatch,
@@ -66,36 +64,11 @@ import useDrawer from "../../../components/layouts/navbar/components/useDrawer";
 import axios from "axios";
 import AppDrawer from "../../drawer/presentation/BasketDrawer";
 import { useTranslation } from "react-i18next";
-import { LazyLoadImage } from "react-lazy-load-image-component";
-import { decode } from "blurhash";
 import { formatNumber } from "../../../components/utils/allutils";
+import { ProductImageOne } from "../../home/components/discountedGoods/components/productImageOne";
+import DoneIcon from "@mui/icons-material/Done";
 
-interface Props {
-  // productId: number; // Removed
-}
-const blurHashToBase64 = (
-  blurhash: string,
-  width: number = 32,
-  height: number = 32
-) => {
-  if (!blurhash) return null;
-  try {
-    const pixels = decode(blurhash, width, height);
-    const canvas = document.createElement("canvas");
-    canvas.width = width;
-    canvas.height = height;
-    const ctx = canvas.getContext("2d");
-    if (!ctx) return null;
-    const imageData = ctx.createImageData(width, height);
-    imageData.data.set(pixels);
-    ctx.putImageData(imageData, 0, 0);
-    return canvas.toDataURL();
-  } catch (e) {
-    console.error("error blurhash", e);
-    return null;
-  }
-};
-const FullDescriptionProduct: FC<Props> = observer(() => {
+const FullDescriptionProduct: FC = observer(() => {
   const navigate = useNavigate();
   const [currentImage, setCurrentImage] = useState<string | null>(null);
   const { selectedProduct, fetchProductById, loading } = ProductViewModel;
@@ -105,7 +78,8 @@ const FullDescriptionProduct: FC<Props> = observer(() => {
   const loggedUser = localStorage.getItem("ElectronicaUser");
   const { isOpen, openDrawer, closeDrawer } = useDrawer();
   const [isOpened, setIsOpened] = useState<boolean>(false);
-
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const [categoryProducts, setCategoryProducts] = useState([]);
   const { t, i18n } = useTranslation();
 
@@ -172,7 +146,6 @@ const FullDescriptionProduct: FC<Props> = observer(() => {
   }, [selectedProduct]);
   const dispatch = useAppDispatch();
   const compareProducts = useAppSelector((state) => state.compare.products);
-  // const smallImages = selectedProduct?.imageOne || [];
   const handleOpen = () => {
     if (loggedUser) {
       setOpenCommentModal(true);
@@ -249,7 +222,12 @@ const FullDescriptionProduct: FC<Props> = observer(() => {
         return nameEn || nameRu || nameTm || "";
     }
   };
-
+  const isExist = (product: any) => {
+    const isInBasket = BasketViewModel.items.some(
+      (item) => item.product.id === product.id
+    );
+    return isInBasket ? <DoneIcon /> : <LocalGroceryStoreOutlinedIcon />;
+  };
   return (
     <>
       <Container>
@@ -276,8 +254,6 @@ const FullDescriptionProduct: FC<Props> = observer(() => {
                       src:
                         `${BASE_URL_IMG}public/${currentImage}` ||
                         `${BASE_URL_IMG}public/${selectedProduct?.imageOne}`,
-
-                      // src: currentImage || "./images/category1.png",
                       width: 1000,
                       height: 1000,
                     },
@@ -301,11 +277,6 @@ const FullDescriptionProduct: FC<Props> = observer(() => {
                 ml={20}
                 sx={smallProductImagePaper}
               >
-                {/* <Paper
-                    elevation={3}
-                    sx={smallProductImagePaper}
-                    onMouseEnter={() => handleImageHover(image)}
-                  > */}
                 <motion.img
                   src={`${BASE_URL_IMG}public/${selectedProduct?.imageOne}`}
                   alt={`thumbnail `}
@@ -384,9 +355,7 @@ const FullDescriptionProduct: FC<Props> = observer(() => {
                 <span>{selectedProduct?.barcode || 123456789}</span>
               </Typography>
               <Stack spacing={2} my={3}>
-                {/* {visibleProperties.map((property: any, index) => ( */}
                 <Stack
-                  // key={index}
                   direction="row"
                   alignItems="center"
                   justifyContent="space-between"
@@ -467,7 +436,7 @@ const FullDescriptionProduct: FC<Props> = observer(() => {
                 <Button
                   variant="contained"
                   fullWidth
-                  endIcon={<LocalGroceryStoreOutlinedIcon />}
+                  endIcon={isExist(selectedProduct)}
                   sx={{ ...addStoreDiscountGoodButton, width: "235px" }}
                   onClick={() => {
                     selectedProduct.productQuantity <= 0
@@ -582,185 +551,194 @@ const FullDescriptionProduct: FC<Props> = observer(() => {
             {t("home.sameProducts")}
           </Typography>
         </Stack>
-        <Grid container spacing={2} my={3} ref={containerRef}>
-          {categoryProducts.map((product: any, index) => (
-            <Grid
-              key={product.id}
-              sx={{
-                minHeight: 430,
-                justifyContent: "space-between",
-              }}
-              size={{ lg: 2, md: 3, sm: 4, xs: 6 }}
-            >
-              <motion.div
-                initial="hidden"
-                animate={containerInView ? "visible" : "hidden"}
-                custom={index}
-                variants={productItemVariants}
-                style={{
-                  position: "relative",
-                  height: "100%",
+        <Grid container spacing={1} my={1} ref={containerRef}>
+          {categoryProducts
+            .slice(0, isMobile ? 6 : 5)
+            ?.map((product: any, index) => (
+              <Grid
+                key={product.id}
+                sx={{
+                  minHeight: 380,
+                  justifyContent: "space-between",
                 }}
+                size={{ lg: 2.38, md: 3, sm: 4, xs: 6 }}
               >
-                <Box
-                  sx={{
-                    p: 1,
+                <motion.div
+                  initial="hidden"
+                  animate={containerInView ? "visible" : "hidden"}
+                  custom={index}
+                  variants={productItemVariants}
+                  style={{
+                    position: "relative",
                     height: "100%",
-                    borderRadius: "6px",
                   }}
                 >
-                  {product.warranty && (
-                    <Box sx={{ position: "absolute", right: 10, top: 10 }}>
-                      <Stack direction="row" color="#B71C1C">
-                        <img
-                          src="/images/guarantee.png"
-                          style={{ width: 40, height: 40 }}
-                        />
-                      </Stack>
-                    </Box>
-                  )}
-                  <Box sx={auctionImageBox}>
-                    <LazyLoadImage
-                      onClick={() => navigate(`/product/${product.id}`)}
-                      src={`${BASE_URL_IMG}public/${product.imageOne}`}
-                      alt={product.title_en}
-                      placeholderSrc={blurHashToBase64(product.blurhash) || ""}
-                      effect="blur"
-                      style={{
-                        width: "85%",
-                        height: "80%",
-                        objectFit: "contain",
-                        cursor: "pointer",
-                      }}
-                    />
-                  </Box>
+                  <Box
+                    sx={{
+                      p: 1,
+                      height: "100%",
+                      borderRadius: "6px",
+                    }}
+                  >
+                    {product.warranty && (
+                      <Box
+                        sx={{
+                          position: "absolute",
+                          right: 0,
+                          zIndex: 100,
+                          top: 10,
+                        }}
+                      >
+                        <Stack direction="row" color="#B71C1C">
+                          <img
+                            src="/icons/guarantee.png"
+                            style={{ width: 40, height: 40 }}
+                          />
+                          <Typography
+                            fontSize={13}
+                            position="absolute"
+                            bottom={-12}
+                            color="#000"
+                          >
+                            {product.warranty}
+                          </Typography>
+                        </Stack>
+                      </Box>
+                    )}
+                    <ProductImageOne product={product} />
 
-                  <Stack my={2}>
-                    <Typography
-                      sx={discountGoodTitle}
-                      onClick={() => navigate(`/product/${product.id}`)}
-                      noWrap
-                    >
-                      {getTitle(product.nameTm, product.nameRu, product.nameEn)}
-                      {/* {product.nameTm} */}
-                    </Typography>
-                    <Typography sx={discountGoodCompanyTitle}>
-                      {product.brand?.nameTm || "Unknown Brand"}
-                    </Typography>
-                    <Stack direction="row" spacing={1} my={1}>
-                      <Typography sx={discountGoodCodeText}>
-                        {t("home.barcode")}
+                    <Stack my={2}>
+                      <Typography
+                        sx={discountGoodTitle}
+                        onClick={() => navigate(`/product/${product.id}`)}
+                        noWrap
+                      >
+                        {getTitle(
+                          product.nameTm,
+                          product.nameRu,
+                          product.nameEn
+                        )}
+                        {/* {product.nameTm} */}
                       </Typography>
-                      <Typography sx={discountGoodCodeText}>
-                        {product.barcode || "No code"}
+                      <Typography sx={discountGoodCompanyTitle}>
+                        {product.brand?.nameTm || "Unknown Brand"}
                       </Typography>
+                      <Stack direction="row" spacing={1} my={1}>
+                        <Typography sx={discountGoodCodeText}>
+                          {t("home.barcode")}
+                        </Typography>
+                        <Typography sx={discountGoodCodeText}>
+                          {product.barcode || "No code"}
+                        </Typography>
+                      </Stack>
+                      <Stack
+                        direction="row"
+                        justifyContent="space-between"
+                        alignItems="center"
+                      >
+                        <Typography sx={discountGoodCost}>
+                          {product.sellPrice - product.discount_priceTMT} m.
+                        </Typography>
+                        <Button variant="contained" sx={discountGoodLastCount}>
+                          {t("products.nagt")} {product.productQuantity}
+                        </Button>
+                      </Stack>
                     </Stack>
+                    <Button
+                      variant="contained"
+                      fullWidth
+                      endIcon={isExist(product)}
+                      sx={addStoreDiscountGoodButton}
+                      onClick={() => {
+                        product.productQuantity <= 0
+                          ? toast.error("Ammarda haryt az mukdarda")
+                          : (BasketViewModel.addToBasket(product),
+                            toggleDrawer(true));
+                      }}
+                    >
+                      {t("home.addToCart")}
+                    </Button>
                     <Stack
                       direction="row"
                       justifyContent="space-between"
                       alignItems="center"
+                      gap={1}
                     >
-                      <Typography sx={discountGoodCost}>
-                        {product.sellPrice - product.discount_priceTMT} m.
-                      </Typography>
-                      <Button variant="contained" sx={discountGoodLastCount}>
-                        {t("products.nagt")} {product.productQuantity}
-                      </Button>
-                    </Stack>
-                  </Stack>
-                  <Button
-                    variant="contained"
-                    fullWidth
-                    endIcon={<LocalGroceryStoreOutlinedIcon />}
-                    sx={addStoreDiscountGoodButton}
-                    onClick={() => {
-                      product.productQuantity <= 0
-                        ? toast.error("Ammarda haryt az mukdarda")
-                        : (BasketViewModel.addToBasket(product),
-                          toggleDrawer(true));
-                    }}
-                  >
-                    {t("home.addToCart")}
-                  </Button>
-                  <Stack
-                    direction="row"
-                    justifyContent="space-between"
-                    alignItems="center"
-                    gap={1}
-                  >
-                    <Button
-                      onClick={() => dispatch(addProduct(product))}
-                      sx={{
-                        ...compareDiscountGoodsCostButton,
-                        backgroundColor: compareProducts.some(
-                          (comp: any) => comp.id === product.id
-                        )
-                          ? "#C3000E"
-                          : "transparent",
-                        color: compareProducts.some(
-                          (comp: any) => comp.id === product.id
-                        )
-                          ? "#fff"
-                          : "#929292",
-                        "&:hover": {
+                      <Button
+                        onClick={() => dispatch(addProduct(product))}
+                        sx={{
+                          ...compareDiscountGoodsCostButton,
                           backgroundColor: compareProducts.some(
                             (comp: any) => comp.id === product.id
                           )
                             ? "#C3000E"
-                            : "#f0f0f0",
-                        },
-                        height: 24,
-                      }}
-                    >
-                      <img
-                        src={
-                          compareProducts.some((p) => p.id === product.id)
-                            ? "/icons/compare white.svg"
-                            : "/icons/compare.svg"
-                        }
-                        alt="compare-icon"
-                        style={{ marginRight: "5px" }}
-                      />
-                      {t("home.compare")}
-                    </Button>
+                            : "transparent",
+                          color: compareProducts.some(
+                            (comp: any) => comp.id === product.id
+                          )
+                            ? "#fff"
+                            : "#929292",
+                          "&:hover": {
+                            backgroundColor: compareProducts.some(
+                              (comp: any) => comp.id === product.id
+                            )
+                              ? "#C3000E"
+                              : "#f0f0f0",
+                          },
+                          height: 24,
+                        }}
+                      >
+                        <img
+                          src={
+                            compareProducts.some((p) => p.id === product.id)
+                              ? "/icons/compare white.svg"
+                              : "/icons/compare.svg"
+                          }
+                          alt="compare-icon"
+                          style={{ marginRight: "5px" }}
+                        />
+                        {t("home.compare")}
+                      </Button>
 
-                    <Button
-                      onClick={() => handleToggleFavorite(product)}
-                      sx={{
-                        ...compareDiscountGoodsCostButton,
-                        backgroundColor: favorites.some(
-                          (fav) => fav.id === product.id
-                        )
-                          ? "#C3000E"
-                          : "transparent",
-                        color: favorites.some((fav) => fav.id === product.id)
-                          ? "#fff"
-                          : "#929292",
-                        "&:hover": {
+                      <Button
+                        onClick={() => handleToggleFavorite(product)}
+                        sx={{
+                          ...compareDiscountGoodsCostButton,
                           backgroundColor: favorites.some(
                             (fav) => fav.id === product.id
                           )
                             ? "#C3000E"
-                            : "#f0f0f0",
-                        },
-                      }}
-                    >
-                      <FavoriteBorderIcon
-                        sx={{
-                          fontWeight: 300,
-                          width: "12px",
+                            : "transparent",
                           color: favorites.some((fav) => fav.id === product.id)
                             ? "#fff"
                             : "#929292",
+                          "&:hover": {
+                            backgroundColor: favorites.some(
+                              (fav) => fav.id === product.id
+                            )
+                              ? "#C3000E"
+                              : "#f0f0f0",
+                          },
                         }}
-                      />
-                      {t("home.favourite")}
-                    </Button>
-                  </Stack>
-                </Box>
-              </motion.div>
-            </Grid>
-          ))}
+                      >
+                        <FavoriteBorderIcon
+                          sx={{
+                            fontWeight: 300,
+                            width: "12px",
+                            color: favorites.some(
+                              (fav) => fav.id === product.id
+                            )
+                              ? "#fff"
+                              : "#929292",
+                          }}
+                        />
+                        {t("home.favourite")}
+                      </Button>
+                    </Stack>
+                  </Box>
+                </motion.div>
+              </Grid>
+            ))}
           <AppDrawer isOpen={isOpened} toggleDrawer={toggleDrawer} />
         </Grid>
       </Container>

@@ -14,9 +14,10 @@ export const discountGoodsSeeAllButton = {
 };
 
 export const auctionImageBox = {
-  height: { lg: "150px", md: "120px", sm: "120px", xs: "120px" },
+  maxHeight: { lg: "150px", md: "120px", sm: "120px", xs: "120px" },
   my: { lg: -1, md: 2, sm: 1, xs: 1 },
   background: "#f7f7f7",
+  aspectRatio: "1 / 1",
   display: "flex",
   alignItems: "center",
   justifyContent: "center",
@@ -37,7 +38,7 @@ export const auctionTextBox = {
 };
 export const auctionTextBoxWarranty = {
   background: "#fff",
-  width: "34px",
+  width: "38px",
   height: "24px",
   color: "#2E2F38",
   fontSize: "11px",

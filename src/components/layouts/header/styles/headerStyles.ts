@@ -5,7 +5,7 @@ export const headerContactTitle = {
 };
 
 export const headerContactSubTitle = {
-  fontSize: "12px",
+  fontSize: "14px",
   fontWeight: 400,
   width: "260px",
 

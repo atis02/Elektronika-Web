@@ -2,7 +2,6 @@ import { FC, useEffect, useState, useRef } from "react";
 import {
   Stack,
   Typography,
-  Skeleton,
   TextField,
   InputAdornment,
   CircularProgress,
@@ -26,7 +25,7 @@ interface SearchedProducts {
   }[];
 }
 
-const HeaderContactsSearch: FC<HeaderContactsProps> = ({ isLoading }) => {
+const HeaderContactsSearch: FC<HeaderContactsProps> = () => {
   const [searchValue, setSearchValue] = useState("");
   const [result, setResult] = useState<SearchedProducts | undefined>(undefined);
   const [debouncedValue, setDebouncedValue] = useState("");
@@ -89,18 +88,7 @@ const HeaderContactsSearch: FC<HeaderContactsProps> = ({ isLoading }) => {
         return nameEn;
     }
   };
-  if (isLoading) {
-    return (
-      <Stack direction="row" justifyContent="space-between">
-        <Stack></Stack>
-        <Stack>
-          <Skeleton variant="text" sx={{ fontSize: "1.5rem" }} width={150} />
-          <Skeleton variant="text" sx={{ fontSize: "1rem" }} width={100} />
-        </Stack>
-        <Stack></Stack>
-      </Stack>
-    );
-  }
+
   const style3 = {
     fontSize: "14px",
     whiteSpace: "normal",
@@ -199,7 +187,7 @@ const HeaderContactsSearch: FC<HeaderContactsProps> = ({ isLoading }) => {
               </Stack>
             ))
           ) : (
-            <Typography>Haryt tapylmady</Typography>
+            <Typography color="#464646">Haryt tapylmady</Typography>
           )}
         </Stack>
       )}

@@ -12,6 +12,7 @@ import toast from "react-hot-toast";
 import BasketViewModel from "../../../store/basket/BasketViewModel";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { observer } from "mobx-react-lite";
 
 interface orderStatus {
   id: string;
@@ -44,7 +45,8 @@ const CompleteOrder: FC = () => {
   //   const basket = localStorage.getItem("basket");
   //   return basket ? JSON.parse(basket) : [];
   // });
-  const { items } = BasketViewModel;
+  const items = BasketViewModel.items;
+
   const navigate = useNavigate();
   useEffect(() => {
     const orderStatuses = async () => {
@@ -221,4 +223,4 @@ const CompleteOrder: FC = () => {
   );
 };
 
-export default CompleteOrder;
+export default observer(CompleteOrder);

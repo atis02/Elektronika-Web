@@ -1,7 +1,7 @@
 export const auctionBox = {
   position: "relative", // For positioning child elements
   padding: "20px",
-  width:'108%',
+  width: "108%",
   border: "1px solid #C3000E", // Main border for the box
   borderTop: "none", // Remove the top border to replace it with custom pseudo-elements
   "::before": {
@@ -69,11 +69,11 @@ export const autionProductTitle = {
 export const auctionParticipateButton = {
   color: "#2E2F38",
   fontWeight: 700,
-  fontSize: "12px",
+  fontSize: "15px",
   background: "#E0E0E0",
   borderRadius: "2px",
   textTransform: "none",
-  mt:2
+  mt: 2,
 };
 
 // Auction Details styles starts here ....................................
@@ -215,7 +215,7 @@ export const auctionDetailProportiesBgBox = {
 
 export const auctionDetailProportiesBox = {
   width: "100%",
-    minHeight: "50px",
+  minHeight: "50px",
 
   display: "flex",
   alignItems: "center",

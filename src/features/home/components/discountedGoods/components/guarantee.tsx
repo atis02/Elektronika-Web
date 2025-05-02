@@ -18,9 +18,9 @@ export const Guarantee: FC<Props> = ({ product }) => {
       }}
     >
       <Stack direction="row" color="#B71C1C">
-        <img src="/images/guarantee.png" style={{ width: 40, height: 40 }} />
+        <img src="/icons/guarantee.png" style={{ width: 40, height: 45 }} />
       </Stack>
-      <Typography fontSize={11} position="absolute" bottom={-18}>
+      <Typography fontSize={13} position="absolute" bottom={-22}>
         {product.warranty}
       </Typography>
     </Box>

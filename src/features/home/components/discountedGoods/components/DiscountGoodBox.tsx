@@ -2,7 +2,7 @@ import { FC, useEffect, useRef, useState } from "react";
 import { Stack, Typography } from "@mui/material";
 import axios from "axios";
 import { BASE_URL } from "../../../../../api/instance";
-import GridLoading from "./GridLoading";
+import GridLoading from "../../offeredGoods/components/GridLoading";
 import GridProducts from "./GridProducts";
 
 const DiscountGoodBox: FC = () => {

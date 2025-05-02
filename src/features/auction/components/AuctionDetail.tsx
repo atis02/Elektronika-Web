@@ -32,8 +32,8 @@ import { BASE_URL, BASE_URL_IMG } from "../../../api/instance";
 import { useParams } from "react-router-dom";
 import AuctionTimer from "./CounDownAuction";
 import toast from "react-hot-toast";
-import { formatNumber } from "../../../components/utils/allutils";
 import { useTranslation } from "react-i18next";
+import { formatNumber } from "../../../components/utils/allutils";
 
 interface Product {
   imageOne: string;

@@ -19,7 +19,6 @@ import {
 } from "../styles/discoutGoodsStyle";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { formatNumber } from "../../../../../components/utils/allutils";
 import LocalGroceryStoreOutlinedIcon from "@mui/icons-material/LocalGroceryStoreOutlined";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
@@ -32,6 +31,7 @@ import { useAppSelector } from "../../../../../components/redux/customHook";
 import { RootState } from "../../../../../components/redux/store";
 import { toggleFavorite } from "../../../../../components/redux/favouriteSlice";
 import AppDrawer from "../../../../drawer/presentation/BasketDrawer";
+import { formatNumber } from "../../../../../components/utils/allutils";
 
 type Props = {
   displayedProducts: Product[];
@@ -122,7 +122,12 @@ const GridProducts: FC<Props> = ({
                 position: "relative",
               }}
             >
-              <Box sx={{ p: 1, borderRadius: "6px" }}>
+              <Box
+                sx={{
+                  p: 1,
+                  borderRadius: "6px",
+                }}
+              >
                 <Stack direction="row" justifyContent="flex-end">
                   {product.warranty && <Guarantee product={product} />}
                 </Stack>

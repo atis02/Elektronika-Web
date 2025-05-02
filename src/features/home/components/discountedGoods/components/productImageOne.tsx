@@ -52,8 +52,8 @@ export const ProductImageOne: FC<Props> = ({ product }) => {
         placeholderSrc={blurHashToBase64(product.blurhash) || ""}
         effect="blur"
         style={{
-          width: "85%",
-          height: "80%",
+          width: "100%",
+          height: "100%",
           objectFit: "cover",
           cursor: "pointer",
           opacity: product.imageOne === null ? "30%" : 1,

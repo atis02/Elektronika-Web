@@ -35,7 +35,6 @@ const ButtonWithTimer: React.FC<ButtonWithTimerProps> = ({
     );
     setRemainingTime(timerDuration);
   };
-  console.log(phoneNumber);
 
   const handleButtonClick = () => {
     sendOTP(`+993${phoneNumber}`);

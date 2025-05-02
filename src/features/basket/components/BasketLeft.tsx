@@ -22,6 +22,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { t } from "i18next";
+import { formatNumber } from "../../../components/utils/allutils";
 
 const BasketLeft: FC = observer(() => {
   const { items, totalPrice } = BasketViewModel;
@@ -203,7 +204,10 @@ const BasketLeft: FC = observer(() => {
                 </IconButton>
               </Stack>
               <Typography sx={{ fontSize: "17px", fontWeight: 600 }}>
-                {item.product?.sellPrice - item.product?.discount_priceTMT} TMT
+                {formatNumber(
+                  item.product?.sellPrice - item.product?.discount_priceTMT
+                )}{" "}
+                TMT
               </Typography>
               <IconButton
                 onClick={() =>
@@ -219,7 +223,7 @@ const BasketLeft: FC = observer(() => {
       <Divider />
       <Stack direction="row" justifyContent="flex-end" m={3}>
         <Typography>
-          {t("basket.total")} <b>{totalPrice.toFixed(2)}</b>
+          {t("basket.total")} <b>{formatNumber(+totalPrice.toFixed(2))}</b>
         </Typography>
       </Stack>
     </Paper>

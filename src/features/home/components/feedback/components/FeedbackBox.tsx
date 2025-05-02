@@ -50,7 +50,6 @@ const Feedbacks: FC = () => {
   if (error) return <div>Error loading feedbacks.</div>;
   if (isLoading) return <div>Loading feedbacks...</div>;
   if (!data?.length) return;
-  console.log(data);
 
   const sliderSettings = {
     dots: data.length > 1 && true,
