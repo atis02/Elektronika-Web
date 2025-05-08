@@ -51,13 +51,14 @@ const CategoryHeader: FC<CategoryHeaderProps> = ({
     };
     handleCategorySelect(filters);
   };
+  console.log(searchParams.get("categoryId"));
 
   return (
     <>
       <Stack direction="row" alignItems="center" spacing={0.4}>
         <Typography sx={deliveryNavigateTitle}>
           <Link to="/" style={{ textDecoration: "none", color: "#777777" }}>
-            Baş sahypa /
+            {t("home.mainPage")}
           </Link>
         </Typography>
         <Typography sx={deliveryNavigateTitle}>{categoryTitle}</Typography>

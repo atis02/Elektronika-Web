@@ -23,6 +23,8 @@ const DiscountGoodBox: FC = () => {
       const filteredProducts = response.data?.products.filter(
         (item: any) => item.statusId === "56143a81-cfa6-4c52-a74b-957d94b0c058"
       );
+      console.log(response.data);
+      console.log(filteredProducts);
 
       if (page === 1) {
         setDiscountedProducts(filteredProducts);

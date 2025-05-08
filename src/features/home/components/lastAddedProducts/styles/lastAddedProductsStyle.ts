@@ -32,11 +32,11 @@ export const lastAddedProductTitle = {
 };
 
 export const lastAddedProductCompanyName = {
-  color: "#0470C4",
+  color: "#464646",
   fontSize: "10px",
   fontWeight: 600,
   lineHeight: "11px",
-  textTransform:'uppercase',
+  textTransform: "uppercase",
 };
 
 export const lastAddedProductCost = {

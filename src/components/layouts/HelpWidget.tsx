@@ -16,11 +16,11 @@ const HelpWidget = () => {
         // mt: -4,
       }}
     >
-      <Box display="flex" alignItems="center" mb={2}>
+      <Box display="flex" alignItems="center" mb={2} mt={-2}>
         <Avatar
-          src="https://randomuser.me/api/portraits/women/79.jpg"
+          src="/images/tmbot.png"
           alt="E"
-          sx={{ width: 40, height: 40, mr: 1 }}
+          sx={{ width: 100, height: 100, mr: 1 }}
         />
         <Box>
           <Typography fontWeight={600}>Чат с экспертом</Typography>

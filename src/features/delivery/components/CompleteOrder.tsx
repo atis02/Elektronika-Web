@@ -100,6 +100,7 @@ const CompleteOrder: FC = () => {
     setSelectedOption(option === selectedOption ? null : option);
     setShowError(false);
   };
+  console.log(selectedOption);
 
   const handleSubmit = async () => {
     const userString = localStorage.getItem("ElectronicaUser");
@@ -150,11 +151,11 @@ const CompleteOrder: FC = () => {
 
       try {
         setLoading(true);
-        if (selectedOption === "Altyn Asyr") {
+        if (selectedOption === "Online payment (Altyn Asyr)") {
           await axios.post(`${BASE_URL}order/payByCard`, body).then((resp) => {
             if (resp.data.message === "Order created successfully") {
               setLoading(false);
-              if (selectedOption === "Altyn Asyr") {
+              if (selectedOption === "Online payment (Altyn Asyr)") {
                 setTimeout(() => {
                   window.location.href = resp.data.paymentUrl;
                 }, 1000);
