@@ -1,22 +1,11 @@
 import { FC, useState } from "react";
-import {
-  IconButton,
-  Drawer,
-  Box,
-  Divider,
-  Stack,
-  Typography,
-} from "@mui/material";
+import { IconButton, Drawer, Box, Divider } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import NavbarMenuLinks from "./NavbarMenuLinks";
-import useDrawer from "./useDrawer";
-import Login from "../../../login/Login";
-import LoginIcon from "@mui/icons-material/Login";
 import CatalogMenu from "./MobileCatalog";
 
 const NavbarMenu: FC = () => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-  const { isOpen, openDrawer, closeDrawer } = useDrawer();
 
   const toggleDrawer = (open: boolean) => () => {
     setIsDrawerOpen(open);
@@ -26,10 +15,10 @@ const NavbarMenu: FC = () => {
     <>
       <IconButton
         sx={{
-          background: "#CFD8DC !important",
+          background: "#B71C1C !important",
           width: "38px",
           height: "38px",
-          color: "#2E2F38",
+          color: "#fff",
           borderRadius: "4px",
         }}
         onClick={toggleDrawer(true)}
@@ -45,26 +34,14 @@ const NavbarMenu: FC = () => {
             backgroundColor: "#fff",
           }}
         >
-          {/* <NavbarMenuCategories /> */}
           <CatalogMenu onClose={toggleDrawer(false)} />
           <Divider />
           <Divider />
           <NavbarMenuLinks />
           <Divider />
           <Divider />
-          <Stack
-            p={2}
-            direction="row"
-            alignItems="center"
-            spacing={2}
-            onClick={openDrawer}
-          >
-            <Typography>Girmek</Typography>
-            <LoginIcon sx={{ color: "#2E2F38", width: "16px" }} />
-          </Stack>
         </Box>
       </Drawer>
-      <Login isOpen={isOpen} onClose={closeDrawer} />
     </>
   );
 };

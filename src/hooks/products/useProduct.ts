@@ -70,7 +70,7 @@ interface UseProductResponse {
 }
 
 export const useProduct = (
-  limit: number = 1300,
+  limit: number = 20,
   page: number = 1
 ): UseProductResponse => {
   const { data, error, mutate } = useSWR(

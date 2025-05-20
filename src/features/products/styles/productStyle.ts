@@ -24,9 +24,10 @@ export const smallProductImagePaper = {
 };
 
 export const currentProductImageBox = {
-  height: "60vh",
+  height: { lg: "60vh", md: "60vh", sm: "60vh", xs: "30vh" },
   width: "90%",
   padding: "20px",
+  pl: 6,
   display: "flex",
   alignItems: "center",
   justifyContent: "center",

@@ -145,7 +145,7 @@ const MobileSearch: FC<HeaderContactsProps> = ({ isLoading }) => {
             },
           },
           "& input::placeholder": {
-            color: "#fff",
+            color: { lg: "#fff", md: "#fff", sm: "#fff", xs: "#464646" },
             opacity: 1,
           },
         }}

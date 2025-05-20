@@ -22,9 +22,9 @@
     "pageDoesntExist":"Gözleýan sahypaňyz ýok.",
 
     "how_to_register":"Nädip hasaba alynmaly",
-    "search":"Gözleg..."
-
-
+    "search":"Gözleg...",
+"dosearch":"Gözleg",
+    "clearFilter":"Arassala"
   },
   "auction":{
     "auctionTitle":"Auksion",
@@ -88,8 +88,10 @@
     "barcode":"Barkody",
     "mainPage":"Baş sahypa",
     "delivery":"Eltip berme",
-    "newGoods":"Täze harytlar"
-
+    "newGoods":"Täze harytlar",
+    "noItem":"Haryt ýok",
+    "brand":"Brend",
+    "setFilters":"Aýratynlyklary we filterler boýunça gözleg"
   },
   "basket":{
     "noProduct":"Sebediňiz boş",
@@ -166,7 +168,8 @@
   "descFour":"Dükanymyzdan ýakyn adamyňyza sowgat şahadatnamasyny beriň we öz islegine görä sowgat saýlajakdygyna we ünsüňizi ýada saljakdygyna göz ýetiriň!"
 },
 "products":{
-  "nagt":"sany"
+  "nagt":"sany",
+  "noProperty":"Aýratynlyk ýok"
 },
 "goodOfWeek":{
   "quality":"Ýokary hilli",

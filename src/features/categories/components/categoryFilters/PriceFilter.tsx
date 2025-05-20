@@ -5,15 +5,19 @@ import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
 import { Search } from "@mui/icons-material";
 import { defaultCostButton } from "../../styles/categoryStyle";
 import { useSearchParams } from "react-router-dom";
+import { useTranslation } from "react-i18next";
+import { Close } from "@mui/icons-material";
+
 interface Prices {
   handleCategorySelect: (filters: any) => void;
+  onClose?: () => void;
 }
-const PriceFilter: FC<Prices> = ({ handleCategorySelect }) => {
+const PriceFilter: FC<Prices> = ({ onClose, handleCategorySelect }) => {
   const [showFilters, setShowFilters] = useState(true);
   const [focusedMinPrice, setFocusedMinPrice] = useState(true);
   const [focusedMaxPrice, setFocusedMaxPrice] = useState(true);
   const [searchParams] = useSearchParams();
-
+  const { t } = useTranslation();
   const [minPriceProduct, setMinPriceProduct] = useState("");
   const [maxPriceProduct, setMaxPriceProduct] = useState("");
 
@@ -37,6 +41,7 @@ const PriceFilter: FC<Prices> = ({ handleCategorySelect }) => {
       minPrice: minPriceProduct,
       maxPrice: maxPriceProduct,
     };
+    onClose && onClose();
     handleCategorySelect(filters);
   };
   const handleSet = (numb: any) => {
@@ -61,7 +66,7 @@ const PriceFilter: FC<Prices> = ({ handleCategorySelect }) => {
           px={1}
           onClick={() => handleClick()}
         >
-          <Typography color="#2E2F38">Baha</Typography>
+          <Typography color="#2E2F38">{t("auction.price")}</Typography>
           {!showFilters ? (
             <ArrowDropDownIcon sx={{ width: "20px", color: "#2E2F38" }} />
           ) : (
@@ -72,7 +77,7 @@ const PriceFilter: FC<Prices> = ({ handleCategorySelect }) => {
       </Stack>
       {showFilters && (
         <>
-          <Stack direction="row" alignItems="center" spacing={2}>
+          <Stack direction="row" alignItems="center" spacing={1.25}>
             <input
               type="number"
               style={{
@@ -89,6 +94,7 @@ const PriceFilter: FC<Prices> = ({ handleCategorySelect }) => {
             />
 
             <Typography>-</Typography>
+
             <input
               type="number"
               style={{
@@ -103,6 +109,7 @@ const PriceFilter: FC<Prices> = ({ handleCategorySelect }) => {
               onChange={(e: any) => setMaxPriceProduct(e.target.value)}
               onFocus={() => setFocusedMaxPrice(true)}
             />
+
             <IconButton
               sx={{
                 background: "#929292",
@@ -117,6 +124,28 @@ const PriceFilter: FC<Prices> = ({ handleCategorySelect }) => {
             >
               <Search />
             </IconButton>
+
+            {(minPriceProduct || maxPriceProduct) && (
+              <IconButton
+                sx={{
+                  background: "#f44336",
+                  borderRadius: "4px",
+                  width: "24px",
+                  height: "24px",
+                  color: "#fff",
+                  padding: "15px",
+                  "&:hover": { background: "#d32f2f" },
+                }}
+                onClick={() => {
+                  setMinPriceProduct("");
+                  setMaxPriceProduct("");
+                  setFocusedMinPrice(true);
+                  setFocusedMaxPrice(true);
+                }}
+              >
+                <Close />
+              </IconButton>
+            )}
           </Stack>
           <Stack direction="row" alignItems="center" spacing={1}>
             <Button

@@ -25,6 +25,7 @@ import { BASE_URL_IMG } from "../../../../api/instance";
 import toast from "react-hot-toast";
 import AppDrawer from "../../../drawer/presentation/BasketDrawer";
 import { useTranslation } from "react-i18next";
+import { Guarantee } from "../../../home/components/discountedGoods/components/guarantee";
 
 interface CategoryProductsBoxProps {
   products: Product[] | undefined;
@@ -90,22 +91,9 @@ const CategoryProductsBox: FC<CategoryProductsBoxProps> = ({ products }) => {
                 }}
               >
                 <Box>
-                  {product.warranty && (
-                    <Box
-                      sx={{
-                        position: "absolute",
-                        right: 2,
-                        top: 10,
-                      }}
-                    >
-                      <Stack direction="row" color="#B71C1C">
-                        <img
-                          src="/images/guarantee.png"
-                          style={{ width: 40, height: 40 }}
-                        />
-                      </Stack>
-                    </Box>
-                  )}
+                  <Stack direction="row" justifyContent="flex-end">
+                    {product.warranty && <Guarantee product={product} />}
+                  </Stack>
                   <Box
                     sx={{
                       width: "100%",
@@ -115,6 +103,7 @@ const CategoryProductsBox: FC<CategoryProductsBoxProps> = ({ products }) => {
                         sm: "180px",
                         xs: "150px",
                       },
+                      mt: { lg: -5, md: -5, sm: -3, xs: -1 },
                       overflow: "hidden",
                       background: "#f7f7f7",
                       borderRadius: "6px",
@@ -198,7 +187,6 @@ const CategoryProductsBox: FC<CategoryProductsBoxProps> = ({ products }) => {
                     <Button
                       onClick={() => {
                         handleCompareClick(product);
-                        // CompareViewModel.addToCompare(product); // Add product to compare
                       }}
                       sx={{
                         ...compareDiscountGoodsCostButton,
@@ -271,7 +259,7 @@ const CategoryProductsBox: FC<CategoryProductsBoxProps> = ({ products }) => {
           ))
         ) : (
           <Typography textAlign="center" width="100%">
-            Haryt ýok
+            {t("home.noItem")}
           </Typography>
         )}
         <AppDrawer isOpen={isOpen} toggleDrawer={toggleDrawer} />

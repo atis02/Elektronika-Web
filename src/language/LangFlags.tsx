@@ -27,30 +27,18 @@ const LangFlags: FC = () => {
         ".MuiOutlinedInput-notchedOutline": {
           border: "none",
         },
+
+        color: "#fff",
         backgroundColor: "transparent",
+        padding: 0,
+        svg: {
+          color: "#fff", // your desired color
+        },
       }}
     >
-      <MenuItem value="tm">
-        <img
-          src="./flags/tm.png"
-          alt="Turkmen"
-          style={{ width: 30, height: 20 }}
-        />
-      </MenuItem>
-      <MenuItem value="ru">
-        <img
-          src="./flags/ru.png"
-          alt="Russian"
-          style={{ width: 30, height: 20 }}
-        />
-      </MenuItem>
-      <MenuItem value="en">
-        <img
-          src="./flags/en.png"
-          alt="English"
-          style={{ width: 30, height: 20 }}
-        />
-      </MenuItem>
+      <MenuItem value="tm">TM</MenuItem>
+      <MenuItem value="ru">RU</MenuItem>
+      <MenuItem value="en">EN</MenuItem>
     </Select>
   );
 };

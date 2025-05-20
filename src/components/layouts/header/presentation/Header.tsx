@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, useEffect, useState } from "react";
 import HeaderLogo from "../components/HeaderLogo";
 import { Box, Container, Stack } from "@mui/material";
 import Grid from "@mui/material/Grid2";
@@ -7,14 +7,28 @@ import HeaderContacts from "../components/HeaderTexts";
 import { useNavigate } from "react-router-dom";
 import LangFlags from "../../../../language/LangFlags";
 import BasketM from "../components/BasketM";
+import { ProfileNavMobile } from "../components/ProfileNavMobile";
 
 interface HeaderProps {
   isLoading: boolean;
 }
 
 const Header: FC<HeaderProps> = ({ isLoading }) => {
+  const [scrolled, setScrolled] = useState<boolean>(false);
   const navigate = useNavigate();
-
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 0) {
+        setScrolled(true);
+      } else {
+        setScrolled(false);
+      }
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
   return (
     <>
       <Box
@@ -41,25 +55,47 @@ const Header: FC<HeaderProps> = ({ isLoading }) => {
       <Box
         sx={{
           display: { lg: "none", md: "none", sm: "flex", xs: "flex" },
-          height: "80px",
+          height: "60px",
+          ...(scrolled
+            ? {
+                boxShadow: "0px 1px 5px 0px #B71C1C",
+                backdropFilter: "blur(10px)",
+              }
+            : {
+                boxShadow: "0",
+                backgroundColor: "transparent",
+              }),
+          color: "#fff",
+          backgroundColor: "#B71C1C",
         }}
+        position="sticky"
+        top={0}
+        zIndex="1000"
+        bgcolor="#fff"
       >
         <Container>
           <Stack
             direction="row"
             justifyContent="space-between"
             alignItems="center"
-            height="80%"
+            height="100%"
           >
             <img
               onClick={() => navigate("/")}
               src="/navbarIcons/logo.svg"
-              style={{ width: "150px", height: "28px" }}
+              style={{
+                padding: 3,
+                width: "180px",
+                height: "35px",
+                backgroundColor: "#fff",
+                borderRadius: 8,
+              }}
               alt=""
             />
-            <Stack direction="row" alignItems={"center"} spacing={2}>
+            <Stack direction="row" alignItems={"center"} spacing={0}>
               <LangFlags />
               <BasketM />
+              <ProfileNavMobile />
             </Stack>
           </Stack>
         </Container>

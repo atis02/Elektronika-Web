@@ -12,6 +12,7 @@ import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
 import ProductViewModel from "../../../products/presentation/ProductViewModel";
 import axios from "axios";
 import { BASE_URL } from "../../../../api/instance";
+import { useTranslation } from "react-i18next";
 
 interface BrandFiltersProps {
   onCategorySelect: (filters: string | null) => void;
@@ -29,7 +30,7 @@ const BrendFilter: FC<BrandFiltersProps> = ({ onCategorySelect }) => {
     setShowFilters(!showFilters);
   };
   const [brands, setBrands] = useState<Brand[]>([]);
-
+  const { t } = useTranslation();
   useEffect(() => {
     const getBrands = async () => {
       try {
@@ -72,7 +73,7 @@ const BrendFilter: FC<BrandFiltersProps> = ({ onCategorySelect }) => {
               px={1}
               onClick={() => handleClick()}
             >
-              <Typography color="#2E2F38">Brend</Typography>
+              <Typography color="#2E2F38">{t("home.brand")}</Typography>
               {!showFilters ? (
                 <ArrowDropDownIcon sx={{ width: "20px", color: "#2E2F38" }} />
               ) : (

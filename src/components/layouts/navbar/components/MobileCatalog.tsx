@@ -14,6 +14,7 @@ import { ExpandLess, ExpandMore, Close } from "@mui/icons-material";
 import { useCategories } from "../../../../hooks/category/useCategory";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
+import { BASE_URL_IMG } from "../../../../api/instance";
 
 interface Props {
   onClose: () => void;
@@ -48,6 +49,7 @@ const CatalogMenu: React.FC<Props> = ({ onClose }) => {
       </Box>
     );
   }
+  console.log(categories);
 
   return (
     <Box sx={{ width: "100%", p: 2 }}>
@@ -75,6 +77,22 @@ const CatalogMenu: React.FC<Props> = ({ onClose }) => {
           return (
             <React.Fragment key={catKey}>
               <ListItem sx={{ px: 0 }}>
+                <Stack width={60}>
+                  <img
+                    src={
+                      cat.image === null
+                        ? "/navbarIcons/logo.svg"
+                        : `${BASE_URL_IMG}public/${cat.image}`
+                    }
+                    alt={catTitle}
+                    style={{
+                      width: 54,
+                      height: 54,
+                      objectFit: "cover",
+                      borderRadius: 4,
+                    }}
+                  />
+                </Stack>
                 <ListItemText
                   primary={
                     <Link
@@ -105,7 +123,6 @@ const CatalogMenu: React.FC<Props> = ({ onClose }) => {
                 )}
               </ListItem>
 
-              {/* Подкатегории */}
               {cat.subCategories?.length > 0 && (
                 <Collapse in={openItems[catKey]} timeout="auto" unmountOnExit>
                   <List component="div" disablePadding sx={{ pl: 2 }}>
@@ -119,7 +136,29 @@ const CatalogMenu: React.FC<Props> = ({ onClose }) => {
 
                       return (
                         <React.Fragment key={subKey}>
-                          <ListItem sx={{ px: 0 }}>
+                          <ListItem
+                            sx={{
+                              p: 0,
+                              pb: 1,
+                              borderBottom: "1px solid lightgray",
+                            }}
+                          >
+                            <Stack width={60}>
+                              <img
+                                src={
+                                  sub.image === null
+                                    ? "/navbarIcons/logo.svg"
+                                    : `${BASE_URL_IMG}public/${sub.image}`
+                                }
+                                alt={subTitle}
+                                style={{
+                                  width: 44,
+                                  height: 44,
+                                  objectFit: "cover",
+                                  borderRadius: 4,
+                                }}
+                              />
+                            </Stack>
                             <ListItemText
                               primary={
                                 <Link
@@ -174,7 +213,23 @@ const CatalogMenu: React.FC<Props> = ({ onClose }) => {
                                   );
                                   const segKey = `seg-${seg.id}`;
                                   return (
-                                    <ListItem key={segKey} sx={{ px: 0 }}>
+                                    <ListItem key={segKey} sx={{ p: 0, pb: 1 }}>
+                                      <Stack width={60}>
+                                        <img
+                                          src={
+                                            seg.image === null
+                                              ? "/navbarIcons/logo.svg"
+                                              : `${BASE_URL_IMG}public/${seg.image}`
+                                          }
+                                          alt={segTitle}
+                                          style={{
+                                            width: 34,
+                                            height: 34,
+                                            objectFit: "cover",
+                                            borderRadius: 4,
+                                          }}
+                                        />
+                                      </Stack>
                                       <ListItemText
                                         primary={
                                           <Link

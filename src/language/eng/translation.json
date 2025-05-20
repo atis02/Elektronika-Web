@@ -51,7 +51,9 @@
     "our_address": "Ashgabat, Bitarap Turkmenistan Street 183",
     "pageDoesntExist":"Oops! The page you`re looking for doesn`t exist.",
     "how_to_register":"How to register",
-    "search":"Search..."
+    "search":"Search...",
+    "dosearch":"Search",
+    "clearFilter":"Clear all filters"
   },
   "home":{
     "writeRating":"Leave your comment",
@@ -67,8 +69,10 @@
     "mainPage":"Main Page",
     "delivery":"Delivery",
     "lastAddedProducts":"Last added products",
-    "newGoods":"New Products"
-
+    "newGoods":"New Products",
+    "noItem":"Can't find product",
+    "brand":"Brand",
+    "setFilters":"Select by parameters and filters"
   },
   "howRegister":{
     "how-to-register":"How to register on the site.",
@@ -160,7 +164,8 @@
   "descFour":"Give your loved one a gift certificate from our store and be sure that he will choose a gift of his choice and remember your sign!"
 },
 "products":{
-  "nagt":"quantity"
+  "nagt":"quantity",
+  "noProperty":"No property"
 },
 "goodOfWeek":{
   "quality":"The best quality",

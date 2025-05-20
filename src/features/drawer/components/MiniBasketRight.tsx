@@ -6,10 +6,11 @@ import {
 } from "../../auction/styles/auctionStyles";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
+import { useTranslation } from "react-i18next";
 
 const MiniBasketRight: FC = () => {
   const navigate = useNavigate();
-
+  const { t } = useTranslation();
   const handleSubmitToOrder = () => {
     const basketDataLocalStroge = localStorage.getItem("basket");
 
@@ -31,7 +32,13 @@ const MiniBasketRight: FC = () => {
   };
   return (
     <>
-      <Box sx={auctionSmallBox}>
+      <Box
+        sx={auctionSmallBox}
+        mt={2}
+        width="100vw"
+        justifyContent="center"
+        alignItems="center"
+      >
         <Typography
           sx={{
             fontWeight: 600,
@@ -40,12 +47,12 @@ const MiniBasketRight: FC = () => {
             mt: "-10px",
           }}
         >
-          Kupon kody ýaz
+          {t("basket.coupon")}
         </Typography>
         <Stack spacing={2} my={1}>
           <input
             type="text"
-            placeholder="Kupon koduny giriziň"
+            placeholder={t("basket.couponCode")}
             style={{
               height: "45px",
               padding: "10px 17px",
@@ -60,7 +67,7 @@ const MiniBasketRight: FC = () => {
             variant="contained"
             fullWidth
           >
-            Sargyt etmek
+            {t("basket.order")}
           </Button>
         </Stack>
       </Box>

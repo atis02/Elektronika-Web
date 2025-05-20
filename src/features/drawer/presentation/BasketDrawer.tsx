@@ -3,6 +3,7 @@ import { Drawer, IconButton, Box, Typography, Stack } from "@mui/material";
 import MiniBasket from "../components/MiniBasket";
 import MiniBasketRight from "../components/MiniBasketRight";
 import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
+import { useTranslation } from "react-i18next";
 
 interface Bools {
   isOpen: boolean;
@@ -10,17 +11,17 @@ interface Bools {
 }
 
 const AppDrawer: React.FC<Bools> = ({ isOpen, toggleDrawer }) => {
+  const { t } = useTranslation();
   return (
     <>
-      <Drawer anchor="right" open={isOpen} onClose={() => toggleDrawer(false)}>
-        {/* <List>
-          {menuItems.map((item, index) => (
-            <ListItem key={index}>
-              <ListItemIcon>{item.icon}</ListItemIcon>
-              <ListItemText primary={item.text} />
-            </ListItem>
-          ))}
-        </List> */}
+      <Drawer
+        sx={{
+          width: "100vw",
+        }}
+        anchor="right"
+        open={isOpen}
+        onClose={() => toggleDrawer(false)}
+      >
         <Box
           sx={{
             position: "sticky",
@@ -28,7 +29,7 @@ const AppDrawer: React.FC<Bools> = ({ isOpen, toggleDrawer }) => {
             backgroundColor: "#fff",
             zIndex: 100,
             display: "inline-block",
-            width: "60vh",
+            width: "100vw",
           }}
         >
           <Stack
@@ -57,7 +58,7 @@ const AppDrawer: React.FC<Bools> = ({ isOpen, toggleDrawer }) => {
                 // p: 2,
               }}
             >
-              Sebet
+              {t("basket.basket")}
             </Typography>
             <span></span>
           </Stack>
@@ -77,7 +78,7 @@ const AppDrawer: React.FC<Bools> = ({ isOpen, toggleDrawer }) => {
         <Stack
           justifyContent="space-between"
           direction="column"
-          width="60vh"
+          width={{ lg: "60vh", md: "60vh", sm: "60vh", xs: "0" }}
           height="100%"
         >
           <MiniBasket />

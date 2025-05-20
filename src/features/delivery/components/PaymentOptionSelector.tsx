@@ -54,10 +54,17 @@ const PaymentOptionSelector: FC<DeliveryTypeProps> = ({
                     gap: "10px",
                     cursor: "pointer",
                   }}
-                  onClick={() => handleOptionChange(option)}
+                  onClick={() =>
+                    handleOptionChange(
+                      index !== 2 ? option : "Online payment (Altyn Asyr)"
+                    )
+                  }
                 >
                   <Checkbox
-                    checked={selectedOption === option}
+                    checked={
+                      selectedOption ===
+                      (index !== 2 ? option : "Online payment (Altyn Asyr)")
+                    }
                     sx={{
                       transform: "scale(0.8)",
                       padding: "0px",

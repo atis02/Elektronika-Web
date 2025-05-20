@@ -51,7 +51,6 @@ const CategoryHeader: FC<CategoryHeaderProps> = ({
     };
     handleCategorySelect(filters);
   };
-  console.log(searchParams.get("categoryId"));
 
   return (
     <>

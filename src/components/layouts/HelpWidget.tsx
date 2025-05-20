@@ -8,15 +8,11 @@ const HelpWidget = () => {
         width: "95%",
         p: 2,
         borderRadius: 3,
-        // boxShadow: 5,
         position: "fixed",
-        // bottom: 20,
-        // right: 20,
         zIndex: 1000,
-        // mt: -4,
       }}
     >
-      <Box display="flex" alignItems="center" mb={2} mt={-2}>
+      <Box display="flex" alignItems="center" mb={2} mt={-5}>
         <Avatar
           src="/images/tmbot.png"
           alt="E"

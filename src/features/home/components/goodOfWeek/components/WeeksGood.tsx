@@ -297,7 +297,7 @@ const WeeksGood: FC = () => {
                       }
                       placeholderSrc={bigPlaceholder}
                       style={{
-                        width: "100%",
+                        width: "90%",
                         height: "90%",
                         objectFit: "contain",
                       }}
@@ -364,9 +364,11 @@ const WeeksGood: FC = () => {
                     <Typography sx={weeksGoodCurrentCost}>
                       {formatNumber(calculated)} m.
                     </Typography>
-                    <Typography sx={weeksGoodOldCost}>
-                      {disc + price} m.
-                    </Typography>
+                    {price !== calculated && (
+                      <Typography sx={weeksGoodOldCost}>
+                        {disc + price} m.
+                      </Typography>
+                    )}
                   </Stack>
                 </motion.div>
                 <motion.div

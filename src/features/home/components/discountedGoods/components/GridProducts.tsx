@@ -3,7 +3,14 @@ import { FC, useState } from "react";
 import { Product } from "../../../../../components/redux/interface";
 import { motion } from "framer-motion";
 import { useInView } from "react-intersection-observer";
-import { Box, Button, Stack, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Stack,
+  Typography,
+  useMediaQuery,
+  useTheme,
+} from "@mui/material";
 import { Guarantee } from "./guarantee";
 import { ProductImageOne } from "./productImageOne";
 import {
@@ -55,7 +62,8 @@ const GridProducts: FC<Props> = ({
   const favorites = useSelector(
     (state: RootState) => state.favorites.favorites
   );
-
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const handleToggleFavorite = (product: any) => {
     dispatch(toggleFavorite(product));
   };
@@ -110,7 +118,7 @@ const GridProducts: FC<Props> = ({
           {t("home.seeAll")}
         </Button>
       </Stack>
-      <Grid container spacing={2} my={0}>
+      <Grid container spacing={1} my={0}>
         {displayedProducts.map((product: any, index) => (
           <Grid key={product.id} size={{ lg: 3, md: 4, sm: 6, xs: 6 }}>
             <motion.div
@@ -120,6 +128,8 @@ const GridProducts: FC<Props> = ({
               variants={productItemVariants}
               style={{
                 position: "relative",
+                border: isMobile ? "1px solid #e9a3a8" : "none",
+                borderRadius: 13,
               }}
             >
               <Box

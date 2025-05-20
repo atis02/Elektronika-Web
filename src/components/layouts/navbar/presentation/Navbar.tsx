@@ -60,7 +60,6 @@ const Navbar: FC = () => {
             }}
           >
             <Header isLoading={isLoading} />
-            {/* <NavLinks /> */}
             <NavbarRightSide />
           </Box>
         </Container>
@@ -77,9 +76,9 @@ const Navbar: FC = () => {
             height="50%"
             justifyContent="space-between"
             spacing={1}
+            mt={2}
           >
             <NavbarMenu />
-            {/* <NavbarSearch /> */}
             <MobileSearch isLoading={isLoading} />
           </Stack>
         </Container>

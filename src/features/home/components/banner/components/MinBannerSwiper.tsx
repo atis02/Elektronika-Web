@@ -34,7 +34,7 @@ const MinBannerSwiper: React.FC<{ banners: any[] }> = ({ banners }) => {
             lg: "180px",
             md: "180px",
             sm: "150px",
-            xs: "100px",
+            xs: "76px",
           },
         }}
       >

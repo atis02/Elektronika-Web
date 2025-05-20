@@ -228,6 +228,27 @@ const FullDescriptionProduct: FC = observer(() => {
     );
     return isInBasket ? <DoneIcon /> : <LocalGroceryStoreOutlinedIcon />;
   };
+
+  const grouped = Object.values(
+    Array.isArray(selectedProduct.properties) &&
+      selectedProduct.properties.reduce((acc, item) => {
+        const key = item.propertyTemplateId;
+
+        if (!acc[key]) {
+          // Create a shallow copy and initialize propertyValue as array
+          acc[key] = {
+            ...item,
+            propertyValue: [item.propertyValue],
+          };
+        } else {
+          // Push additional propertyValue to the existing group
+          acc[key].propertyValue.push(item.propertyValue);
+        }
+
+        return acc;
+      }, {})
+  );
+
   return (
     <>
       <Container>
@@ -247,7 +268,7 @@ const FullDescriptionProduct: FC = observer(() => {
                         `${BASE_URL_IMG}public/${selectedProduct?.imageOne}`,
 
                       isFluidWidth: true,
-                      width: 200,
+                      width: 300,
                       height: 200,
                     },
                     largeImage: {
@@ -354,7 +375,7 @@ const FullDescriptionProduct: FC = observer(() => {
                 {t("home.barcode")} :{" "}
                 <span>{selectedProduct?.barcode || 123456789}</span>
               </Typography>
-              <Stack spacing={2} my={3}>
+              <Stack spacing={2} my={1}>
                 <Stack
                   direction="row"
                   alignItems="center"
@@ -377,10 +398,14 @@ const FullDescriptionProduct: FC = observer(() => {
                   </Typography>
                 </Stack>
               </Stack>
-              <Stack height={300} overflow="auto" className="searchResult">
-                {Array.isArray(selectedProduct?.properties) &&
-                  selectedProduct.properties.map(
-                    (property: any, num: number) => (
+              {selectedProduct.properties?.length == 0 ? (
+                <Typography mb={1} color="gray" textAlign="center">
+                  {t("products.noProperty")}
+                </Typography>
+              ) : (
+                <Stack height={300} overflow="auto" className="searchResult">
+                  {Array.isArray(grouped) &&
+                    grouped.map((property: any, num: number) => (
                       <Box
                         key={property.id}
                         sx={
@@ -390,7 +415,6 @@ const FullDescriptionProduct: FC = observer(() => {
                         }
                       >
                         <Stack
-                          // height="auto"
                           direction="row"
                           width="100%"
                           height="100%"
@@ -400,23 +424,33 @@ const FullDescriptionProduct: FC = observer(() => {
                         >
                           <Typography>
                             {getTitles(
-                              property.keyTm,
-                              property.keyRu,
-                              property.keyEn
+                              property.propertyTemplates?.nameTm,
+                              property.propertyTemplates?.nameRu,
+                              property.propertyTemplates?.nameEn
                             )}
                           </Typography>
-                          <Typography textAlign="end">
-                            {getTitles(
-                              property.valueTm,
-                              property.valueRu,
-                              property.valueEn
+                          <Stack direction="row" gap={1}>
+                            {property.propertyValue?.map(
+                              (value: any, index: number) => (
+                                <Typography key={index} textAlign="end">
+                                  {getTitles(
+                                    value.valueTm,
+                                    value.valueRu,
+                                    value.valueEn
+                                  )}
+                                  {index !== property.propertyValue.length - 1
+                                    ? ","
+                                    : ""}
+                                </Typography>
+                              )
                             )}
-                          </Typography>
+                          </Stack>
                         </Stack>
                       </Box>
-                    )
-                  )}
-              </Stack>
+                    ))}
+                </Stack>
+              )}
+
               <Divider />
               <Stack direction="row" spacing={2} my={3}>
                 <Typography sx={productCurrentPrice}>
@@ -450,9 +484,6 @@ const FullDescriptionProduct: FC = observer(() => {
                 <IconButton
                   onClick={() => handleToggleFavorite(selectedProduct)}
                   sx={{
-                    // ...(favorites.some((fav) => fav.id === selectedProduct.id)
-                    //   ? { color: "#C3000E" }
-                    //   : { color: "inherit" }),
                     color: favorites.some(
                       (fav) => fav.id === selectedProduct.id
                     )
@@ -475,12 +506,7 @@ const FullDescriptionProduct: FC = observer(() => {
                   )}
                 </IconButton>
                 <IconButton
-                  onClick={() =>
-                    // isProductInCompare
-                    //   ? dispatch(removeProduct(product.id)):
-                    // dispatch(addProduct(selectedProduct && selectedProduct))
-                    handleDispatch(selectedProduct)
-                  }
+                  onClick={() => handleDispatch(selectedProduct)}
                   sx={{
                     ...compareDiscountGoodsCostButton,
                     backgroundColor: compareProducts.some(
@@ -530,7 +556,6 @@ const FullDescriptionProduct: FC = observer(() => {
                 >
                   {t("home.writeRating")}
                 </Button>
-                {/* <FavoriteButton isFavorite={favorites} onToggle={toggleFavorite} /> */}
               </Stack>
             </Grid>
           </Grid>
@@ -618,7 +643,6 @@ const FullDescriptionProduct: FC = observer(() => {
                           product.nameRu,
                           product.nameEn
                         )}
-                        {/* {product.nameTm} */}
                       </Typography>
                       <Typography sx={discountGoodCompanyTitle}>
                         {product.brand?.nameTm || "Unknown Brand"}

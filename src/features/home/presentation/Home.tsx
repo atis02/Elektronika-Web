@@ -46,19 +46,19 @@ const Home: FC = () => {
           <Box>
             <Banner />
           </Box>
-          <Box my={3}>
+          <Box my={2}>
             <NewGoods />
           </Box>
-          <Box my={3}>
+          <Box my={2}>
             <DiscountedGoods />
           </Box>
-          <Box my={3}>
+          <Box my={2}>
             <OfferedGoods />
           </Box>
-          <Box my={3}>
+          <Box my={2}>
             <GoodOfWeek />
           </Box>
-          <Box my={3}>
+          <Box my={2}>
             <OurPartners />
           </Box>
         </Grid>

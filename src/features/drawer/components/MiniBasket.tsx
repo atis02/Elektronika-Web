@@ -11,10 +11,6 @@ import {
 } from "@mui/material";
 import AutoDeleteOutlinedIcon from "@mui/icons-material/AutoDeleteOutlined";
 import ClearOutlinedIcon from "@mui/icons-material/ClearOutlined";
-// import {
-//   basketProductCountBox,
-//   clearAllBasketButton,
-// } from "../styles/basketStyle";
 import { observer } from "mobx-react-lite";
 import BasketViewModel from "../../../store/basket/BasketViewModel";
 import { BASE_URL, BASE_URL_IMG } from "../../../api/instance";
@@ -25,12 +21,13 @@ import {
   basketProductCountBox,
   clearAllBasketButton,
 } from "../../basket/styles/basketStyle";
+import { useTranslation } from "react-i18next";
 
 const MiniBasket: FC = observer(() => {
   const { items, totalPrice } = BasketViewModel;
   const navigate = useNavigate();
   const basketDataLocalStroge = localStorage.getItem("basket");
-
+  const { t, i18n } = useTranslation();
   useEffect(() => {
     const body = {
       ids: items.map((item) => item.product.id),
@@ -109,39 +106,45 @@ const MiniBasket: FC = observer(() => {
       console.error("Error fetching product:", error);
     }
   };
-
+  const getTitle = (nameTm: string, nameRu: string, nameEn: string) => {
+    const currentLanguage = i18n.language;
+    switch (currentLanguage) {
+      case "ru":
+        return nameRu;
+      case "tm":
+        return nameTm;
+      default:
+        return nameEn;
+    }
+  };
   return !items.length ? (
     <Stack
       alignItems="center"
       minHeight="65vh"
+      width="100vw"
       justifyContent="center"
       spacing={2}
     >
       <img src="/images/sebet.png" style={{ width: 100, height: 65 }} alt="" />
-      <Typography
-        color="#4B5563"
-        fontFamily="Open Sans"
-        fontSize={20}
-        fontWeight={600}
-      >
-        Sebediňiz boş
+      <Typography color="#4B5563" fontSize={20} fontWeight={600}>
+        {t("basket.noProduct")}
       </Typography>
     </Stack>
   ) : (
-    <Paper elevation={4} sx={{ width: "100%", py: 1 }}>
+    <Paper elevation={4} sx={{ width: "100vw", py: 1 }}>
       <Stack
         direction="row"
         mx={2}
         justifyContent="space-between"
         alignItems="center"
       >
-        <Typography>Sebet</Typography>
+        <Typography fontFamily="sans-serif"> {t("basket.basket")}</Typography>
         <Button
           startIcon={<AutoDeleteOutlinedIcon sx={{ color: "#B71C1C" }} />}
           sx={clearAllBasketButton}
           onClick={() => BasketViewModel.clearBasket()}
         >
-          Ählisini pozmak
+          {t("basket.clearAll")}
         </Button>
       </Stack>
       <Divider />
@@ -177,7 +180,11 @@ const MiniBasket: FC = observer(() => {
                 alt="basket pictures"
               />
               <Typography sx={{ fontSize: "14px" }}>
-                {item.product.nameTm}
+                {getTitle(
+                  item.product?.nameTm,
+                  item.product?.nameRu,
+                  item.product?.nameEn
+                )}
               </Typography>
             </Stack>
           </Grid>
@@ -242,7 +249,7 @@ const MiniBasket: FC = observer(() => {
       <Divider />
       <Stack direction="row" justifyContent="flex-end" m={2}>
         <Typography>
-          Jemi: <b>{totalPrice.toFixed(2)}</b>
+          {t("basket.total")} <b>{totalPrice.toFixed(2)}</b>
         </Typography>
       </Stack>
     </Paper>

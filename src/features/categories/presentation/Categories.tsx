@@ -1,22 +1,35 @@
 import { FC, useEffect, useState } from "react";
-import { CircularProgress, Container, Stack, Typography } from "@mui/material";
+import {
+  Container,
+  Stack,
+  Typography,
+  useMediaQuery,
+  useTheme,
+} from "@mui/material";
 import Grid from "@mui/material/Grid2";
 import {
   size1_4,
   size4_1,
 } from "../../../components/layouts/header/utils/gridSize";
 import CategoryFilters from "../components/categoryFilters/CategoryFilters";
-// import CategoryHeader from "../components/CategoryHeader";
 import CategoryProductsBox from "../components/categoryProducts/CategoryProductsBox";
 import { observer } from "mobx-react-lite";
 import { useSearchParams } from "react-router-dom";
 import ProductViewModel from "../../products/presentation/ProductViewModel";
 import { Product } from "../../../components/redux/interface";
+import { useTranslation } from "react-i18next";
+import GridLoading from "../../home/components/offeredGoods/components/GridLoading";
+import CategoryFiltersDrawer from "../components/categoryFilters/CategoryFiltersDrawer";
+import { Tune } from "@mui/icons-material";
 
 const Categories: FC = observer(() => {
   const [filtered, setFiltered] = useState<Product[]>(
     ProductViewModel.products
   );
+  const [openFilters, setOpenFilters] = useState<boolean>(false);
+  const { t } = useTranslation();
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   useEffect(() => {
     setFiltered(ProductViewModel.products || []);
   }, [ProductViewModel.products]);
@@ -76,25 +89,51 @@ const Categories: FC = observer(() => {
     <Container>
       <Grid container width="100%" my={2} spacing={3}>
         <Grid size={size1_4}>
-          <CategoryFilters
-            selectedFilters={ProductViewModel.filters}
-            onCategorySelect={filteredProducts}
-            filteredProductsByProperty={filteredProductsByProperty}
-            handleCategorySelect={handleCategorySelect}
-          />
+          {isMobile ? (
+            <Stack
+              bgcolor="#E9A3A8"
+              direction="row"
+              spacing={2}
+              p={1}
+              borderRadius={3}
+              onClick={() => setOpenFilters(true)}
+            >
+              <Tune />
+              <Typography>{t("home.setFilters")}</Typography>
+            </Stack>
+          ) : (
+            <CategoryFilters
+              selectedFilters={ProductViewModel.filters}
+              onCategorySelect={filteredProducts}
+              filteredProductsByProperty={filteredProductsByProperty}
+              handleCategorySelect={handleCategorySelect}
+            />
+          )}
         </Grid>
         <Grid size={size4_1}>
           {ProductViewModel.loading ? (
             <Stack alignItems="center" ml={10}>
-              <CircularProgress />
+              <GridLoading />
             </Stack>
           ) : filtered?.length ? (
             <CategoryProductsBox products={filtered} />
           ) : (
-            <Typography textAlign="center">Haryt ýok</Typography>
+            <Typography my={15} textAlign="center">
+              {t("home.noItem")}
+            </Typography>
           )}
         </Grid>
       </Grid>
+      {isMobile && (
+        <CategoryFiltersDrawer
+          open={openFilters}
+          onClose={() => setOpenFilters(false)}
+          selectedFilters={ProductViewModel.filters}
+          onCategorySelect={filteredProducts}
+          filteredProductsByProperty={filteredProductsByProperty}
+          handleCategorySelect={handleCategorySelect}
+        />
+      )}
     </Container>
   );
 });
