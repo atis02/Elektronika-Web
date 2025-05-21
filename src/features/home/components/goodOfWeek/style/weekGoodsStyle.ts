@@ -49,7 +49,7 @@ export const weeksGoodOldCost = {
   fontWeight: 400,
   textDecoration: "line-through",
 };
-
+export const mainColor = "#B71C1C";
 export const weeksGoodBuyNowButton = {
   textTransform: "none",
   background: "#E0E0E0",
@@ -59,4 +59,31 @@ export const weeksGoodBuyNowButton = {
   borderRadius: "4px",
   width: { lg: "242px", md: "242px", sm: "100%", xs: "100%" },
   height: { lg: "57px", md: "55px", sm: "50px", xs: "40px" },
+  position: "relative",
+  "&:before": {
+    content: '""',
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    width: "10px",
+    height: "10px",
+    backgroundColor: "transparent",
+    borderRadius: "50%",
+    transform: "translate(-50%, -50%) scale(1)",
+    opacity: 0.5,
+    animation: "dropEffect 0.4s ease-out",
+  },
+  "@keyframes dropEffect": {
+    "0%": {
+      transform: "translate(-50%, -50%) scale(1)",
+      opacity: 0.5,
+    },
+    "100%": {
+      transform: "translate(-50%, -50%) scale(6)",
+      opacity: 0,
+    },
+  },
+  "& .MuiTouchRipple-root": {
+    color: mainColor,
+  },
 };

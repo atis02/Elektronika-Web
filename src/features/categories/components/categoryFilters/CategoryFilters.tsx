@@ -1,5 +1,5 @@
 import { FC } from "react";
-import { Box, Button, Stack, useMediaQuery, useTheme } from "@mui/material";
+import { Button, Stack, useMediaQuery, useTheme } from "@mui/material";
 import PriceFilter from "./PriceFilter";
 import BrendFilter from "./BrendFilter";
 import TypeFilter from "./TypeFilter";
@@ -52,7 +52,7 @@ const CategoryFilters: FC<CategoryFiltersProps> = ({
   };
 
   return (
-    <Box sx={{ position: "relative" }}>
+    <>
       <Stack spacing={2}>
         {!isMobile && (
           <Stack spacing={2}>
@@ -113,7 +113,7 @@ const CategoryFilters: FC<CategoryFiltersProps> = ({
           {t("header.dosearch")}
         </Button>
       </Stack>
-    </Box>
+    </>
   );
 };
 

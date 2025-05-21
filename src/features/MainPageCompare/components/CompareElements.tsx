@@ -23,6 +23,7 @@ import {
 } from "../../compare/styles/compareSlider";
 import { compareGridSize } from "../../compare/utils/compareSize";
 import { useNavigate } from "react-router-dom";
+import { t } from "i18next";
 const CompareElements: FC = () => {
   const dispatch = useAppDispatch();
   const compareProducts = useAppSelector((state) => state.compare.products);
@@ -46,7 +47,7 @@ const CompareElements: FC = () => {
         width="20%"
         color="#B71C1C"
       >
-        Haryt deňeşdirmek üçin goşuldy. Siz diňe 4 sany haryt goşup bilýäňiz.
+        {t("compare.fourItem")}
       </Typography>
       <Grid container sx={{ justifyContent: "space-around" }}>
         {compareProducts.length > 0 ? (
@@ -103,7 +104,7 @@ const CompareElements: FC = () => {
                     placeholder="Gözleg"
                     className="compareSearchInput"
                   />
-                  <Box sx={compareImagebox}>Deňeşdirmek üçin haryt goşun</Box>
+                  <Box sx={compareImagebox}>{t("compare.addProduct")}</Box>
                 </Box>
               </Grid>
             </Grid>
@@ -124,7 +125,7 @@ const CompareElements: FC = () => {
             dispatch(closeFastCompare());
           }}
         >
-          Harytlary deňeşdirmek
+          {t("compare.compareProduct")}
         </Button>
         <Button
           variant="outlined"

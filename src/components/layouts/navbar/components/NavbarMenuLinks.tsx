@@ -44,12 +44,7 @@ const NavbarMenuLinks: FC = () => {
       >
         {t("navbar.how_to_order")}
       </Typography>
-      <Typography
-        onClick={() => navigate("/embassy")}
-        sx={linkStyles(isActiveLink("/embassy"))}
-      >
-        {t("navbar.embassy")}
-      </Typography>
+
       <Typography
         onClick={() => navigate("/auction")}
         sx={linkStyles(isActiveLink("/auction"))}

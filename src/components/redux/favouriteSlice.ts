@@ -24,31 +24,30 @@ const favoritesSlice = createSlice({
       const isFavorite = state.favorites.some((fav) => fav.id === product.id);
 
       if (isFavorite) {
-        // Remove product from favorites
-        state.favorites = state.favorites.filter((fav) => fav.id !== product.id);
+        state.favorites = state.favorites.filter(
+          (fav) => fav.id !== product.id
+        );
       } else {
-        // Add product to favorites
         state.favorites.push(product);
       }
-
-      // Update localStorage
       localStorage.setItem("favorites", JSON.stringify(state.favorites));
       toast.success("Üstünlikli!");
-        },
+    },
     removeProduct: (state, action: PayloadAction<Product>) => {
       const product = action.payload;
-
-      // Remove product from favorites
       state.favorites = state.favorites.filter((fav) => fav.id !== product.id);
-
-      // Update localStorage
       localStorage.setItem("favorites", JSON.stringify(state.favorites));
       toast.success("Üstünlikli!");
-
+    },
+    clearAllFav: (state) => {
+      state.favorites = [];
+      localStorage.removeItem("favorites");
+      toast.success("Üstünlikli!");
     },
   },
 });
 
-export const { toggleFavorite, removeProduct } = favoritesSlice.actions;
+export const { toggleFavorite, removeProduct, clearAllFav } =
+  favoritesSlice.actions;
 
 export default favoritesSlice.reducer;

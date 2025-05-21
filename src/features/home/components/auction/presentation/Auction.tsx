@@ -10,7 +10,7 @@ const Auction: FC = () => {
   useEffect(() => {
     const fetchBlurhash = async () => {
       try {
-        const response = await axios.get(`${BASE_URL}banners?limit=1&page=1`);
+        const response = await axios.get(`${BASE_URL}banner/all`);
         const data = response.data.data;
         if (data && data.length > 0 && data[0].blurhash) {
           setBlurhash(data[0].blurhash);

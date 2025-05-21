@@ -24,15 +24,21 @@ const LangFlags: FC = () => {
       inputProps={{ "aria-label": "Language Selector" }}
       sx={{
         border: "none",
+        backgroundColor: "transparent",
+        color: "#fff",
+        p: 0,
+        minHeight: 0,
         ".MuiOutlinedInput-notchedOutline": {
           border: "none",
         },
-
-        color: "#fff",
-        backgroundColor: "transparent",
-        padding: 0,
+        ".MuiSelect-select": {
+          p: 0,
+          mr: -2,
+          minHeight: 0,
+        },
         svg: {
-          color: "#fff", // your desired color
+          mr: -2,
+          color: "#fff",
         },
       }}
     >

@@ -609,9 +609,9 @@ const FullDescriptionProduct: FC = observer(() => {
                       <Box
                         sx={{
                           position: "absolute",
-                          right: 0,
+                          right: -13,
                           zIndex: 100,
-                          top: 10,
+                          top: -20,
                         }}
                       >
                         <Stack direction="row" color="#B71C1C">

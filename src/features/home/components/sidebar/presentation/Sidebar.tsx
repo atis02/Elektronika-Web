@@ -1,6 +1,5 @@
 import { FC, useState, useEffect } from "react";
 import SidebarLinks from "../components/SidebarLinks";
-import { BASE_URL } from "../../../../../api/instance";
 import { Box } from "@mui/material";
 
 interface Filters {
@@ -44,12 +43,12 @@ const Sidebar: FC = () => {
       if (filters.brandId)
         queryParams.append("brandId", String(filters.brandId));
 
-      const url = `${BASE_URL}/products/client/products?${queryParams.toString()}`;
-      const response = await fetch(url);
+      // const url = `${BASE_URL}/products/client/products?${queryParams.toString()}`;
+      // const response = await fetch(url);
 
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
+      // if (!response.ok) {
+      //   throw new Error(`HTTP error! status: ${response.status}`);
+      // }
     } catch (err) {
       setError("Error fetching products.");
     } finally {

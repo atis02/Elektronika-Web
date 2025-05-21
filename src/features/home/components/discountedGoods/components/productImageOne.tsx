@@ -54,7 +54,7 @@ export const ProductImageOne: FC<Props> = ({ product }) => {
         style={{
           width: "100%",
           height: "100%",
-          objectFit: "cover",
+          objectFit: "contain",
           cursor: "pointer",
           opacity: product.imageOne === null ? "30%" : 1,
         }}

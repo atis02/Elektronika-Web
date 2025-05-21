@@ -77,6 +77,7 @@ const AuctionDetails: FC<AuctionDetailsProps> = ({ isLoading, blurhash }) => {
   const [showEndDate, setShowEndDate] = useState(false);
   const navigate = useNavigate();
   const { t, i18n } = useTranslation();
+
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true); // Set loading to true before fetching

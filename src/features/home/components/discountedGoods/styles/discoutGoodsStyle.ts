@@ -37,8 +37,7 @@ export const auctionTextBox = {
   justifyContent: "center",
 };
 export const auctionTextBoxWarranty = {
-  background: "#fff",
-  width: "40px",
+  width: "45px",
   height: "24px",
   color: "#2E2F38",
   fontSize: "11px",
@@ -87,7 +86,7 @@ export const discountGoodCodeText = {
 export const discountGoodCost = {
   color: "#2E2F38",
   fontSize: { lg: "14px", md: "14px", sm: "14px", xs: "13px" },
-  fontWeight: { lg: 700, md: 700, sm: 600, xs: 500 },
+  fontWeight: { lg: 700, md: 700, sm: 600, xs: 600 },
   lineHeight: "19px",
 };
 
@@ -116,7 +115,7 @@ export const addStoreDiscountGoodButton = {
 
 export const compareDiscountGoodsCostButton = {
   color: "#929292",
-  fontSize: "12px",
+  fontSize: { lg: 12, md: 12, sm: 12, xs: 15 },
   fontWeight: 400,
   lineHeight: "15px",
   textTransform: "none",

@@ -28,23 +28,20 @@ import PreLoader from "../components/utils/Preloader";
 import Account from "../features/account/presentation/Account";
 import HowToRegister from "../features/howToRegister/presentation/howToRegister";
 import PaymentSucces from "../features/paymentSucces";
-// Custom Skeleton Loader
+import BottomNav from "../components/layouts/navbar/components/BottomNavbar";
+import { useMediaQuery, useTheme } from "@mui/material";
 
 const App = () => {
-  const [selectedFilters] = useState<any>({});
   const [loader, setLoader] = useState<boolean>(false);
-
-  useEffect(() => {
-    if (Object.keys(selectedFilters).length > 0) {
-      // fetchFilteredProducts(selectedFilters);
-    }
-  }, [selectedFilters]);
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   useEffect(() => {
     setLoader(true);
     setTimeout(() => {
       setLoader(false);
     }, 2300);
   }, []);
+
   return (
     <>
       {loader ? (
@@ -90,6 +87,7 @@ const App = () => {
                   <Route path="*" element={<NotFoundPage />} />
                 </Route>
               </Routes>
+              {isMobile && <BottomNav />}
             </Suspense>
           </BrowserRouter>
         </div>

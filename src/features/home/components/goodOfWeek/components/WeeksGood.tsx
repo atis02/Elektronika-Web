@@ -27,13 +27,8 @@ import { useNavigate } from "react-router-dom";
 import { formatNumber } from "../../../../../components/utils/allutils";
 import { useTranslation } from "react-i18next";
 
-// Define blurhash strings (replace with your actual blurhashes)
-// const blurhashSmall1 = "L25h-W00~qIp4ofk_3?a_Ni_ofV@";
-// const blurhashSmall2 = "L56,4=00.5E15^%KxYj[00%1-o4.";
-// const blurhashSmall3 = "L167t5009-xY00%M%MM{00%L%LxG";
 const blurhashBig = "L68]y=00?b_N4nM{s.t000%N%Lxt";
 
-// Function to generate placeholder image from blurhash
 const getPlaceholder = (blurhash: string, width: number, height: number) => {
   const pixels = decode(blurhash, width, height);
   const canvas = document.createElement("canvas");
@@ -63,72 +58,29 @@ interface Product {
   nameEn: string;
 }
 const WeeksGood: FC = () => {
-  // State to manage images
   const [discountedProducts, setDiscountedProducts] = useState<Product>();
-  // const [bigImage, setBigImage] = useState(discountedProducts?.imageOne);
-  // const [smallImages, setSmallImages] = useState([
-  //   "/week/noutWeek.jpg",
-  //   "/week/noutWeek2.jpg",
-  //   "/week/noutWeek3.jpg",
-  // ]);
-
-  // const [hoveredImage, setHoveredImage] = useState<string | null>(null);
   const [currentImage, setCurrentImage] = useState<string | null>(null);
-
-  // const [isLoading, setIsLoading] = useState<boolean>(true);
-  // const [isError, setIsError] = useState<boolean>(false);
-  // Placeholder images
-  // const smallPlaceholders = [
-  //   getPlaceholder(blurhashSmall1, 100, 100),
-  //   getPlaceholder(blurhashSmall2, 100, 100),
-  //   getPlaceholder(blurhashSmall3, 100, 100),
-  // ];
   const bigPlaceholder = getPlaceholder(blurhashBig, 200, 200);
   const navigate = useNavigate();
   const { t, i18n } = useTranslation();
-  // Function to handle image swap
-  // const handleImageClick = (clickedImage: string) => {
-  //   const newSmallImages = smallImages.map((img) =>
-  //     img === clickedImage ? bigImage : img
-  //   );
-  //   setSmallImages(newSmallImages);
-  //   setBigImage(clickedImage);
-  // };
-  // // Function to handle hover
-  // const handleMouseEnter = (image: string) => {
-  //   setHoveredImage(image);
-  //   setBigImage(image);
-  // };
   const fetchDiscountedProducts = async () => {
     try {
-      // setIsLoading(true);
       const response = await axios.get(`${BASE_URL}productOfWeek/all`);
 
       const products =
         Array.isArray(response.data) && response.data[0]?.products
           ? response.data[0].products
           : [];
-
       const highestSellingProduct = products;
-
       setDiscountedProducts(highestSellingProduct);
-      // setIsLoading(false);
     } catch (error) {
       console.log(error);
-
-      // setIsError(true);
-      // setIsLoading(false);
     }
   };
 
   useEffect(() => {
     fetchDiscountedProducts();
   }, []);
-
-  // const handleMouseLeave = () => {
-  //   setHoveredImage(null);
-  // };
-
   const controls = useAnimation();
   const [ref, inView] = useInView({
     triggerOnce: true,
@@ -196,93 +148,31 @@ const WeeksGood: FC = () => {
                   }}
                   spacing={1}
                 >
-                  <LazyLoadImage
-                    src={
-                      `${BASE_URL_IMG}public/${discountedProducts?.imageOne}` ||
-                      "/images/logo2.png"
-                    }
-                    placeholderSrc={bigPlaceholder}
-                    style={{
-                      width: "95px",
-                      height: "95px",
-                      objectFit: "contain",
-                      border: "1px solid #D9D9D9",
-                      borderRadius: "10px",
-                      cursor: "pointer",
-                    }}
-                    alt="Big Image"
-                    effect="blur"
-                    onMouseEnter={() =>
-                      handleImageHover(discountedProducts?.imageOne ?? "")
-                    }
-                  />
-                  {discountedProducts?.imageTwo && (
-                    <LazyLoadImage
-                      src={
-                        `${BASE_URL_IMG}public/${discountedProducts?.imageTwo}` ||
-                        "/images/logo2.png"
-                      }
-                      placeholderSrc={bigPlaceholder}
-                      style={{
-                        width: "95px",
-                        height: "95px",
-                        objectFit: "contain",
-                        border: "1px solid #D9D9D9",
-                        borderRadius: "10px",
-                        cursor: "pointer",
-                      }}
-                      alt="Big Image"
-                      effect="blur"
-                      onMouseEnter={() =>
-                        handleImageHover(discountedProducts?.imageTwo)
-                      }
-                    />
-                  )}
-                  {discountedProducts?.imageThree && (
-                    <LazyLoadImage
-                      src={
-                        `${BASE_URL_IMG}public/${discountedProducts?.imageThree}` ||
-                        "/images/logo2.png"
-                      }
-                      placeholderSrc={bigPlaceholder}
-                      style={{
-                        width: "95px",
-                        height: "95px",
-                        objectFit: "contain",
-                        border: "1px solid #D9D9D9",
-                        borderRadius: "10px",
-                        cursor: "pointer",
-                      }}
-                      alt="Big Image"
-                      effect="blur"
-                      onMouseEnter={() =>
-                        handleImageHover(discountedProducts?.imageThree)
-                      }
-                    />
-                  )}
-                  {discountedProducts?.imageFour && (
-                    <LazyLoadImage
-                      src={
-                        `${BASE_URL_IMG}public/${discountedProducts?.imageFour}` ||
-                        "/images/logo2.png"
-                      }
-                      placeholderSrc={bigPlaceholder}
-                      style={{
-                        width: "95px",
-                        height: "95px",
-                        objectFit: "contain",
-                        border: "1px solid #D9D9D9",
-                        borderRadius: "10px",
-                        cursor: "pointer",
-                      }}
-                      alt="Big Image"
-                      effect="blur"
-                      onMouseEnter={() =>
-                        handleImageHover(discountedProducts?.imageFour)
-                      }
-                    />
-                  )}
+                  {(
+                    ["imageOne", "imageTwo", "imageThree", "imageFour"] as const
+                  )
+                    .map((key) => discountedProducts?.[key])
+                    .filter((image): image is string => Boolean(image))
+                    .map((image, index) => (
+                      <LazyLoadImage
+                        key={index}
+                        src={`${BASE_URL_IMG}public/${image}`}
+                        placeholderSrc={bigPlaceholder}
+                        style={{
+                          width: "95px",
+                          height: "95px",
+                          objectFit: "contain",
+                          border: "1px solid #B71C1C",
+                          borderRadius: "10px",
+                          cursor: "pointer",
+                        }}
+                        alt={`Product Image ${index + 1}`}
+                        effect="blur"
+                        onMouseEnter={() => handleImageHover(image)}
+                      />
+                    ))}
                 </Stack>
+
                 <Box sx={weeksGoodsBigImageBox}>
                   <motion.div
                     initial="hidden"

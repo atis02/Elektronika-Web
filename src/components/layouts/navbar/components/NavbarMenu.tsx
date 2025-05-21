@@ -1,8 +1,7 @@
 import { FC, useState } from "react";
-import { IconButton, Drawer, Box, Divider } from "@mui/material";
+import { IconButton } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
-import NavbarMenuLinks from "./NavbarMenuLinks";
-import CatalogMenu from "./MobileCatalog";
+import MobileDrawer from "./MobileDrawer";
 
 const NavbarMenu: FC = () => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
@@ -25,23 +24,10 @@ const NavbarMenu: FC = () => {
       >
         <MenuIcon />
       </IconButton>
-
-      <Drawer anchor="right" open={isDrawerOpen} onClose={toggleDrawer(false)}>
-        <Box
-          sx={{
-            width: "100vw",
-            minHeight: "100vh",
-            backgroundColor: "#fff",
-          }}
-        >
-          <CatalogMenu onClose={toggleDrawer(false)} />
-          <Divider />
-          <Divider />
-          <NavbarMenuLinks />
-          <Divider />
-          <Divider />
-        </Box>
-      </Drawer>
+      <MobileDrawer
+        isDrawerOpen={isDrawerOpen}
+        toggleDrawer={() => setIsDrawerOpen(false)}
+      />
     </>
   );
 };

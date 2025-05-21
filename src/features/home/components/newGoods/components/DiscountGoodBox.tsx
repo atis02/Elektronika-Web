@@ -18,11 +18,13 @@ const NewGoodBox: FC = () => {
     setLoading(true);
     try {
       const response = await axios.get(
-        `${BASE_URL}product/all?limit=20&page=${page}`
+        `${BASE_URL}product/all?limit=10&page=${page}`
       );
       const filteredProducts = response.data?.products.filter(
         (item: any) => item.statusId === "4021a947-6bd2-4ef0-ac51-4548c28e42e8"
       );
+      console.log(filteredProducts);
+
       if (page === 1) {
         setDiscountedProducts(filteredProducts);
       } else {
@@ -33,7 +35,6 @@ const NewGoodBox: FC = () => {
       }
     } catch (error: unknown) {
       setIsError(true);
-      console.error(error);
     }
     setIsLoading(false);
     setLoading(false);
@@ -95,11 +96,11 @@ const NewGoodBox: FC = () => {
     <Stack
       ref={tableContainerRef}
       onScroll={handleScroll}
-      sx={{
-        overflowY: "auto",
-      }}
-      className="productScroll"
-      maxHeight="100vh"
+      // sx={{
+      //   overflowY: "auto",
+      // }}
+      // className="productScroll"
+      // maxHeight="100vh"
     >
       <GridProducts
         titleBase={"home.newGoods"}

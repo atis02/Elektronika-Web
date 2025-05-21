@@ -1,6 +1,13 @@
 import { FC, useEffect, useState } from "react";
 import Grid from "@mui/material/Grid2";
-import { Box, Button, Stack, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Stack,
+  Typography,
+  useMediaQuery,
+  useTheme,
+} from "@mui/material";
 import {
   auctionIndexNumerBox,
   auctionParticipateButton,
@@ -15,12 +22,8 @@ import toast from "react-hot-toast";
 import useDrawer from "../../../components/layouts/navbar/components/useDrawer";
 import Login from "../../../components/login/Login";
 import { useTranslation } from "react-i18next";
-
-interface Product {
-  imageOne: string;
-  nameTm: string;
-  // ... other product properties
-}
+import { Product } from "../../../components/redux/interface";
+import { formatNumber } from "../../../components/utils/allutils";
 
 interface MyData {
   id: string;
@@ -37,14 +40,15 @@ interface MyData {
 const AuctionCard: FC = () => {
   const navigate = useNavigate();
   const { isOpen, openDrawer, closeDrawer } = useDrawer();
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [data, setData] = useState<MyData[]>([]);
   const [loading, setLoading] = useState(true); // Add loading state
   const [error, setError] = useState(null); // Add error state
   const registeredUser = () => {
     return JSON.parse(localStorage.getItem("ElectronicaUser") ?? "[]");
   };
-
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true); // Set loading to true before fetching
@@ -73,7 +77,16 @@ const AuctionCard: FC = () => {
   }, []);
 
   if (loading) {
-    return <div style={{ height: "60vh" }}>Loading...</div>; // Display a loading message
+    return (
+      <div
+        style={{
+          height: isMobile ? "10vh" : "60vh",
+          marginTop: isMobile ? 20 : 0,
+        }}
+      >
+        Loading...
+      </div>
+    );
   }
 
   if (error) {
@@ -83,38 +96,60 @@ const AuctionCard: FC = () => {
     const alreadyJoined = auction?.participants.filter(
       (item: any) => item.id === registeredUser()?.id
     );
+
     if (alreadyJoined.length) {
       navigate(`/auction-detail/${auction.id}`);
     } else {
       try {
-        if (registeredUser().length == 0) {
+        if (registeredUser().length === 0) {
           toast.error("Ulgama giriň!");
           openDrawer();
         } else {
+          const token = localStorage.getItem("tokenOfElectronics");
+
           const body = {
             userId: registeredUser()?.id,
             auctionId: auction.id,
           };
-          await axios.post(`${BASE_URL}auction/join`, body).then((resp) => {
-            if (resp.data.message == "User successfully joined the auction") {
-              toast.success("Üstünlikli!");
-              navigate(`/auction-detail/${auction.id}`);
-            }
-          });
+
+          await axios
+            .post(`${BASE_URL}auction/join`, body, {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            })
+            .then((resp) => {
+              if (
+                resp.data.message === "User successfully joined the auction"
+              ) {
+                toast.success("Üstünlikli!");
+                navigate(`/auction-detail/${auction.id}`);
+              }
+            });
         }
       } catch (error: any) {
         if (
-          error.response.data.message ==
+          error.response?.data?.message ===
           "User is already participating in this auction"
         ) {
           toast.error("Siz eýýäm gatnaşyjy!");
-        } else if (error.response.data.message == "User not found") {
+        } else if (error.response?.data?.message === "User not found") {
           toast.error("Ulanyjy Registrasiýa etmeli!");
           openDrawer();
         } else {
-          toast.error(error.response.data.message);
+          toast.error(error.response?.data?.message || "Ýalňyşlyk ýüze çykdy");
         }
       }
+    }
+  };
+  const getTitle = (nameTm: string, nameRu: string, nameEn: string): string => {
+    switch (i18n.language) {
+      case "ru":
+        return nameRu;
+      case "tm":
+        return nameTm;
+      default:
+        return nameEn;
     }
   };
   return (
@@ -122,9 +157,12 @@ const AuctionCard: FC = () => {
       <Grid container spacing={2} my={4}>
         <Grid size={{ lg: 3, md: 4, sm: 6, xs: 12 }}>
           {!data.length ? (
-            <Typography>Auksion ýok</Typography>
+            <Typography>{t("auction.noAuction")}</Typography>
           ) : (
-            <Stack direction="row" spacing={1}>
+            <Stack
+              direction={{ lg: "row", md: "row", sm: "row", xs: "column" }}
+              spacing={1}
+            >
               {data.slice(0, 4)?.map((auction, index) => (
                 <Box sx={autioncardBox} key={index}>
                   <AuctionTimer
@@ -137,7 +175,7 @@ const AuctionCard: FC = () => {
                   />
 
                   <Box my={2} sx={auctionIndexNumerBox}>
-                    {auction.auctionID}
+                    {index + 1}
                   </Box>
                   <Box
                     sx={{
@@ -159,11 +197,17 @@ const AuctionCard: FC = () => {
                   </Box>
                   <Stack spacing={1}>
                     <Typography sx={autionProductTitle}>
-                      {auction.product?.nameTm}
+                      {getTitle(
+                        auction.product?.nameTm || "",
+                        auction.product?.nameRu || "",
+                        auction.product?.nameEn || ""
+                      )}
                     </Typography>
                     <Typography sx={autionProductTitle}>
                       {t("auction.price")}{" "}
-                      <b>{auction.auctionProductPriceCurrent} manat</b>
+                      <b>
+                        {formatNumber(auction.auctionProductPriceCurrent)} manat
+                      </b>
                     </Typography>
                     <Button
                       onClick={() => handleJoinAuction(auction)}

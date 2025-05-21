@@ -35,8 +35,10 @@ const MinBannerSwiper: React.FC = () => {
               lg: "80px",
               md: "180px",
               sm: "150px",
-              xs: "100px",
+              xs: "100%",
             },
+            borderTop: "1px solid #B71C1C",
+            borderBottom: "1px solid #B71C1C",
           }}
         >
           <Swiper

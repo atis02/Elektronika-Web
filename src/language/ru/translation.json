@@ -51,7 +51,8 @@
   "countDownDay":"День",
   "countDownHour":"Час",
   "countDownMinut":"Минут",
-  "countDownSecond":"Секунт"
+  "countDownSecond":"Секунт",
+  "noAuction":"Активный акцион не найден"
 
 },
   "home":{
@@ -145,7 +146,14 @@
   "selfDeliverDesc":"182, Bitarap Türkmenistan проспект, “Elektonika dünýäsi”"
 },
 "compare":{
-  "productTitle":"Сравнение товара"
+  "productTitle":"Сравнение товара",
+  "fourItem":"Товар добавлен для сравнения. Вы можете добавить только 4 товара.",
+  "addProduct":"Добавьте товар для сравнения",
+  "compareProduct":"Сравнение товаров"
+},
+"favourite":{
+  "empty":"Нет избранных товаров.",
+  "title":"Избранные товары"
 },
 "certifate":{
   "phoneError":"Номер не может быть только +993",

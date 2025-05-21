@@ -18,7 +18,6 @@ const Layout: FC = () => {
   const isOpenFastCompare = useAppSelector(
     (state) => state.compare.isOpenFastCompare
   );
-
   useEffect(() => {
     // Simulate loading
     setTimeout(() => {
@@ -36,13 +35,13 @@ const Layout: FC = () => {
           },
           position: "fixed",
           borderRadius: "100%",
-          width: { lg: 75, md: 75, sm: 55, xs: 55 },
-          height: { lg: 75, md: 75, sm: 55, xs: 55 },
+          width: { lg: 65, md: 65, sm: 55, xs: 45 },
+          height: { lg: 65, md: 65, sm: 55, xs: 45 },
           alignItems: "center",
           justifyContent: "center",
-          bottom: 20,
+          bottom: 70,
           right: { lg: 100, md: 180, sm: 30, xs: 18 },
-          zIndex: 100,
+          zIndex: 1000,
         }}
         onClick={() => setOpenEmojiModal(true)}
       >
@@ -72,7 +71,7 @@ const Layout: FC = () => {
         open={openEmojiModal}
         handleClose={() => setOpenEmojiModal(false)}
       />
-      {compareProducts.length && isOpenFastCompare == true ? (
+      {!isSmallScreen && compareProducts.length && isOpenFastCompare == true ? (
         <Stack position="fixed" width="100vw" zIndex={1000} bottom={0}>
           <MainPageCompare />
         </Stack>

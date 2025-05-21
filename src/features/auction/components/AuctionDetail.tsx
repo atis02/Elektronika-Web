@@ -13,7 +13,6 @@ import {
   auctionDetailCost,
   auctionDetailCurrentBigPicture,
   auctionDetailCurrentSmallPicture,
-  // auctionDetailDateBox,
   auctionDetailIconButton,
   auctionDetailNextSmallPicture,
   auctionDetailProductSubtitle,
@@ -29,7 +28,7 @@ import AuctionDetailProporties from "./AuctionDetailProporties";
 import useDrawer from "../../../components/layouts/navbar/components/useDrawer";
 import axios from "axios";
 import { BASE_URL, BASE_URL_IMG } from "../../../api/instance";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import AuctionTimer from "./CounDownAuction";
 import toast from "react-hot-toast";
 import { useTranslation } from "react-i18next";
@@ -38,6 +37,8 @@ import { formatNumber } from "../../../components/utils/allutils";
 interface Product {
   imageOne: string;
   nameTm: string;
+  nameRu: string;
+  nameEn: string;
   imageTwo: string;
   imageThree: string;
   imageFour: string;
@@ -74,7 +75,8 @@ const AuctionDetail: FC = () => {
   const registeredUser = () => {
     return JSON.parse(localStorage.getItem("ElectronicaUser") ?? "[]");
   };
-  const { t } = useTranslation();
+
+  const { t, i18n } = useTranslation();
   const params = useParams();
   const smallImages = [
     data?.product.imageOne,
@@ -83,6 +85,7 @@ const AuctionDetail: FC = () => {
     data?.product.imageFour,
     data?.product.imageFive,
   ];
+
   const handleDecrease = () => {
     const inc = bid > 0 && bid - 50;
     setBid(inc);
@@ -144,15 +147,23 @@ const AuctionDetail: FC = () => {
             auctionId: data?.id,
             newPrice: bid,
           };
-          await axios.post(`${BASE_URL}auction/bidPrice`, body).then((resp) => {
-            if (resp.data.message == "Auction price updated successfully") {
-              toast.success("Üstünlikli!");
-              fetchData();
-              setBid(0);
-            } else {
-              toast.success("Ýalňyşlyk!");
-            }
-          });
+          const token = localStorage.getItem("tokenOfElectronics");
+
+          await axios
+            .post(`${BASE_URL}auction/bidPrice`, body, {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            })
+            .then((resp) => {
+              if (resp.data.message == "Auction price updated successfully") {
+                toast.success("Üstünlikli!");
+                fetchData();
+                setBid(0);
+              } else {
+                toast.success("Ýalňyşlyk!");
+              }
+            });
         }
       } catch (error: any) {
         if (
@@ -166,10 +177,25 @@ const AuctionDetail: FC = () => {
       toast.error("Auksion entäk başlanok!");
     }
   };
+  const getTitle = (nameTm: string, nameRu: string, nameEn: string): string => {
+    switch (i18n.language) {
+      case "ru":
+        return nameRu;
+      case "tm":
+        return nameTm;
+      default:
+        return nameEn;
+    }
+  };
   return (
     <Box my={5}>
       <Container>
-        <Typography sx={deliveryNavigateTitle}>Baş sahypa / Auksion</Typography>
+        <Typography sx={deliveryNavigateTitle}>
+          <Link to="/" style={{ textDecoration: "none", color: "#777777" }}>
+            {t("home.mainPage")}
+          </Link>{" "}
+          / {t("auction.auctionTitle")}
+        </Typography>
         <Stack
           direction={{ lg: "row", md: "row", sm: "column", xs: "column" }}
           alignItems={{
@@ -184,7 +210,11 @@ const AuctionDetail: FC = () => {
         >
           <Stack spacing={1}>
             <Typography sx={auctionDetailProductTitle}>
-              {data?.product.nameTm}
+              {getTitle(
+                data?.product.nameTm || "",
+                data?.product.nameRu || "",
+                data?.product.nameEn || ""
+              )}
             </Typography>
             <Typography sx={auctionDetailProductSubtitle}>
               {t("auction.state")} <span>{t("auction.new")}</span>
@@ -246,12 +276,15 @@ const AuctionDetail: FC = () => {
                           onClick={() => handleSmallImageClick(image)}
                         >
                           <img
-                            // src={image}
                             src={
                               `${BASE_URL_IMG}public/${image}` ||
                               "/images/logo2.png"
                             }
-                            style={{ width: "100%" }}
+                            style={{
+                              width: "100%",
+                              height: "100%",
+                              objectFit: "contain",
+                            }}
                             alt={`small-${index + 1}`}
                           />
                         </Box>

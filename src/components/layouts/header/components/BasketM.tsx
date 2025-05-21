@@ -2,8 +2,9 @@ import { Badge } from "@mui/material";
 import { FC } from "react";
 import { useNavigate } from "react-router-dom";
 import BasketViewModel from "../../../../store/basket/BasketViewModel";
+import { observer } from "mobx-react-lite";
 
-const BasketM: FC = () => {
+const BasketM: FC = observer(() => {
   const navigate = useNavigate();
   const { totalItems } = BasketViewModel;
 
@@ -33,6 +34,6 @@ const BasketM: FC = () => {
       </Badge>
     </>
   );
-};
+});
 
 export default BasketM;

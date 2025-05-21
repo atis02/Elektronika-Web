@@ -98,11 +98,7 @@ const DiscountGoodBox: FC = () => {
     <Stack
       ref={tableContainerRef}
       onScroll={handleScroll}
-      sx={{
-        overflowY: "auto",
-      }}
-      className="productScroll"
-      maxHeight="100vh"
+      // maxHeight="100vh"
     >
       <GridProducts
         titleBase={"home.discountedGoods"}

@@ -63,7 +63,7 @@
     "seeAll":"See all",
     "sale":"Sale",
     "addToCart":"Add To Cart",
-    "compare":"compare",
+    "compare":"Compare",
     "favourite":"Favourite",
     "barcode":"Barcode",
     "mainPage":"Main Page",
@@ -77,6 +77,10 @@
   "howRegister":{
     "how-to-register":"How to register on the site.",
     "htoDesc":"The registration principle is very simple:<1/>Click on the little man in the upper right corner. A window will appear in which you need to indicate your initials, contact number and email address. Then click on the 'Registration' button<1/>Done!"
+  },
+  "favourite":{
+    "empty":"Favourite products not found.",
+    "title":"Favourite products"
   },
   "footer":{
     "footerFastHelp":"Fast help",
@@ -123,9 +127,13 @@
 
 },
 "compare":{
-  "productTitle":"Compare Products"
+  "productTitle":"Compare Products",
+  "fourItem":"The product has been added for comparison. You can only add up to 4 products.",
+  "addProduct":"Add Product to compare",
+  "compareProduct":"Compare Products"
 },
 "auction":{
+  "noAuction":"Auction not found",
   "auctionTitle":"Auction",
   "createdDate":"Created Date:",
   "alreadyParticipated":"You already joined" ,

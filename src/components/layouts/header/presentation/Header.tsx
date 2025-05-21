@@ -6,8 +6,8 @@ import { size1_4, size4_1 } from "../utils/gridSize";
 import HeaderContacts from "../components/HeaderTexts";
 import { useNavigate } from "react-router-dom";
 import LangFlags from "../../../../language/LangFlags";
-import BasketM from "../components/BasketM";
-import { ProfileNavMobile } from "../components/ProfileNavMobile";
+import FavouriteButton from "../../navbar/components/iconButtons/FavouriteButton";
+import CompareButton from "../../navbar/components/iconButtons/CompareButton";
 
 interface HeaderProps {
   isLoading: boolean;
@@ -15,7 +15,9 @@ interface HeaderProps {
 
 const Header: FC<HeaderProps> = ({ isLoading }) => {
   const [scrolled, setScrolled] = useState<boolean>(false);
+
   const navigate = useNavigate();
+
   useEffect(() => {
     const handleScroll = () => {
       if (window.scrollY > 0) {
@@ -29,6 +31,7 @@ const Header: FC<HeaderProps> = ({ isLoading }) => {
       window.removeEventListener("scroll", handleScroll);
     };
   }, []);
+
   return (
     <>
       <Box
@@ -92,10 +95,10 @@ const Header: FC<HeaderProps> = ({ isLoading }) => {
               }}
               alt=""
             />
-            <Stack direction="row" alignItems={"center"} spacing={0}>
+            <Stack direction="row" alignItems={"center"} spacing={1.5}>
+              <FavouriteButton />
+              <CompareButton />
               <LangFlags />
-              <BasketM />
-              <ProfileNavMobile />
             </Stack>
           </Stack>
         </Container>

@@ -42,7 +42,8 @@
     "countDownDay":"Gün",
     "countDownHour":"Sagat",
     "countDownMinut":"Minut",
-    "countDownSecond":"Sekunt"
+    "countDownSecond":"Sekunt",
+    "noAuction":"Aksion ýok"
   },
   "footer":{
     "footerFastHelp":"Tiz kömek",
@@ -146,7 +147,14 @@
   "selfDeliverDesc":"182, Bitarap Türkmenistan şaýoly, “Elektonika dünýäsi”"
 },
 "compare":{
-  "productTitle":"Harydy deňeşdirmek"
+  "productTitle":"Harydy deňeşdirmek",
+  "fourItem":"Haryt deňeşdirmek üçin goşuldy. Siz diňe 4 sany haryt goşup bilýäňiz.",
+  "addProduct":"Deňeşdirmek üçin haryt goşun",
+  "compareProduct":"Harytlary deňeşdirmek"
+},
+"favourite":{
+  "empty":"Halan harytlaryňyzyň sanawy boş.",
+  "title":"Halan harytlarym"
 },
 "certifate":{
   "phoneError":"Telefon belgi ýöne +993 bolup bilmeýär",

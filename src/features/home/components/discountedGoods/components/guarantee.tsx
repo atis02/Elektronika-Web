@@ -15,12 +15,14 @@ export const Guarantee: FC<Props> = ({ product }) => {
         ...auctionTextBoxWarranty,
         flexDirection: "column",
         position: "relative",
+        zIndex: 100,
+        mr: -1,
       }}
     >
       <Stack direction="row" color="#B71C1C">
-        <img src="/icons/guarantee.png" style={{ width: 40, height: 45 }} />
+        <img src="/icons/guarantee.png" style={{ width: 27, height: 30 }} />
       </Stack>
-      <Typography fontSize={13} position="absolute" bottom={-22}>
+      <Typography fontSize={12} position="absolute" bottom={-20}>
         {product.warranty}
       </Typography>
     </Box>
