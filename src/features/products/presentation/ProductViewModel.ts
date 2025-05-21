@@ -12,6 +12,7 @@ interface Filters {
   maxPrice: number | null | undefined;
   sortBy: string | null | undefined;
   sortOrder: string | null | undefined;
+  statusId: string | null | undefined;
 }
 interface Brands {
   id: string;
@@ -53,6 +54,7 @@ class ProductViewModel {
     brandId: null,
     minPrice: 0,
     maxPrice: 0,
+    statusId: null,
     sortBy: "alphabet",
     sortOrder: "ASC",
   };
@@ -82,6 +84,7 @@ class ProductViewModel {
       brandId: null,
       minPrice: null,
       maxPrice: null,
+      statusId: null,
       sortBy: "alphabet",
       sortOrder: "ASC",
     };
@@ -116,6 +119,8 @@ class ProductViewModel {
         queryParams.append("sortBy", String(this.filters.sortBy));
       if (this.filters.sortOrder)
         queryParams.append("sortOrder", String(this.filters.sortOrder));
+      if (this.filters.statusId)
+        queryParams.append("statusId", String(this.filters.statusId));
 
       const url = `${BASE_URL}product/all?${queryParams.toString()}`;
 

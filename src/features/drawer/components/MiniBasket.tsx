@@ -22,6 +22,7 @@ import {
   clearAllBasketButton,
 } from "../../basket/styles/basketStyle";
 import { useTranslation } from "react-i18next";
+import { formatNumber } from "../../../components/utils/allutils";
 
 const MiniBasket: FC = observer(() => {
   const { items, totalPrice } = BasketViewModel;
@@ -121,7 +122,7 @@ const MiniBasket: FC = observer(() => {
     <Stack
       alignItems="center"
       minHeight="65vh"
-      width="100vw"
+      // width="100vw"
       justifyContent="center"
       spacing={2}
     >
@@ -131,7 +132,7 @@ const MiniBasket: FC = observer(() => {
       </Typography>
     </Stack>
   ) : (
-    <Paper elevation={4} sx={{ width: "100vw", py: 1 }}>
+    <Paper elevation={4} sx={{ py: 1 }}>
       <Stack
         direction="row"
         mx={2}
@@ -225,7 +226,10 @@ const MiniBasket: FC = observer(() => {
                 </IconButton>
               </Stack>
               <Typography sx={{ fontSize: "17px", fontWeight: 600 }}>
-                {item.product?.sellPrice - item.product?.discount_priceTMT} TMT
+                {formatNumber(
+                  item.product?.sellPrice - item.product?.discount_priceTMT
+                )}{" "}
+                TMT
               </Typography>
               <IconButton
                 onClick={() =>

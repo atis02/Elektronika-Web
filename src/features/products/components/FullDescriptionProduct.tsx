@@ -29,12 +29,7 @@ import {
 import {
   addStoreDiscountGoodButton,
   compareDiscountGoodsCostButton,
-  discountGoodCodeText,
-  discountGoodCompanyTitle,
-  discountGoodCost,
-  discountGoodLastCount,
   discountGoodsTitle,
-  discountGoodTitle,
 } from "../../home/components/discountedGoods/styles/discoutGoodsStyle";
 import { observer } from "mobx-react-lite";
 import ProductViewModel from "../presentation/ProductViewModel";
@@ -62,11 +57,11 @@ import AddCommentModal from "../../home/components/feedback/components/AddCommen
 import Login from "../../../components/login/Login";
 import useDrawer from "../../../components/layouts/navbar/components/useDrawer";
 import axios from "axios";
-import AppDrawer from "../../drawer/presentation/BasketDrawer";
 import { useTranslation } from "react-i18next";
 import { formatNumber } from "../../../components/utils/allutils";
-import { ProductImageOne } from "../../home/components/discountedGoods/components/productImageOne";
 import DoneIcon from "@mui/icons-material/Done";
+import { ProductCart } from "../../home/components/discountedGoods/components/ProductCart";
+import { ThumbUpAltOutlined } from "@mui/icons-material";
 
 const FullDescriptionProduct: FC = observer(() => {
   const navigate = useNavigate();
@@ -77,7 +72,6 @@ const FullDescriptionProduct: FC = observer(() => {
   const [isOrdered, setIsOrdered] = useState(false);
   const loggedUser = localStorage.getItem("ElectronicaUser");
   const { isOpen, openDrawer, closeDrawer } = useDrawer();
-  const [isOpened, setIsOpened] = useState<boolean>(false);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const [categoryProducts, setCategoryProducts] = useState([]);
@@ -86,9 +80,7 @@ const FullDescriptionProduct: FC = observer(() => {
   const { ref: containerRef, inView: containerInView } = useInView({
     threshold: 0.2,
   });
-  const toggleDrawer = (open: boolean) => {
-    setIsOpened(open);
-  };
+
   const getOrderedClient = async () => {
     if (loggedUser) {
       const userLogged = JSON.parse(loggedUser);
@@ -186,25 +178,6 @@ const FullDescriptionProduct: FC = observer(() => {
 
   const handleImageHover = (image: string) => {
     setCurrentImage(image);
-  };
-  const productItemVariants = {
-    hidden: { opacity: 0, y: 50 },
-    visible: (delay: number) => ({
-      opacity: 1,
-      y: 0,
-      transition: { delay: delay * 0.1, duration: 0.5, ease: "easeInOut" },
-    }),
-  };
-  const getTitle = (nameTm: string, nameRu: string, nameEn: string) => {
-    const currentLanguage = i18n.language; // Get the current language (e.g., "en", "ru", "tm")
-    switch (currentLanguage) {
-      case "ru":
-        return nameRu;
-      case "tm":
-        return nameTm;
-      default:
-        return nameEn; // Default to English
-    }
   };
   const getTitles = (
     nameTm: string | undefined | null,
@@ -543,6 +516,7 @@ const FullDescriptionProduct: FC = observer(() => {
                 </IconButton>
                 <Button
                   sx={{
+                    minWidth: 45,
                     p: 1,
                     color: "#B71C1C",
                     alignItems: "center",
@@ -554,7 +528,9 @@ const FullDescriptionProduct: FC = observer(() => {
                   variant="outlined"
                   onClick={handleOpen}
                 >
-                  {t("home.writeRating")}
+                  <ThumbUpAltOutlined />
+
+                  {/* {t("home.writeRating")} */}
                 </Button>
               </Stack>
             </Grid>
@@ -576,195 +552,10 @@ const FullDescriptionProduct: FC = observer(() => {
             {t("home.sameProducts")}
           </Typography>
         </Stack>
-        <Grid container spacing={1} my={1} ref={containerRef}>
-          {categoryProducts
-            .slice(0, isMobile ? 6 : 5)
-            ?.map((product: any, index) => (
-              <Grid
-                key={product.id}
-                sx={{
-                  minHeight: 380,
-                  justifyContent: "space-between",
-                }}
-                size={{ lg: 2.38, md: 3, sm: 4, xs: 6 }}
-              >
-                <motion.div
-                  initial="hidden"
-                  animate={containerInView ? "visible" : "hidden"}
-                  custom={index}
-                  variants={productItemVariants}
-                  style={{
-                    position: "relative",
-                    height: "100%",
-                  }}
-                >
-                  <Box
-                    sx={{
-                      p: 1,
-                      height: "100%",
-                      borderRadius: "6px",
-                    }}
-                  >
-                    {product.warranty && (
-                      <Box
-                        sx={{
-                          position: "absolute",
-                          right: -13,
-                          zIndex: 100,
-                          top: -20,
-                        }}
-                      >
-                        <Stack direction="row" color="#B71C1C">
-                          <img
-                            src="/icons/guarantee.png"
-                            style={{ width: 40, height: 40 }}
-                          />
-                          <Typography
-                            fontSize={13}
-                            position="absolute"
-                            bottom={-12}
-                            color="#000"
-                          >
-                            {product.warranty}
-                          </Typography>
-                        </Stack>
-                      </Box>
-                    )}
-                    <ProductImageOne product={product} />
-
-                    <Stack my={2}>
-                      <Typography
-                        sx={discountGoodTitle}
-                        onClick={() => navigate(`/product/${product.id}`)}
-                        noWrap
-                      >
-                        {getTitle(
-                          product.nameTm,
-                          product.nameRu,
-                          product.nameEn
-                        )}
-                      </Typography>
-                      <Typography sx={discountGoodCompanyTitle}>
-                        {product.brand?.nameTm || "Unknown Brand"}
-                      </Typography>
-                      <Stack direction="row" spacing={1} my={1}>
-                        <Typography sx={discountGoodCodeText}>
-                          {t("home.barcode")}
-                        </Typography>
-                        <Typography sx={discountGoodCodeText}>
-                          {product.barcode || "No code"}
-                        </Typography>
-                      </Stack>
-                      <Stack
-                        direction="row"
-                        justifyContent="space-between"
-                        alignItems="center"
-                      >
-                        <Typography sx={discountGoodCost}>
-                          {product.sellPrice - product.discount_priceTMT} m.
-                        </Typography>
-                        <Button variant="contained" sx={discountGoodLastCount}>
-                          {t("products.nagt")} {product.productQuantity}
-                        </Button>
-                      </Stack>
-                    </Stack>
-                    <Button
-                      variant="contained"
-                      fullWidth
-                      endIcon={isExist(product)}
-                      sx={addStoreDiscountGoodButton}
-                      onClick={() => {
-                        product.productQuantity <= 0
-                          ? toast.error("Ammarda haryt az mukdarda")
-                          : (BasketViewModel.addToBasket(product),
-                            toggleDrawer(true));
-                      }}
-                    >
-                      {t("home.addToCart")}
-                    </Button>
-                    <Stack
-                      direction="row"
-                      justifyContent="space-between"
-                      alignItems="center"
-                      gap={1}
-                    >
-                      <Button
-                        onClick={() => dispatch(addProduct(product))}
-                        sx={{
-                          ...compareDiscountGoodsCostButton,
-                          backgroundColor: compareProducts.some(
-                            (comp: any) => comp.id === product.id
-                          )
-                            ? "#C3000E"
-                            : "transparent",
-                          color: compareProducts.some(
-                            (comp: any) => comp.id === product.id
-                          )
-                            ? "#fff"
-                            : "#929292",
-                          "&:hover": {
-                            backgroundColor: compareProducts.some(
-                              (comp: any) => comp.id === product.id
-                            )
-                              ? "#C3000E"
-                              : "#f0f0f0",
-                          },
-                          height: 24,
-                        }}
-                      >
-                        <img
-                          src={
-                            compareProducts.some((p) => p.id === product.id)
-                              ? "/icons/compare white.svg"
-                              : "/icons/compare.svg"
-                          }
-                          alt="compare-icon"
-                          style={{ marginRight: "5px" }}
-                        />
-                        {t("home.compare")}
-                      </Button>
-
-                      <Button
-                        onClick={() => handleToggleFavorite(product)}
-                        sx={{
-                          ...compareDiscountGoodsCostButton,
-                          backgroundColor: favorites.some(
-                            (fav) => fav.id === product.id
-                          )
-                            ? "#C3000E"
-                            : "transparent",
-                          color: favorites.some((fav) => fav.id === product.id)
-                            ? "#fff"
-                            : "#929292",
-                          "&:hover": {
-                            backgroundColor: favorites.some(
-                              (fav) => fav.id === product.id
-                            )
-                              ? "#C3000E"
-                              : "#f0f0f0",
-                          },
-                        }}
-                      >
-                        <FavoriteBorderIcon
-                          sx={{
-                            fontWeight: 300,
-                            width: "12px",
-                            color: favorites.some(
-                              (fav) => fav.id === product.id
-                            )
-                              ? "#fff"
-                              : "#929292",
-                          }}
-                        />
-                        {t("home.favourite")}
-                      </Button>
-                    </Stack>
-                  </Box>
-                </motion.div>
-              </Grid>
-            ))}
-          <AppDrawer isOpen={isOpened} toggleDrawer={toggleDrawer} />
-        </Grid>
+        <ProductCart
+          displayedProducts={categoryProducts.slice(0, isMobile ? 6 : 5)}
+          size={2.38}
+        />
       </Container>
     </>
   );

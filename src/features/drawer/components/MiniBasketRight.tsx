@@ -35,7 +35,6 @@ const MiniBasketRight: FC = () => {
       <Box
         sx={auctionSmallBox}
         mt={2}
-        width="100vw"
         justifyContent="center"
         alignItems="center"
       >

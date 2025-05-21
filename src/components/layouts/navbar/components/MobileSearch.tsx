@@ -159,7 +159,7 @@ const MobileSearch: FC<HeaderContactsProps> = ({ isLoading }) => {
           width="100%"
           minHeight="50px"
           maxHeight="450px"
-          zIndex={100}
+          zIndex={150}
           borderRadius={1}
           p={1}
           overflow="auto"

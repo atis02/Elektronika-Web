@@ -36,9 +36,10 @@ import { RootState } from "../../../../../components/redux/store";
 import { toggleFavorite } from "../../../../../components/redux/favouriteSlice";
 
 interface Props {
+  size?: number;
   displayedProducts: Product[];
 }
-export const ProductCart: FC<Props> = ({ displayedProducts }) => {
+export const ProductCart: FC<Props> = ({ size = 3, displayedProducts }) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -84,16 +85,16 @@ export const ProductCart: FC<Props> = ({ displayedProducts }) => {
     setIsOpen(open);
   };
   return (
-    <Grid container spacing={1} my={0}>
+    <Grid container spacing={1} my={0} mb={2}>
       {displayedProducts.map((product: any, index) => (
-        <Grid key={product.id} size={{ lg: 3, md: 4, sm: 6, xs: 6 }}>
+        <Grid key={product.id} size={{ lg: size, md: 4, sm: 6, xs: 6 }}>
           <motion.div
             initial={"hidden"}
             animate={containerInView ? "visible" : "visible"}
             custom={index}
             variants={productItemVariants}
             style={{
-              minHeight: 405,
+              minHeight: 415,
               position: "relative",
               border: isMobile ? "1px solid #e9a3a8" : "none",
               borderRadius: 13,

@@ -10,7 +10,6 @@ const NewGoodBox: FC = () => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isError, setIsError] = useState<boolean>(false);
   const [page, setPage] = useState(1);
-  const [showAll, setShowAll] = useState(false);
   const [loading, setLoading] = useState(false);
   const tableContainerRef = useRef<HTMLDivElement | null>(null);
 
@@ -18,19 +17,14 @@ const NewGoodBox: FC = () => {
     setLoading(true);
     try {
       const response = await axios.get(
-        `${BASE_URL}product/all?limit=10&page=${page}`
+        `${BASE_URL}product/all?limit=4&page=${page}&statusId=4021a947-6bd2-4ef0-ac51-4548c28e42e8`
       );
-      const filteredProducts = response.data?.products.filter(
-        (item: any) => item.statusId === "4021a947-6bd2-4ef0-ac51-4548c28e42e8"
-      );
-      console.log(filteredProducts);
-
       if (page === 1) {
-        setDiscountedProducts(filteredProducts);
+        setDiscountedProducts(response.data?.products);
       } else {
         setDiscountedProducts((prevItems) => [
           ...prevItems,
-          ...filteredProducts,
+          ...response.data?.products,
         ]);
       }
     } catch (error: unknown) {
@@ -50,7 +44,7 @@ const NewGoodBox: FC = () => {
         tableContainerRef.current;
 
       if (scrollHeight - scrollTop <= clientHeight + 100) {
-        if (!loading && showAll) {
+        if (!loading) {
           setPage((prev) => prev + 1);
         }
       }
@@ -68,10 +62,6 @@ const NewGoodBox: FC = () => {
     }
   }, []);
 
-  const handleShowAll = () => {
-    setShowAll(!showAll);
-  };
-
   if (isLoading) {
     return <GridLoading />;
   }
@@ -88,25 +78,12 @@ const NewGoodBox: FC = () => {
     return <Typography></Typography>;
   }
 
-  const displayedProducts = showAll
-    ? discountedProducts
-    : discountedProducts.slice(0, 4);
-
   return (
-    <Stack
-      ref={tableContainerRef}
-      onScroll={handleScroll}
-      // sx={{
-      //   overflowY: "auto",
-      // }}
-      // className="productScroll"
-      // maxHeight="100vh"
-    >
+    <Stack ref={tableContainerRef} onScroll={handleScroll}>
       <GridProducts
         titleBase={"home.newGoods"}
-        displayedProducts={displayedProducts}
-        showAll={showAll}
-        handleShowAll={handleShowAll}
+        displayedProducts={discountedProducts}
+        id="4021a947-6bd2-4ef0-ac51-4548c28e42e8"
       />
     </Stack>
   );

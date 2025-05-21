@@ -295,8 +295,6 @@ const NavbarCategory: FC = () => {
                                 sx={{
                                   cursor: "pointer",
                                   mb: 1,
-                                  // fontFamily: "Open Sans",
-                                  // pl: 1,
                                   fontSize: "14px",
                                   textAlign: "start",
                                 }}

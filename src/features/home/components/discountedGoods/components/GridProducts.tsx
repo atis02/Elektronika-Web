@@ -8,21 +8,23 @@ import {
 import { useTranslation } from "react-i18next";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import { ProductCart } from "./ProductCart";
+import { useNavigate } from "react-router-dom";
 
 type Props = {
   displayedProducts: Product[];
-  showAll: boolean;
-  handleShowAll: () => void;
+  showAll?: boolean;
   titleBase: string;
+  id?: string;
 };
 
 const GridProducts: FC<Props> = ({
   displayedProducts,
-  handleShowAll,
   showAll,
   titleBase,
+  id,
 }) => {
   const { t } = useTranslation();
+  const navigate = useNavigate();
 
   return (
     <>
@@ -38,7 +40,7 @@ const GridProducts: FC<Props> = ({
               sx={{ ...(showAll ? { transform: "rotate(90deg)" } : {}) }}
             />
           }
-          onClick={handleShowAll}
+          onClick={() => navigate(`/categories?statusId=${id}`)}
         >
           {t("home.seeAll")}
         </Button>

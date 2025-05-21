@@ -95,11 +95,7 @@ const DiscountGoodBox: FC = () => {
     : discountedProducts.slice(0, 4);
 
   return (
-    <Stack
-      ref={tableContainerRef}
-      onScroll={handleScroll}
-      // maxHeight="100vh"
-    >
+    <Stack ref={tableContainerRef} onScroll={handleScroll}>
       <GridProducts
         titleBase={"home.discountedGoods"}
         handleShowAll={handleShowAll}

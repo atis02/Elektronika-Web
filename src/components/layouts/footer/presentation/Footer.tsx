@@ -20,11 +20,17 @@ const Footer: FC = () => {
           </Grid>
         </Container>
         <Divider color="#F2F2F2" />
-        <Typography sx={{ color: "#DBDBDB", mt: 1, textAlign: "center" }}>
+        <Typography
+          p={2}
+          pt={0}
+          pb={{ lg: 0, md: 0, sm: 0, xs: 7 }}
+          sx={{ color: "#DBDBDB", mt: 1, textAlign: "center" }}
+        >
           Ähli hukuklary goralan © {new Date().getFullYear()}. Powered by{" "}
           <a
             href="https://alemtilsimat.com"
-            style={{ textDecoration: "none", color: "#DBDBDB" }}
+            target="_blank"
+            style={{ textDecoration: "none", color: "lightblue" }}
           >
             Alem Tilsimat
           </a>

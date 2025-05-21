@@ -45,7 +45,7 @@ const NavbarSearchGlobal: FC<{ onClose: () => void }> = ({ onClose }) => {
         onChange={handleInputChange}
         sx={{
           "& .MuiInputBase-input": {
-            color: "white", // Changes input text color to white
+            color: "white",
           },
           "& .MuiInputBase-root": {
             color: "white",
@@ -60,7 +60,8 @@ const NavbarSearchGlobal: FC<{ onClose: () => void }> = ({ onClose }) => {
             },
           },
           "& .MuiInputLabel-root": {
-            color: "white", // Placeholder color when not focused
+            color: "white",
+
             "&.Mui-focused": {
               color: "white", // Placeholder color when focused
             },

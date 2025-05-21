@@ -10,28 +10,20 @@ const DiscountGoodBox: FC = () => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isError, setIsError] = useState<boolean>(false);
   const [page, setPage] = useState(1);
-  const [showAll, setShowAll] = useState(false);
   const [loading, setLoading] = useState(false);
   const tableContainerRef = useRef<HTMLDivElement | null>(null);
-
   const fetchItems = async () => {
     setLoading(true);
     try {
       const response = await axios.get(
-        `${BASE_URL}product/all?limit=20&page=${page}`
+        `${BASE_URL}product/all?limit=4&page=${page}&statusId=56143a81-cfa6-4c52-a74b-957d94b0c058`
       );
-      const filteredProducts = response.data?.products.filter(
-        (item: any) => item.statusId === "56143a81-cfa6-4c52-a74b-957d94b0c058"
-      );
-      console.log(response.data);
-      console.log(filteredProducts);
-
       if (page === 1) {
-        setDiscountedProducts(filteredProducts);
+        setDiscountedProducts(response.data?.products);
       } else {
         setDiscountedProducts((prevItems) => [
           ...prevItems,
-          ...filteredProducts,
+          ...response.data?.products,
         ]);
       }
     } catch (error: unknown) {
@@ -52,7 +44,7 @@ const DiscountGoodBox: FC = () => {
         tableContainerRef.current;
 
       if (scrollHeight - scrollTop <= clientHeight + 100) {
-        if (!loading && showAll) {
+        if (!loading) {
           setPage((prev) => prev + 1);
         }
       }
@@ -70,10 +62,6 @@ const DiscountGoodBox: FC = () => {
     }
   }, []);
 
-  const handleShowAll = () => {
-    setShowAll(!showAll);
-  };
-
   if (isLoading) {
     return <GridLoading />;
   }
@@ -90,17 +78,12 @@ const DiscountGoodBox: FC = () => {
     return <Typography></Typography>;
   }
 
-  const displayedProducts = showAll
-    ? discountedProducts
-    : discountedProducts.slice(0, 4);
-
   return (
     <Stack ref={tableContainerRef} onScroll={handleScroll}>
       <GridProducts
         titleBase={"home.offeredProducts"}
-        handleShowAll={handleShowAll}
-        displayedProducts={displayedProducts}
-        showAll={showAll}
+        displayedProducts={discountedProducts}
+        id="56143a81-cfa6-4c52-a74b-957d94b0c058"
       />
     </Stack>
   );

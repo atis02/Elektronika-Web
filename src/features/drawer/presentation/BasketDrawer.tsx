@@ -15,10 +15,12 @@ const AppDrawer: React.FC<Bools> = ({ isOpen, toggleDrawer }) => {
   return (
     <>
       <Drawer
-        sx={{
-          width: "100vw",
-        }}
         anchor="right"
+        PaperProps={{
+          sx: {
+            width: { lg: "40vw", md: "40vw", sm: "100vw", xs: "100vw" },
+          },
+        }}
         open={isOpen}
         onClose={() => toggleDrawer(false)}
       >
@@ -29,7 +31,6 @@ const AppDrawer: React.FC<Bools> = ({ isOpen, toggleDrawer }) => {
             backgroundColor: "#fff",
             zIndex: 100,
             display: "inline-block",
-            width: "100vw",
           }}
         >
           <Stack
@@ -78,7 +79,7 @@ const AppDrawer: React.FC<Bools> = ({ isOpen, toggleDrawer }) => {
         <Stack
           justifyContent="space-between"
           direction="column"
-          width={{ lg: "60vh", md: "60vh", sm: "60vh", xs: "0" }}
+          // width={{ lg: "60vh", md: "60vh", sm: "60vh", xs: "0" }}
           height="100%"
         >
           <MiniBasket />

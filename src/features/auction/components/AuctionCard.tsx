@@ -164,7 +164,7 @@ const AuctionCard: FC = () => {
               spacing={1}
             >
               {data.slice(0, 4)?.map((auction, index) => (
-                <Box sx={autioncardBox} key={index}>
+                <Box sx={autioncardBox} key={auction.auctionID}>
                   <AuctionTimer
                     endDate={
                       new Date(auction.startDateAuction) < new Date()

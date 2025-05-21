@@ -26,35 +26,49 @@ const Categories: FC = observer(() => {
   const [filtered, setFiltered] = useState<Product[]>(
     ProductViewModel.products
   );
+  const [page, setPage] = useState(1);
   const [openFilters, setOpenFilters] = useState<boolean>(false);
   const { t } = useTranslation();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
-  useEffect(() => {
-    setFiltered(ProductViewModel.products || []);
-  }, [ProductViewModel.products]);
+  const [hasMore, setHasMore] = useState(true);
   const [searchParams] = useSearchParams();
+  const [firstLoading, setFirstLoading] = useState(true);
+
+  const loadProducts = async (reset = false) => {
+    const currentPage = reset ? 1 : page;
+
+    ProductViewModel.setCurrentPage(currentPage);
+    ProductViewModel.setLimit(10);
+
+    const newProducts = await ProductViewModel.fetchFilteredProducts();
+
+    setFiltered((prev) =>
+      reset ? [...prev, ...newProducts] : [...prev, ...newProducts]
+    );
+    setPage((prev) => (reset ? 1 : prev + 1));
+
+    if (newProducts.length < 10) {
+      setHasMore(false);
+    }
+  };
+
   useEffect(() => {
     const filters = {
-      categoryId: searchParams.get("categoryId")
-        ? searchParams.get("categoryId")
-        : undefined,
-      subCategoryId: searchParams.get("subCategoryId")
-        ? searchParams.get("subCategoryId")
-        : undefined,
-      segmentId: searchParams.get("segmentId")
-        ? searchParams.get("segmentId")
-        : undefined,
-      brandId: searchParams.get("brandId")
-        ? searchParams.get("brandId")
-        : undefined,
-      minPrice: 100,
+      categoryId: searchParams.get("categoryId") || undefined,
+      subCategoryId: searchParams.get("subCategoryId") || undefined,
+      segmentId: searchParams.get("segmentId") || undefined,
+      brandId: searchParams.get("brandId") || undefined,
+      statusId: searchParams.get("statusId") || undefined,
+      minPrice: 1,
       maxPrice: 200000,
-      sortBy: "alphabet",
-      sortOrder: "ASC",
+      sortBy: "createdAt",
+      sortOrder: "DESC",
     };
+    setFirstLoading(false);
     ProductViewModel.setFilters(filters);
-    ProductViewModel.fetchFilteredProducts();
+    setHasMore(true);
+    loadProducts(true);
   }, [searchParams]);
 
   const handleCategorySelect = (filters: any) => {
@@ -84,7 +98,11 @@ const Categories: FC = observer(() => {
       setFiltered(filtered);
     }
   };
-
+  const loadMore = () => {
+    if (hasMore && !ProductViewModel.loading) {
+      loadProducts();
+    }
+  };
   return (
     <Container>
       <Grid container width="100%" my={2} spacing={3}>
@@ -111,12 +129,16 @@ const Categories: FC = observer(() => {
           )}
         </Grid>
         <Grid size={size4_1}>
-          {ProductViewModel.loading ? (
+          {firstLoading && ProductViewModel.loading ? (
             <Stack alignItems="center" ml={10}>
               <GridLoading />
             </Stack>
           ) : filtered?.length ? (
-            <CategoryProductsBox products={filtered} />
+            <CategoryProductsBox
+              products={filtered}
+              loadMore={loadMore}
+              hasMore={hasMore}
+            />
           ) : (
             <Typography my={15} textAlign="center">
               {t("home.noItem")}

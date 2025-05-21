@@ -4,7 +4,7 @@ import Grid from "@mui/material/Grid2";
 const GridLoading = () => {
   return (
     <Grid container spacing={2} my={3}>
-      {Array.from(new Array(4)).map((_, index) => (
+      {Array.from(new Array(8)).map((_, index) => (
         <Grid key={index} size={{ lg: 3, md: 4, sm: 6, xs: 6 }}>
           <Box sx={{ background: "#f7f7f7", p: 2, borderRadius: "6px" }}>
             <Box sx={{ display: "flex", justifyContent: "center" }}>

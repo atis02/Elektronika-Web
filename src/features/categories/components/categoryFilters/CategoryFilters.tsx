@@ -40,7 +40,10 @@ const CategoryFilters: FC<CategoryFiltersProps> = ({
       brandId: searchParams.get("brandId")
         ? searchParams.get("brandId")
         : undefined,
-      minPrice: 100,
+      statusId: searchParams.get("statusId")
+        ? searchParams.get("statusId")
+        : undefined,
+      minPrice: 1,
       maxPrice: 200000,
       sortBy: "alphabet",
       sortOrder: "ASC",
