@@ -72,7 +72,8 @@
     "alreadyHaveAccount":"Siziň öňden hasabyňyz bar!",
     "imageUpload":"Surat ýükle",
     "sendOTP":"tassyklaýyş kody ugrat",
-    "resend":"Gaýtadan ugratmak "
+    "resend":"Gaýtadan ugratmak ",
+    "sendOTPAgain":"Täzeden ugrat"
   },
   "home":{
     "sameProducts":"Meňzeş harytlar",
@@ -190,6 +191,8 @@
 },
 "partners":{
   "ourPartners":"Hyzmatdaşlarymyz"
-}
+},
+"verifySend":"Tassyklaýyş kody ugradyldy",
+"verify":"Tassykla"
 
 }

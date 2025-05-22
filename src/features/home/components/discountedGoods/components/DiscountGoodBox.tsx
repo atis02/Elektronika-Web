@@ -10,7 +10,6 @@ const DiscountGoodBox: FC = () => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isError, setIsError] = useState<boolean>(false);
   const [page, setPage] = useState(1);
-  const [showAll, setShowAll] = useState(false);
   const [loading, setLoading] = useState(false);
   const tableContainerRef = useRef<HTMLDivElement | null>(null);
 
@@ -52,7 +51,7 @@ const DiscountGoodBox: FC = () => {
         tableContainerRef.current;
 
       if (scrollHeight - scrollTop <= clientHeight + 100) {
-        if (!loading && showAll) {
+        if (!loading) {
           setPage((prev) => prev + 1);
         }
       }
@@ -70,10 +69,6 @@ const DiscountGoodBox: FC = () => {
     }
   }, []);
 
-  const handleShowAll = () => {
-    setShowAll(!showAll);
-  };
-
   if (isLoading) {
     return <GridLoading />;
   }
@@ -90,17 +85,11 @@ const DiscountGoodBox: FC = () => {
     return <Typography></Typography>;
   }
 
-  const displayedProducts = showAll
-    ? discountedProducts
-    : discountedProducts.slice(0, 4);
-
   return (
     <Stack ref={tableContainerRef} onScroll={handleScroll}>
       <GridProducts
         titleBase={"home.discountedGoods"}
-        handleShowAll={handleShowAll}
-        displayedProducts={displayedProducts}
-        showAll={showAll}
+        displayedProducts={discountedProducts}
       />
     </Stack>
   );

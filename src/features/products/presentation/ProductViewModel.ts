@@ -67,6 +67,8 @@ class ProductViewModel {
   };
 
   setFilters = (filters: Filters) => {
+    console.log(filters);
+    this.products = [];
     this.filters = filters;
     this.currentPage = 1;
   };

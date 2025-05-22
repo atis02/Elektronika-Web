@@ -186,6 +186,8 @@
 },
 "partners":{
   "ourPartners":"Our Partners"
-}
+},
+"verifySend":"Verification code has been sent to",
+"verify":"Verify"
 
 }

@@ -2,10 +2,11 @@ import { Box, Stack, Typography } from "@mui/material";
 import { FC } from "react";
 import { footersubLogo } from "../styles/footerStyles";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 const FooterLeftSide: FC = () => {
   const navigate = useNavigate();
-
+  const { t } = useTranslation();
   return (
     <>
       <Stack
@@ -21,7 +22,7 @@ const FooterLeftSide: FC = () => {
           />
         </Box>
         <Typography sx={footersubLogo}>
-          Электроника и бытовая техника
+          {t("header.header_subtitle")}
         </Typography>
       </Stack>
     </>

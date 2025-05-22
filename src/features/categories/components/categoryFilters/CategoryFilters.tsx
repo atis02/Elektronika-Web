@@ -59,7 +59,7 @@ const CategoryFilters: FC<CategoryFiltersProps> = ({
       <Stack spacing={2}>
         {!isMobile && (
           <Stack spacing={2}>
-            <Sidebar />
+            <Sidebar handleSelectCategory={handleCategorySelect} />
           </Stack>
         )}
         <Stack spacing={2}>

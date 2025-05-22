@@ -44,17 +44,18 @@ const blurHashToBase64 = (
 
 interface SidebarLinksProps {
   selectedFilters: {
-    categoryId?: number;
-    subcategoryId?: number;
-    segmentId?: number;
-    brandId?: number;
+    categoryId?: number | string;
+    subcategoryId?: number | string;
+    segmentId?: number | string;
+    brandId?: number | string;
   };
   onCategorySelect: (filters: {
-    categoryId?: number;
-    subcategoryId?: number;
-    segmentId?: number;
-    brandId?: number;
+    categoryId?: number | string;
+    subcategoryId?: number | string;
+    segmentId?: number | string;
+    brandId?: number | string;
   }) => void;
+  handleSelectCategory?: (filters: any) => void;
 }
 const categoryItemVariants = {
   hidden: { opacity: 0, y: 20 },
@@ -65,7 +66,10 @@ const categoryItemVariants = {
   }),
 };
 
-const SidebarLinks: FC<SidebarLinksProps> = ({ onCategorySelect }) => {
+const SidebarLinks: FC<SidebarLinksProps> = ({
+  onCategorySelect,
+  handleSelectCategory,
+}) => {
   // Always call hooks at the top level
   const { categories, isLoading: isCategoriesLoading } = useCategories();
   const { t, i18n } = useTranslation();
@@ -93,12 +97,41 @@ const SidebarLinks: FC<SidebarLinksProps> = ({ onCategorySelect }) => {
   } = useSubcategories(expandedCategory?.id);
 
   // Navigation handlers
+  // const handleCategoryClick = (category: any) => {
+  //   onCategorySelect({ categoryId: category.id });
+  //   navigate("/categories?categoryId=" + category.id);
+  // };
+
+  // const handleSubcategoryClick = (category: any, subcategoryId: string) => {
+  //   navigate(
+  //     `/categories?categoryId=${category.id}&subCategoryId=${subcategoryId}`
+  //   );
+  // };
+
+  // const handleSegmentClick = (
+  //   category: any,
+  //   subcategoryId: string,
+  //   segmentId: string
+  // ) => {
+  //   navigate(
+  //     `/categories?categoryId=${category.id}&subCategoryId=${subcategoryId}&segmentId=${segmentId}`
+  //   );
+  // };
+
   const handleCategoryClick = (category: any) => {
-    onCategorySelect({ categoryId: category.id });
-    navigate("/categories?categoryId=" + category.id);
+    const data = { categoryId: category.id };
+    handleSelectCategory?.(data);
+    onCategorySelect(data);
+    navigate(`/categories?categoryId=${category.id}`);
   };
 
   const handleSubcategoryClick = (category: any, subcategoryId: string) => {
+    const data = {
+      categoryId: category.id,
+      subCategoryId: subcategoryId,
+    };
+    handleSelectCategory?.(data);
+    onCategorySelect(data);
     navigate(
       `/categories?categoryId=${category.id}&subCategoryId=${subcategoryId}`
     );
@@ -109,6 +142,13 @@ const SidebarLinks: FC<SidebarLinksProps> = ({ onCategorySelect }) => {
     subcategoryId: string,
     segmentId: string
   ) => {
+    const data = {
+      categoryId: category.id,
+      subCategoryId: subcategoryId,
+      segmentId: segmentId,
+    };
+    handleSelectCategory?.(data);
+    onCategorySelect(data);
     navigate(
       `/categories?categoryId=${category.id}&subCategoryId=${subcategoryId}&segmentId=${segmentId}`
     );

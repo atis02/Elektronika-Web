@@ -17,12 +17,11 @@ import { observer } from "mobx-react-lite";
 import UserViewModel from "./UserViewModel";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
-import OtpVerification from "./OtpVerification";
 import axios from "axios";
 import { BASE_URL } from "../../api/instance";
 import ButtonWithTimer from "./ButtonWithTimer";
 import { useTranslation } from "react-i18next";
-// import OtpVerification from "./OtpVerification";
+import VerifyDrawer from "./VerifyDrawer";
 
 interface LoginProps {
   isOpen: boolean;
@@ -64,8 +63,6 @@ const Login: FC<LoginProps> = observer(({ isOpen, onClose }) => {
     return storedUser ? JSON.parse(storedUser) || [] : [];
   };
 
-  // const { isOpen, openDrawer, closeDrawer } = useDrawer();
-
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = e.target.files?.[0];
     if (selectedFile) {
@@ -80,6 +77,7 @@ const Login: FC<LoginProps> = observer(({ isOpen, onClose }) => {
   const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setIsNotify(e.target.checked);
   };
+  console.log(isEmail(email));
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -93,6 +91,8 @@ const Login: FC<LoginProps> = observer(({ isOpen, onClose }) => {
       setError(true);
       return toast.error("Telefon belgi ýa-da email tassykla!");
     }
+    console.log(email);
+
     try {
       await UserViewModel.registerUser({
         file,
@@ -276,7 +276,7 @@ const Login: FC<LoginProps> = observer(({ isOpen, onClose }) => {
             </Stack>
 
             <Typography fontWeight={500} fontSize={18}>
-              {user?.phoneNumber}
+              +993 {user?.phoneNumber}
             </Typography>
             <Stack direction="row" mt={1} spacing={2}>
               <Button
@@ -445,6 +445,7 @@ const Login: FC<LoginProps> = observer(({ isOpen, onClose }) => {
                         />
                         {successfullyVerificated !== true ? (
                           <ButtonWithTimer
+                            isEmail={false}
                             phoneNumber={phoneNumber}
                             isTurkmenPhoneNumber={() =>
                               isTurkmenPhoneNumber(`+993${phoneNumber}`)
@@ -480,6 +481,7 @@ const Login: FC<LoginProps> = observer(({ isOpen, onClose }) => {
                         />
                         {successfullyVerificated !== true ? (
                           <ButtonWithTimer
+                            isEmail={true}
                             phoneNumber={email}
                             isTurkmenPhoneNumber={() => isEmail(email)}
                             sendOTP={() => sendEmailOTP(email)}
@@ -582,7 +584,10 @@ const Login: FC<LoginProps> = observer(({ isOpen, onClose }) => {
                     <Stack direction="row" width={"100%"} spacing={2} mb={4}>
                       <Button
                         variant="contained"
-                        onClick={() => setActiveTabDirection("phoneNumber")}
+                        onClick={() => {
+                          setActiveTabDirection("phoneNumber");
+                          setEmail("");
+                        }}
                         sx={{
                           textTransform: "none",
                           background:
@@ -604,7 +609,10 @@ const Login: FC<LoginProps> = observer(({ isOpen, onClose }) => {
                       </Button>
                       <Button
                         variant="contained"
-                        onClick={() => setActiveTabDirection("email")}
+                        onClick={() => {
+                          setActiveTabDirection("email");
+                          setPhoneNumber("");
+                        }}
                         sx={{
                           textTransform: "none",
                           background:
@@ -665,6 +673,7 @@ const Login: FC<LoginProps> = observer(({ isOpen, onClose }) => {
                         />
                         {successfullyVerificated !== true ? (
                           <ButtonWithTimer
+                            isEmail={false}
                             phoneNumber={phoneNumber}
                             isTurkmenPhoneNumber={() =>
                               isTurkmenPhoneNumber(`+993${phoneNumber}`)
@@ -700,6 +709,7 @@ const Login: FC<LoginProps> = observer(({ isOpen, onClose }) => {
                         />
                         {successfullyVerificated !== true ? (
                           <ButtonWithTimer
+                            isEmail={true}
                             phoneNumber={email}
                             isTurkmenPhoneNumber={() => isEmail(email)}
                             sendOTP={() => sendEmailOTP(email)}
@@ -827,10 +837,21 @@ const Login: FC<LoginProps> = observer(({ isOpen, onClose }) => {
           {snackbarMessage}
         </Alert>
       </Snackbar>
-      <OtpVerification
+      <VerifyDrawer
         setSuccesfullyVerficated={setSuccesfullyVerficated}
         isOpen={isOtpVerificationOpen}
         onClose={handleOtpVerificationClose}
+        phoneNumber={email !== "" ? email : phoneNumber}
+        isTurkmenPhoneNumber={
+          email !== ""
+            ? () => isEmail(email)
+            : () => isTurkmenPhoneNumber(phoneNumber)
+        }
+        sendOTP={
+          email !== "" ? () => sendEmailOTP(email) : () => sendOTP(phoneNumber)
+        }
+        loading={loading}
+        isEmail={email !== "" ? true : false}
       />
     </Drawer>
   );

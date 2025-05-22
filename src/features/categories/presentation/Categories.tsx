@@ -21,6 +21,8 @@ import { useTranslation } from "react-i18next";
 import GridLoading from "../../home/components/offeredGoods/components/GridLoading";
 import CategoryFiltersDrawer from "../components/categoryFilters/CategoryFiltersDrawer";
 import { Tune } from "@mui/icons-material";
+import { BASE_URL } from "../../../api/instance";
+import axios from "axios";
 
 const Categories: FC = observer(() => {
   const [filtered, setFiltered] = useState<Product[]>(
@@ -43,10 +45,13 @@ const Categories: FC = observer(() => {
 
     const newProducts = await ProductViewModel.fetchFilteredProducts();
 
-    setFiltered((prev) =>
-      reset ? [...prev, ...newProducts] : [...prev, ...newProducts]
-    );
-    setPage((prev) => (reset ? 1 : prev + 1));
+    if (reset) {
+      setFiltered(newProducts); // перезаписываем данные
+      setPage(2); // следующая будет вторая страница
+    } else {
+      setFiltered((prev) => [...prev, ...newProducts]);
+      setPage((prev) => prev + 1);
+    }
 
     if (newProducts.length < 10) {
       setHasMore(false);
@@ -71,9 +76,44 @@ const Categories: FC = observer(() => {
     loadProducts(true);
   }, [searchParams]);
 
-  const handleCategorySelect = (filters: any) => {
-    ProductViewModel.setFilters(filters);
-    ProductViewModel.fetchFilteredProducts();
+  const handleCategorySelect = async (filters: any) => {
+    try {
+      const queryParams = new URLSearchParams({
+        page: String(1),
+        limit: String(10),
+      });
+
+      if (filters.categoryId)
+        queryParams.append("categoryId", String(filters.categoryId));
+      if (filters.subCategoryId)
+        queryParams.append("subCategoryId", String(filters.subCategoryId));
+      if (filters.segmentId)
+        queryParams.append("segmentId", String(filters.segmentId));
+      if (filters.brandId)
+        queryParams.append("brandId", String(filters.brandId));
+      if (filters.minPrice)
+        queryParams.append("minPrice", String(filters.minPrice));
+      if (filters.maxPrice)
+        queryParams.append("maxPrice", String(filters.maxPrice));
+      if (filters.sortBy) queryParams.append("sortBy", String(filters.sortBy));
+      if (filters.sortOrder)
+        queryParams.append("sortOrder", String(filters.sortOrder));
+      if (filters.statusId)
+        queryParams.append("statusId", String(filters.statusId));
+
+      const url = `${BASE_URL}product/all?${queryParams.toString()}`;
+
+      const response = await axios.get(url);
+      const data = response.data;
+
+      return setFiltered(data.products);
+    } catch (error: any) {
+      console.error("Error fetching products:", error);
+      error = "Failed to load products. Please try again.";
+      return [];
+    } finally {
+      console.log(true);
+    }
   };
 
   const filteredProducts = (id: string) => {
@@ -103,6 +143,8 @@ const Categories: FC = observer(() => {
       loadProducts();
     }
   };
+  console.log(filtered);
+
   return (
     <Container>
       <Grid container width="100%" my={2} spacing={3}>

@@ -61,9 +61,10 @@ class UserViewModel {
       if (registrationData.file) {
         formData.append("image", registrationData.file);
       }
+      console.log(registrationData);
       formData.append("name", registrationData.firstName);
       formData.append("surname", registrationData.lastName);
-      if (registrationData.phoneNumber === "+993") {
+      if (registrationData.phoneNumber === "") {
         formData.append("email", registrationData.email);
       } else {
         formData.append("phoneNumber", registrationData.phoneNumber);

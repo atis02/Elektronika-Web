@@ -8,6 +8,8 @@ interface ButtonWithTimerProps {
   sendOTP: (phoneNumber: string) => void;
   timerDuration?: number;
   loading: boolean;
+  isEmail: boolean | undefined;
+  sendAgain?: boolean;
 }
 
 const ButtonWithTimer: React.FC<ButtonWithTimerProps> = ({
@@ -15,7 +17,9 @@ const ButtonWithTimer: React.FC<ButtonWithTimerProps> = ({
   isTurkmenPhoneNumber,
   sendOTP,
   loading,
-  timerDuration = 55, // Default timer duration is 60 seconds
+  timerDuration = 56,
+  isEmail,
+  sendAgain,
 }) => {
   const [timer, setTimer] = useState<number | null>(null);
   const [remainingTime, setRemainingTime] = useState<number>(timerDuration);
@@ -35,13 +39,23 @@ const ButtonWithTimer: React.FC<ButtonWithTimerProps> = ({
     );
     setRemainingTime(timerDuration);
   };
+  console.log(isEmail);
 
   const handleButtonClick = () => {
-    sendOTP(`+993${phoneNumber}`);
+    if (isEmail == true) {
+      sendOTP(phoneNumber);
+    } else {
+      sendOTP(`+993${phoneNumber}`);
+    }
     if (!timer) {
       startTimer();
     }
   };
+  useEffect(() => {
+    if (sendAgain) {
+      startTimer();
+    }
+  }, [sendAgain]);
 
   useEffect(() => {
     return () => {
@@ -52,27 +66,34 @@ const ButtonWithTimer: React.FC<ButtonWithTimerProps> = ({
   }, [timer]);
 
   return (
-    <Button
-      onClick={handleButtonClick}
-      sx={{
-        bgcolor: "#e0e0e0",
-        color: "#000",
-        height: 30,
-        mt: 1,
-        textTransform: "revert",
-      }}
-      disabled={!isTurkmenPhoneNumber(phoneNumber) || timer !== null}
-    >
-      {loading ? (
-        <Stack>
-          <CircularProgress size={25} />
-        </Stack>
-      ) : timer ? (
-        `${t("login.resend")}(${remainingTime}s)`
-      ) : (
-        t("login.sendOTP")
-      )}
-    </Button>
+    <>
+      <Button
+        onClick={handleButtonClick}
+        sx={{
+          bgcolor: "#e0e0e0",
+          color: timer == null ? "#000" : "gray",
+          height: 30,
+          textTransform: "revert",
+        }}
+        disabled={
+          sendAgain == true
+            ? false
+            : !isTurkmenPhoneNumber(phoneNumber) || timer !== null
+        }
+      >
+        {loading ? (
+          <Stack>
+            <CircularProgress size={25} />
+          </Stack>
+        ) : timer ? (
+          `${t("login.resend")}(${remainingTime}s)`
+        ) : sendAgain ? (
+          t("login.resend")
+        ) : (
+          t("login.sendOTP")
+        )}
+      </Button>
+    </>
   );
 };
 

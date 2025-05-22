@@ -3,13 +3,16 @@ import SidebarLinks from "../components/SidebarLinks";
 import { Box } from "@mui/material";
 
 interface Filters {
-  categoryId?: number;
-  subcategoryId?: number;
-  segmentId?: number;
-  brandId?: number;
+  categoryId?: number | string;
+  subcategoryId?: number | string;
+  segmentId?: number | string;
+  brandId?: number | string;
+}
+interface Props {
+  handleSelectCategory?: (filters: any) => void;
 }
 
-const Sidebar: FC = () => {
+const Sidebar: FC<Props> = ({ handleSelectCategory }) => {
   const [selectedFilters, setSelectedFilters] = useState<Filters>({});
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
@@ -66,6 +69,7 @@ const Sidebar: FC = () => {
       }}
     >
       <SidebarLinks
+        handleSelectCategory={handleSelectCategory}
         selectedFilters={selectedFilters}
         onCategorySelect={handleCategorySelect}
       />
