@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, useState } from "react";
 import { Button, Stack, useMediaQuery, useTheme } from "@mui/material";
 import PriceFilter from "./PriceFilter";
 import BrendFilter from "./BrendFilter";
@@ -22,11 +22,19 @@ const CategoryFilters: FC<CategoryFiltersProps> = ({
   filteredProductsByProperty,
   handleCategorySelect,
 }) => {
+  const [brendFilter, setBrendFilter] = useState<string | null>(null);
+  const [typeFilter, setTypeFilter] = useState<{
+    [key: string]: string | null;
+  }>({});
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const [searchParams] = useSearchParams();
+  const [selectedSort, setSelectedSort] = useState("alphabet-ASC");
 
   const handleClearAll = () => {
+    setBrendFilter(null);
+    setTypeFilter({});
+    setSelectedSort("alphabet-ASC");
     const filters = {
       categoryId: searchParams.get("categoryId")
         ? searchParams.get("categoryId")
@@ -43,10 +51,13 @@ const CategoryFilters: FC<CategoryFiltersProps> = ({
       statusId: searchParams.get("statusId")
         ? searchParams.get("statusId")
         : undefined,
+      valueTm: searchParams.get("valueTm")
+        ? searchParams.get("valueTm")
+        : "all",
       minPrice: 1,
       maxPrice: 200000,
-      sortBy: "alphabet",
-      sortOrder: "ASC",
+      sortBy: "createdAt",
+      sortOrder: "DESC",
     };
     onCategorySelect(filters);
     filteredProductsByProperty(filters);
@@ -65,6 +76,8 @@ const CategoryFilters: FC<CategoryFiltersProps> = ({
         <Stack spacing={2}>
           <CategoryHeader
             categoryTitle={""}
+            selectedSort={selectedSort}
+            setSelectedSort={setSelectedSort}
             handleCategorySelect={handleCategorySelect}
           />
         </Stack>
@@ -75,10 +88,18 @@ const CategoryFilters: FC<CategoryFiltersProps> = ({
           />
         </Stack>
         <Stack spacing={2}>
-          <BrendFilter onCategorySelect={onCategorySelect} />
+          <BrendFilter
+            value={brendFilter}
+            setValue={setBrendFilter}
+            onCategorySelect={onCategorySelect}
+          />
         </Stack>
         <Stack spacing={2}>
-          <TypeFilter onCategorySelect={filteredProductsByProperty} />
+          <TypeFilter
+            value={typeFilter}
+            setValue={setTypeFilter}
+            onCategorySelect={handleCategorySelect}
+          />
         </Stack>
       </Stack>
       <Stack

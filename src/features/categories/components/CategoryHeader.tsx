@@ -1,4 +1,4 @@
-import { FC, useState } from "react";
+import { FC } from "react";
 import {
   MenuItem,
   Select,
@@ -13,13 +13,16 @@ import { useTranslation } from "react-i18next";
 interface CategoryHeaderProps {
   categoryTitle?: string;
   handleCategorySelect: (filters: any) => void;
+  setSelectedSort: (value: string) => void;
+  selectedSort: string;
 }
 
 const CategoryHeader: FC<CategoryHeaderProps> = ({
   categoryTitle,
   handleCategorySelect,
+  selectedSort,
+  setSelectedSort,
 }) => {
-  const [selectedSort, setSelectedSort] = useState("alphabet-ASC"); // Combined state
   const [searchParams] = useSearchParams();
   const { t } = useTranslation();
   const handleChange = (event: SelectChangeEvent<string>) => {
@@ -44,6 +47,9 @@ const CategoryHeader: FC<CategoryHeaderProps> = ({
       brandId: searchParams.get("brandId")
         ? searchParams.get("brandId")
         : undefined,
+      valueTm: searchParams.get("valueTm")
+        ? searchParams.get("valueTm")
+        : "all",
       minPrice: 100,
       maxPrice: 200000,
       sortBy: sortBy,

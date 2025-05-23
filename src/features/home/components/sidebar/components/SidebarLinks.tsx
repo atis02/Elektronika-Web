@@ -6,10 +6,10 @@ import {
   Skeleton,
   Divider,
 } from "@mui/material";
-import { FC, useRef, useState } from "react";
+import { FC, useEffect, useRef, useState } from "react";
 import Grid2 from "@mui/material/Grid2";
 import { motion, AnimatePresence } from "framer-motion";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import "react-lazy-load-image-component/src/effects/blur.css";
 import { decode } from "blurhash";
@@ -65,7 +65,11 @@ const categoryItemVariants = {
     transition: { delay: delay * 0.05, duration: 0.3, ease: "easeInOut" },
   }),
 };
-
+interface ActiveUrl {
+  categoryId: string | null | undefined;
+  subCategoryId: string | null | undefined;
+  segmentId: string | null | undefined;
+}
 const SidebarLinks: FC<SidebarLinksProps> = ({
   onCategorySelect,
   handleSelectCategory,
@@ -76,7 +80,12 @@ const SidebarLinks: FC<SidebarLinksProps> = ({
   const navigate = useNavigate();
   const dropdownRef = useRef<HTMLDivElement>(null);
   const { segment: allSegments } = useSegment();
-
+  const [searchParams] = useSearchParams();
+  const [selected, setSelected] = useState<ActiveUrl>({
+    categoryId: "",
+    subCategoryId: "",
+    segmentId: "",
+  });
   // Local states for hovered/expanded items
   const [expandedCategory, setExpandedCategory] = useState<any | null>(null);
   const [hoveredCategoryId, setHoveredCategoryId] = useState<number | null>(
@@ -88,35 +97,26 @@ const SidebarLinks: FC<SidebarLinksProps> = ({
   const [hoveredSubCategoryId, setHoveredSubCategoryId] = useState<
     number | null
   >(null);
-
+  useEffect(() => {
+    const filters = {
+      categoryId: searchParams.get("categoryId")
+        ? searchParams.get("categoryId")
+        : undefined,
+      subCategoryId: searchParams.get("subCategoryId")
+        ? searchParams.get("subCategoryId")
+        : undefined,
+      segmentId: searchParams.get("segmentId")
+        ? searchParams.get("segmentId")
+        : undefined,
+    };
+    setSelected(filters);
+  }, [searchParams]);
   // Retrieve subcategories based on currently expanded category
   const {
     subcategories,
     isLoading: isSubcategoriesLoading,
     isError: isSubcategoryError,
   } = useSubcategories(expandedCategory?.id);
-
-  // Navigation handlers
-  // const handleCategoryClick = (category: any) => {
-  //   onCategorySelect({ categoryId: category.id });
-  //   navigate("/categories?categoryId=" + category.id);
-  // };
-
-  // const handleSubcategoryClick = (category: any, subcategoryId: string) => {
-  //   navigate(
-  //     `/categories?categoryId=${category.id}&subCategoryId=${subcategoryId}`
-  //   );
-  // };
-
-  // const handleSegmentClick = (
-  //   category: any,
-  //   subcategoryId: string,
-  //   segmentId: string
-  // ) => {
-  //   navigate(
-  //     `/categories?categoryId=${category.id}&subCategoryId=${subcategoryId}&segmentId=${segmentId}`
-  //   );
-  // };
 
   const handleCategoryClick = (category: any) => {
     const data = { categoryId: category.id };
@@ -256,6 +256,8 @@ const SidebarLinks: FC<SidebarLinksProps> = ({
                     pt: 0.5,
                     mb: 0.3,
                     transition: "background-color 0.7s ease",
+                    bgcolor:
+                      selected.categoryId === category.id ? "lightgray" : "",
                   }}
                   onClick={() => handleCategoryClick(category)}
                 >
@@ -405,6 +407,10 @@ const SidebarLinks: FC<SidebarLinksProps> = ({
                                             minHeight: 50,
                                             transition:
                                               "background-color 0.7s ease",
+                                            bgcolor:
+                                              selected.subCategoryId === sub.id
+                                                ? "lightgray"
+                                                : "",
                                           }}
                                           mb={2}
                                           direction="row"
@@ -417,14 +423,8 @@ const SidebarLinks: FC<SidebarLinksProps> = ({
                                               sub.id
                                             )
                                           }
-                                          // sx={{
-                                          //   cursor: "pointer",
-                                          //   minHeight: 30,
-                                          //   width: 270,
-                                          // }}
                                         >
                                           {sub.image && (
-                                            // <Box sx={sidelinkImageBox}>
                                             <LazyLoadImage
                                               src={`${BASE_URL}images/${sub.image}`}
                                               alt={sub?.title_en}
@@ -441,7 +441,6 @@ const SidebarLinks: FC<SidebarLinksProps> = ({
                                                 cursor: "pointer",
                                               }}
                                             />
-                                            // </Box>
                                           )}
                                           <Typography
                                             sx={{
@@ -523,6 +522,13 @@ const SidebarLinks: FC<SidebarLinksProps> = ({
                                                       alignItems="center"
                                                       justifyContent="center"
                                                       height="100%"
+                                                      sx={{
+                                                        bgcolor:
+                                                          selected.segmentId ===
+                                                          seg.id
+                                                            ? "lightgray"
+                                                            : "",
+                                                      }}
                                                     >
                                                       {seg.image && (
                                                         <LazyLoadImage

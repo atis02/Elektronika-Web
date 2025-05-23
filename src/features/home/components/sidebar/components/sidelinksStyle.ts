@@ -5,13 +5,13 @@ export const sideLinkBox = {
   display: "flex",
   alignItems: "center",
   pl: 2,
-  borderRadius:0
+  borderRadius: 0,
 };
 
 export const sidelinkImageBox = {
   height: "60px",
   width: "60px",
-  background: "#f7f7f7",
+  // background: "#f7f7f7",
   display: "flex",
   alignItems: "center",
   justifyContent: "center",

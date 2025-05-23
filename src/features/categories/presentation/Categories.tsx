@@ -100,6 +100,8 @@ const Categories: FC = observer(() => {
         queryParams.append("sortOrder", String(filters.sortOrder));
       if (filters.statusId)
         queryParams.append("statusId", String(filters.statusId));
+      if (filters.valueTm !== "all")
+        queryParams.append("valueTm", String(filters.valueTm));
 
       const url = `${BASE_URL}product/all?${queryParams.toString()}`;
 
@@ -127,6 +129,7 @@ const Categories: FC = observer(() => {
   };
   const filteredProductsByProperty = (value: string) => {
     const products = ProductViewModel.products;
+    console.log(value);
 
     if (!products.length) {
       return setFiltered([]);
@@ -143,7 +146,6 @@ const Categories: FC = observer(() => {
       loadProducts();
     }
   };
-  console.log(filtered);
 
   return (
     <Container>

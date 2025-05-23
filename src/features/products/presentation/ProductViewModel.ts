@@ -16,6 +16,7 @@ interface Filters {
   sortBy: string | null | undefined;
   sortOrder: string | null | undefined;
   statusId: string | null | undefined;
+  valueTm?: string | null | undefined;
 }
 interface Brands {
   id: string;
@@ -50,6 +51,7 @@ class ProductViewModel {
     minPrice: 0,
     maxPrice: 0,
     statusId: null,
+    valueTm: null,
     sortBy: "createdAt",
     sortOrder: "ASC",
   };
@@ -62,7 +64,6 @@ class ProductViewModel {
   };
 
   setFilters = (filters: Filters) => {
-    console.log(filters);
     this.products = [];
     this.filters = filters;
     this.currentPage = 1;
@@ -82,6 +83,7 @@ class ProductViewModel {
       minPrice: null,
       maxPrice: null,
       statusId: null,
+      valueTm: null,
       sortBy: "createdAt",
       sortOrder: "DESC",
     };

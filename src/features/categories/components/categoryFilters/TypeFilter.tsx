@@ -10,20 +10,23 @@ import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
 import ProductViewModel from "../../../products/presentation/ProductViewModel";
 import { useTranslation } from "react-i18next";
-import { ChangeEvent, FC, useState } from "react";
+import { FC, useState } from "react";
 
 interface BrandFiltersProps {
-  onCategorySelect: (filters: string | null) => void;
+  value: { [key: string]: string | null }; // pass full object
+  setValue: (val: { [key: string]: string | null }) => void;
+  onCategorySelect: (filters: { valueTm?: number | string }) => void;
 }
 
-const TypeFilter: FC<BrandFiltersProps> = ({ onCategorySelect }) => {
+const TypeFilter: FC<BrandFiltersProps> = ({
+  value,
+  setValue,
+  onCategorySelect,
+}) => {
   const { i18n } = useTranslation();
   const [showFilters, setShowFilters] = useState<{ [keyTm: string]: boolean }>(
     {}
   );
-  const [selectedProperties, setSelectedProperties] = useState<{
-    [keyTm: string]: string | null;
-  }>({});
 
   const getTitle = (tm: string, ru: string, en: string) => {
     const lang = i18n.language;
@@ -37,15 +40,6 @@ const TypeFilter: FC<BrandFiltersProps> = ({ onCategorySelect }) => {
       ...prev,
       [keyTm]: !prev[keyTm],
     }));
-  };
-
-  const handlePropertyChange = (
-    e: ChangeEvent<HTMLInputElement>,
-    keyTm: string
-  ) => {
-    const newValue = e.target.value;
-    setSelectedProperties((prev) => ({ ...prev, [keyTm]: newValue }));
-    onCategorySelect(newValue);
   };
 
   return (
@@ -88,8 +82,12 @@ const TypeFilter: FC<BrandFiltersProps> = ({ onCategorySelect }) => {
                 <RadioGroup
                   aria-labelledby="radio-group"
                   name={`${elem.nameTm}-radio-group`}
-                  value={selectedProperties[elem.nameTm] || ""}
-                  onChange={(e) => handlePropertyChange(e, elem.nameTm)}
+                  value={value[elem.nameTm] || "all"} // inside RadioGroup
+                  onChange={(e) => {
+                    const newVal = { ...value, [elem.nameTm]: e.target.value };
+                    setValue(newVal);
+                    onCategorySelect({ valueTm: e.target.value });
+                  }}
                 >
                   {values?.map((value: string, i: number) => (
                     <FormControlLabel

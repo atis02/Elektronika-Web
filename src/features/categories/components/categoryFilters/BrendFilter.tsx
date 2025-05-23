@@ -15,6 +15,8 @@ import { BASE_URL } from "../../../../api/instance";
 import { useTranslation } from "react-i18next";
 
 interface BrandFiltersProps {
+  value: string | null;
+  setValue: (val: string | null) => void;
   onCategorySelect: (filters: string | null) => void;
 }
 
@@ -23,9 +25,12 @@ interface Brand {
   nameTm: string;
 }
 
-const BrendFilter: FC<BrandFiltersProps> = ({ onCategorySelect }) => {
+const BrendFilter: FC<BrandFiltersProps> = ({
+  value,
+  setValue,
+  onCategorySelect,
+}) => {
   const [showFilters, setShowFilters] = useState(true);
-  const [selectedBrand, setSelectedBrand] = useState<string | null>(null); // Change to string | null
   const handleClick = () => {
     setShowFilters(!showFilters);
   };
@@ -57,7 +62,7 @@ const BrendFilter: FC<BrandFiltersProps> = ({ onCategorySelect }) => {
 
   const handleChnage = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = e.target.value;
-    setSelectedBrand(newValue);
+    setValue(newValue);
     onCategorySelect(newValue);
   };
 
@@ -88,7 +93,7 @@ const BrendFilter: FC<BrandFiltersProps> = ({ onCategorySelect }) => {
                 <RadioGroup
                   aria-labelledby="demo-radio-buttons-group-label"
                   name="radio-buttons-group"
-                  value={selectedBrand}
+                  value={value}
                   onChange={handleChnage}
                 >
                   {brands?.map((elem, index) => (
