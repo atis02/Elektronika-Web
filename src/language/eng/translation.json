@@ -72,7 +72,9 @@
     "newGoods":"New Products",
     "noItem":"Can't find product",
     "brand":"Brand",
-    "setFilters":"Select by parameters and filters"
+    "setFilters":"Select by parameters and filters",
+        "feedback":"Write feedback...",
+    "addButton":"Add"
   },
   "howRegister":{
     "how-to-register":"How to register on the site.",

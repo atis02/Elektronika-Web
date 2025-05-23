@@ -76,7 +76,7 @@ const FullDescriptionProduct: FC = observer(() => {
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const [categoryProducts, setCategoryProducts] = useState([]);
   const { t, i18n } = useTranslation();
-
+  productId;
   const { ref: containerRef, inView: containerInView } = useInView({
     threshold: 0.2,
   });
@@ -98,10 +98,10 @@ const FullDescriptionProduct: FC = observer(() => {
       }
     }
   };
-  const getProductsByCategory = async (categoryId: any) => {
+  const getProductsByCategory = async (segmentId: any) => {
     try {
       await axios
-        .get(`${BASE_URL}product/all?categoryId=${categoryId}&limit=7`)
+        .get(`${BASE_URL}product/all?segmentId=${segmentId}&limit=7`)
         .then((response) => {
           const data = response.data.products;
           const filtered = data.filter((elem: any) => elem.id !== productId);
@@ -113,8 +113,10 @@ const FullDescriptionProduct: FC = observer(() => {
   };
 
   useEffect(() => {
-    getProductsByCategory(selectedProduct?.categoryId);
-  }, [selectedProduct?.categoryId, productId]);
+    if (selectedProduct?.segmentId) {
+      getProductsByCategory(selectedProduct.segmentId);
+    }
+  }, [selectedProduct?.segmentId, productId]);
   useEffect(() => {
     getOrderedClient();
   }, []);
@@ -128,14 +130,11 @@ const FullDescriptionProduct: FC = observer(() => {
   }, [productId, fetchProductById]);
 
   useEffect(() => {
-    if (
-      selectedProduct &&
-      selectedProduct.imageOne
-      // selectedProduct.images.length > 0
-    ) {
+    if (selectedProduct && selectedProduct.imageOne) {
       setCurrentImage(selectedProduct.imageOne);
     }
   }, [selectedProduct]);
+
   const dispatch = useAppDispatch();
   const compareProducts = useAppSelector((state) => state.compare.products);
   const handleOpen = () => {

@@ -7,7 +7,6 @@ import { Toaster } from "react-hot-toast";
 
 import Home from "../features/home/presentation/Home";
 import Categories from "../features/categories/presentation/Categories";
-import Dashboard from "../features/dashboard/presentation/Dashboard";
 import Products from "../features/products/presentation/Products";
 import Users from "../features/users/presentation/Users";
 import Favourites from "../features/Favourites/presentation/Favourites";
@@ -56,7 +55,6 @@ const App = () => {
                 <Route path="/" element={<Layout />}>
                   <Route index element={<Home />} />
                   <Route path="/categories" element={<Categories />} />
-                  <Route path="/dashboard" element={<Dashboard />} />
                   <Route path="/products/" element={<Products />} />
                   <Route
                     path="/product/:productId"

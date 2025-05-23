@@ -93,7 +93,9 @@
     "newGoods":"Täze harytlar",
     "noItem":"Haryt ýok",
     "brand":"Brend",
-    "setFilters":"Aýratynlyklary we filterler boýunça gözleg"
+    "setFilters":"Aýratynlyklary we filterler boýunça gözleg",
+    "feedback":"Teswir ýazyň...",
+    "addButton":"Goşmak"
   },
   "basket":{
     "noProduct":"Sebediňiz boş",

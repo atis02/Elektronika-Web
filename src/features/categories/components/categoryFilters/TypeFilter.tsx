@@ -50,55 +50,61 @@ const TypeFilter: FC<BrandFiltersProps> = ({ onCategorySelect }) => {
 
   return (
     <>
-      {ProductViewModel.properties?.map((elem, idx) => {
-        const displayKey = getTitle(elem.keyTm, elem.keyRu, elem.keyEn);
-        const values =
-          i18n.language === "tm"
-            ? elem.valueTm
-            : i18n.language === "ru"
-            ? elem.valueRu
-            : elem.valueEn;
+      {ProductViewModel.properties?.map((item) =>
+        item.propertyTemplates?.map((elem, idx) => {
+          const displayKey = getTitle(elem.nameTm, elem.nameRu, elem.nameEn);
 
-        return (
-          <div key={idx}>
-            <Stack sx={{ cursor: "pointer" }}>
-              <Stack
-                direction="row"
-                alignItems="center"
-                justifyContent="space-between"
-                px={1}
-                onClick={() => handleClick(elem.keyTm)}
-              >
-                <Typography color="#2E2F38">{displayKey}</Typography>
-                {showFilters[elem.keyTm] ? (
-                  <ArrowDropUpIcon sx={{ width: "20px", color: "#2E2F38" }} />
-                ) : (
-                  <ArrowDropDownIcon sx={{ width: "20px", color: "#2E2F38" }} />
-                )}
+          const values = elem.propertyValue?.map((item) =>
+            i18n.language === "tm"
+              ? item.valueTm
+              : i18n.language === "ru"
+              ? item.valueRu
+              : item.valueEn
+          );
+
+          return (
+            <div key={`${item}+${idx}`}>
+              <Stack sx={{ cursor: "pointer" }}>
+                <Stack
+                  direction="row"
+                  alignItems="center"
+                  justifyContent="space-between"
+                  px={1}
+                  onClick={() => handleClick(elem.nameTm)}
+                >
+                  <Typography color="#2E2F38">{displayKey}</Typography>
+                  {showFilters[elem.nameTm] ? (
+                    <ArrowDropUpIcon sx={{ width: "20px", color: "#2E2F38" }} />
+                  ) : (
+                    <ArrowDropDownIcon
+                      sx={{ width: "20px", color: "#2E2F38" }}
+                    />
+                  )}
+                </Stack>
+                <Divider color="#2E2F38" />
               </Stack>
-              <Divider color="#2E2F38" />
-            </Stack>
 
-            {showFilters[elem.keyTm] && (
-              <RadioGroup
-                aria-labelledby="radio-group"
-                name={`${elem.keyTm}-radio-group`}
-                value={selectedProperties[elem.keyTm] || ""}
-                onChange={(e) => handlePropertyChange(e, elem.keyTm)}
-              >
-                {values?.map((value: string, i: number) => (
-                  <FormControlLabel
-                    key={i}
-                    value={value}
-                    control={<Radio />}
-                    label={value}
-                  />
-                ))}
-              </RadioGroup>
-            )}
-          </div>
-        );
-      })}
+              {showFilters[elem.nameTm] && (
+                <RadioGroup
+                  aria-labelledby="radio-group"
+                  name={`${elem.nameTm}-radio-group`}
+                  value={selectedProperties[elem.nameTm] || ""}
+                  onChange={(e) => handlePropertyChange(e, elem.nameTm)}
+                >
+                  {values?.map((value: string, i: number) => (
+                    <FormControlLabel
+                      key={i}
+                      value={value}
+                      control={<Radio />}
+                      label={value}
+                    />
+                  ))}
+                </RadioGroup>
+              )}
+            </div>
+          );
+        })
+      )}
     </>
   );
 };

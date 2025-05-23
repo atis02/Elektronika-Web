@@ -1,7 +1,10 @@
 import { makeAutoObservable } from "mobx";
 import axios from "axios";
 import { BASE_URL } from "../../../api/instance";
-import { Product } from "../../../components/redux/interface";
+import {
+  Product,
+  ProductProperties,
+} from "../../../components/redux/interface";
 
 interface Filters {
   categoryId: string | null | undefined;
@@ -19,19 +22,11 @@ interface Brands {
   nameTm: string;
 }
 
-interface Properties {
-  keyEn: string;
-  keyRu: string;
-  keyTm: string;
-  valueEn: string[];
-  valueRu: string[];
-  valueTm: string[];
-}
 interface ApiResponse {
   products: Product[];
   totalItems: number;
   uniqueBrands: Brands[];
-  properties: Properties[];
+  properties: ProductProperties[];
   minPrice: number;
   maxPrice: number;
 }
@@ -39,7 +34,7 @@ interface ApiResponse {
 class ProductViewModel {
   products: Product[] = [];
   uniqueBrands: Brands[] = [];
-  properties: Properties[] = [];
+  properties: ProductProperties[] = [];
   minPrice: number = 0;
   maxPrice: number = 0;
   loading: boolean = false;
@@ -55,7 +50,7 @@ class ProductViewModel {
     minPrice: 0,
     maxPrice: 0,
     statusId: null,
-    sortBy: "alphabet",
+    sortBy: "createdAt",
     sortOrder: "ASC",
   };
   selectedProduct: Product | null = null;
@@ -87,8 +82,8 @@ class ProductViewModel {
       minPrice: null,
       maxPrice: null,
       statusId: null,
-      sortBy: "alphabet",
-      sortOrder: "ASC",
+      sortBy: "createdAt",
+      sortOrder: "DESC",
     };
     this.currentPage = 1;
     this.products = [];

@@ -4,6 +4,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import axios from "axios";
 import { BASE_URL } from "../../../../../api/instance";
 import toast from "react-hot-toast";
+import { useTranslation } from "react-i18next";
 
 interface AddCommentModalProps {
   onClose: () => void;
@@ -19,7 +20,7 @@ const AddCommentModal: React.FC<AddCommentModalProps> = ({
   productId = null,
 }) => {
   const [comment, setComment] = useState("");
-
+  const { t } = useTranslation();
   const handleSubmit = async () => {
     const loggedUser = localStorage.getItem("ElectronicaUser");
     if (loggedUser) {
@@ -73,7 +74,7 @@ const AddCommentModal: React.FC<AddCommentModalProps> = ({
         <textarea
           value={comment}
           onChange={(e) => setComment(e.target.value)}
-          placeholder="Teswir ýazyň..."
+          placeholder={t("home.feedback")}
           rows={4}
           style={{
             color: "inherit",
@@ -104,7 +105,7 @@ const AddCommentModal: React.FC<AddCommentModalProps> = ({
             }}
             onClick={handleSubmit}
           >
-            Goşmak
+            {t("home.addButton")}
           </Button>
         </Stack>
       </Box>

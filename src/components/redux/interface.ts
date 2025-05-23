@@ -1,3 +1,22 @@
+export interface PropertyValue {
+  id: string;
+  templateId: string;
+  updatedAt: string;
+  valueEn: string;
+  valueRu: string;
+  valueTm: string;
+}
+export interface PropertyTemplates {
+  id: string;
+  nameEn: string;
+  nameRu: string;
+  nameTm: string;
+  propertyValue: PropertyValue[];
+}
+export interface ProductProperties {
+  id: string;
+  propertyTemplates: PropertyTemplates[];
+}
 export interface Product {
   id: string;
   brand: {
@@ -26,16 +45,7 @@ export interface Product {
   product: {
     id: string;
     productQuantity: number;
-    properties: [
-      {
-        keyEn: string;
-        keyRu: string;
-        keyTm: string;
-        valueEn: string[];
-        valueRu: string[];
-        valueTm: string[];
-      }
-    ];
+    properties: ProductProperties[];
   };
   depth: number;
   desc_en?: string;
@@ -52,6 +62,7 @@ export interface Product {
   rating: number;
   segment: string;
   segment_id: number;
+  segmentId: number;
   size: string;
   stock: number;
   tags: string[];

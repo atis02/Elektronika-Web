@@ -41,7 +41,7 @@ const Categories: FC = observer(() => {
     const currentPage = reset ? 1 : page;
 
     ProductViewModel.setCurrentPage(currentPage);
-    ProductViewModel.setLimit(10);
+    ProductViewModel.setLimit(20);
 
     const newProducts = await ProductViewModel.fetchFilteredProducts();
 
@@ -53,7 +53,7 @@ const Categories: FC = observer(() => {
       setPage((prev) => prev + 1);
     }
 
-    if (newProducts.length < 10) {
+    if (newProducts.length < 20) {
       setHasMore(false);
     }
   };
@@ -80,7 +80,7 @@ const Categories: FC = observer(() => {
     try {
       const queryParams = new URLSearchParams({
         page: String(1),
-        limit: String(10),
+        limit: String(20),
       });
 
       if (filters.categoryId)
