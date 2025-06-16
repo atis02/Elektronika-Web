@@ -51,8 +51,8 @@
     "apps":"Mobil goşundylar",
     "socialLinks":"Sosial ulgam",
      "address":"Aşgabat, Bitarap Türkmenistan şaýoly, 183",
-    "links":"Goşmaça"
-
+    "links":"Goşmaça",
+    "phoneNumber":"Telefon:"
 
   },
   "login":{
@@ -95,7 +95,11 @@
     "brand":"Brend",
     "setFilters":"Aýratynlyklary we filterler boýunça gözleg",
     "feedback":"Teswir ýazyň...",
-    "addButton":"Goşmak"
+    "addButton":"Goşmak",
+    "noProduct":"Haryt tapylmady",
+    "addMore":"Ýene-de görkez",
+    "addToCompare":"Deňeşdirmek üçin haryt goşuň"
+
   },
   "basket":{
     "noProduct":"Sebediňiz boş",

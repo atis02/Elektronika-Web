@@ -19,7 +19,7 @@ const FooterContact: FC = () => {
           </Typography>
         </Box>
         <Box>
-          <Typography sx={footerAddressText}>Telefon: </Typography>
+          <Typography sx={footerAddressText}>{t('footer.phoneNumber')}</Typography>
           <Typography sx={footerLinksStyle2}>
             <a
               href="tel:142241"

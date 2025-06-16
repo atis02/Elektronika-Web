@@ -11,7 +11,7 @@ const NavLinks: FC = () => {
 
   return (
     <Stack direction="column" spacing={1.1}>
-      <Typography
+      {/* <Typography
         onClick={() => navigate("/delivery")} // Relative path
         sx={{
           ...navLinks,
@@ -46,7 +46,7 @@ const NavLinks: FC = () => {
         }}
       >
         {t("navbar.how_to_order")}
-      </Typography>
+      </Typography> */}
 
       <Typography
         onClick={() => navigate("/auction")} // Absolute path

@@ -201,25 +201,25 @@ const FullDescriptionProduct: FC = observer(() => {
     return isInBasket ? <DoneIcon /> : <LocalGroceryStoreOutlinedIcon />;
   };
 
-  const grouped = Object.values(
-    Array.isArray(selectedProduct.properties) &&
-      selectedProduct.properties.reduce((acc, item) => {
-        const key = item.propertyTemplateId;
+  // const grouped = Object.values(
+  //   Array.isArray(selectedProduct.properties) &&
+  //     selectedProduct.properties.reduce((acc, item) => {
+  //       const key = item.propertyTemplateId;
 
-        if (!acc[key]) {
-          // Create a shallow copy and initialize propertyValue as array
-          acc[key] = {
-            ...item,
-            propertyValue: [item.propertyValue],
-          };
-        } else {
-          // Push additional propertyValue to the existing group
-          acc[key].propertyValue.push(item.propertyValue);
-        }
+  //       if (!acc[key]) {
+  //         // Create a shallow copy and initialize propertyValue as array
+  //         acc[key] = {
+  //           ...item,
+  //           propertyValue: [item.propertyValue],
+  //         };
+  //       } else {
+  //         // Push additional propertyValue to the existing group
+  //         acc[key].propertyValue.push(item.propertyValue);
+  //       }
 
-        return acc;
-      }, {})
-  );
+  //       return acc;
+  //     }, {})
+  // );
 
   return (
     <>
@@ -372,12 +372,12 @@ const FullDescriptionProduct: FC = observer(() => {
               </Stack>
               {selectedProduct.properties?.length == 0 ? (
                 <Typography mb={1} color="gray" textAlign="center">
-                  {t("products.noProperty")}
+                 
                 </Typography>
               ) : (
                 <Stack height={300} overflow="auto" className="searchResult">
-                  {Array.isArray(grouped) &&
-                    grouped.map((property: any, num: number) => (
+                  {Array.isArray(selectedProduct.properties) &&
+                    selectedProduct.properties?.map((property: any, num: number) => (
                       <Box
                         key={property.id}
                         sx={
@@ -394,17 +394,24 @@ const FullDescriptionProduct: FC = observer(() => {
                           justifyContent="space-between"
                           spacing={3}
                         >
-                          <Typography>
+                          {/* <Typography>
                             {getTitles(
-                              property.propertyTemplates?.nameTm,
-                              property.propertyTemplates?.nameRu,
-                              property.propertyTemplates?.nameEn
+                              property.valueTm,
+                              property.valueRu,
+                              property.valueEn
                             )}
-                          </Typography>
-                          <Stack direction="row" gap={1}>
+                            {property.valueTm}
+                          </Typography> */}
+                          <div dangerouslySetInnerHTML={{ __html:  getTitles(
+                              property.valueTm,
+                              property.valueRu,
+                              property.valueEn
+                            ) }} style={{fontWeight:500}} />
+
+                          {/* <Stack direction="row" gap={1}>
                             {property.propertyValue?.map(
                               (value: any, index: number) => (
-                                <Typography key={index} textAlign="end">
+                                <Stack key={index} textAlign="end">
                                   {getTitles(
                                     value.valueTm,
                                     value.valueRu,
@@ -413,10 +420,10 @@ const FullDescriptionProduct: FC = observer(() => {
                                   {index !== property.propertyValue.length - 1
                                     ? ","
                                     : ""}
-                                </Typography>
+                                </Stack>
                               )
                             )}
-                          </Stack>
+                          </Stack> */}
                         </Stack>
                       </Box>
                     ))}
@@ -505,7 +512,7 @@ const FullDescriptionProduct: FC = observer(() => {
                   <img
                     src={
                       compareProducts.some((p) => p.id === selectedProduct?.id)
-                        ? // compareStates[product.id]
+                        ? 
                           "/icons/compare white.svg"
                         : "/icons/compare.svg"
                     }
@@ -528,8 +535,6 @@ const FullDescriptionProduct: FC = observer(() => {
                   onClick={handleOpen}
                 >
                   <ThumbUpAltOutlined />
-
-                  {/* {t("home.writeRating")} */}
                 </Button>
               </Stack>
             </Grid>

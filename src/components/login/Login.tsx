@@ -500,20 +500,7 @@ const Login: FC<LoginProps> = observer(({ isOpen, onClose }) => {
                     )}
                   </Stack>
                 </Stack>
-                <Stack
-                  direction="row"
-                  justifyContent="center"
-                  alignItems="center"
-                  spacing={1}
-                  my={2}
-                >
-                  <Typography
-                    fontSize="14px"
-                    sx={{ textDecoration: "underline", cursor: "pointer" }}
-                  >
-                    {t("login.forgotPass")}
-                  </Typography>
-                </Stack>
+                
                 <Button
                   type={"submit"}
                   variant="contained"
@@ -525,6 +512,7 @@ const Login: FC<LoginProps> = observer(({ isOpen, onClose }) => {
                     width: "100%",
                     height: "50px",
                     borderRadius: "4px",
+                    mt:2
                   }}
                 >
                   {t("login.Login")}
@@ -545,7 +533,7 @@ const Login: FC<LoginProps> = observer(({ isOpen, onClose }) => {
                     fontWeight={600}
                     sx={{ cursor: "pointer" }}
                   >
-                    {t("login.registerFor")}
+                    {t("login.register")}
                   </Typography>
                 </Stack>
               </Box>

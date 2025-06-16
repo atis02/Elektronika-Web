@@ -22,6 +22,8 @@ import { Guarantee } from "./guarantee";
 import { ProductImageOne } from "./productImageOne";
 import {
   addStoreDiscountGoodButton,
+  auctionDiscountTextCountBox,
+  auctionTextBox,
   compareDiscountGoodsCostButton,
   discountGoodCodeText,
   discountGoodCompanyTitle,
@@ -87,7 +89,10 @@ export const ProductCart: FC<Props> = ({ size = 3, displayedProducts }) => {
   return (
     <Grid container spacing={1} my={0} mb={2}>
       {displayedProducts.map((product: any, index) => (
-        <Grid key={product.id} size={{ lg: size, md: 4, sm: 6, xs: 6 }}>
+        <Grid
+          key={`${product.id}${index}`}
+          size={{ lg: size, md: 4, sm: 6, xs: 6 }}
+        >
           <motion.div
             initial={"hidden"}
             animate={containerInView ? "visible" : "visible"}
@@ -113,9 +118,19 @@ export const ProductCart: FC<Props> = ({ size = 3, displayedProducts }) => {
             >
               <Stack
                 direction="row"
-                justifyContent={isMobile ? "space-between" : "flex-end"}
+                justifyContent={isMobile||product.discount_priceTMT>0 ? "space-between" : "flex-end"}
               >
-                {isMobile && <CompareButton color="#000" product={product} />}
+                {product.discount_priceTMT>0&&(
+                  <Box sx={auctionTextBox}>
+                  <Stack direction="row" pl={5}>
+                    <Box sx={auctionTextBox}> {t("home.sale")}</Box>
+                    <Box sx={auctionDiscountTextCountBox}>
+                      -{product.discount_pricePercent.toFixed(0)}%
+                    </Box>
+                  </Stack>
+                </Box>
+                )}
+                {isMobile&&product.discount_priceTMT<=0 && <CompareButton color="#000" product={product} />}
                 {product.warranty && <Guarantee product={product} />}
               </Stack>
 

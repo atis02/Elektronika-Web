@@ -13,9 +13,12 @@ import { useAppSelector } from "../../../components/redux/customHook";
 import MultiLangTypography from "../../../components/utils/MultiLangTypography";
 import { firstRowBox } from "../styles/compareDescription";
 import BasketViewModel from "../../../store/basket/BasketViewModel";
+import { useTranslation } from "react-i18next";
+import { formatNumber } from "../../../components/utils/allutils";
 
 const CompareDescription: FC = () => {
   const compareProducts = useAppSelector((state) => state.compare.products);
+  const {t} = useTranslation()
 
   return (
     <Stack direction="row">
@@ -66,7 +69,6 @@ const CompareDescription: FC = () => {
                     <Stack direction="row" alignItems="center" spacing={1}>
                       {item.discount_priceTMT !== 0 && (
                         <Typography
-                          // fontFamily="Open Sans"
                           color="#929292"
                           fontSize={12}
                           sx={{
@@ -81,7 +83,7 @@ const CompareDescription: FC = () => {
                         fontSize={16}
                         fontWeight={600}
                       >
-                        {item.sellPrice - item.discount_priceTMT} TMT
+                        {formatNumber(item.sellPrice - item.discount_priceTMT)} TMT
                       </Typography>
                     </Stack>
                     <Button
@@ -95,7 +97,7 @@ const CompareDescription: FC = () => {
                       }}
                       onClick={() => BasketViewModel.addToBasket(item)}
                     >
-                      Sebede goş
+                      {t('home.addToCart')}
                     </Button>
                   </TableCell>
                 </TableRow>

@@ -25,6 +25,7 @@ import { removeProduct } from "../../../components/redux/ProductSlice";
 import { BASE_URL_IMG } from "../../../api/instance";
 import CloseIcon from "@mui/icons-material/Close";
 import HeaderContactsSearch from "../../../components/layouts/header/components/HeaderContacts";
+import { useTranslation } from "react-i18next";
 const CompareSlider: FC = () => {
   const [isLoading, setIsLoading] = useState(true);
 
@@ -33,18 +34,11 @@ const CompareSlider: FC = () => {
       setIsLoading(false);
     }, 1000);
   }, []);
-  // const [currentImages, setCurrentImages] = useState<{ [key: string]: string }>(
-  //   {}
-  // );
+
   const dispatch = useAppDispatch();
   const compareProducts = useAppSelector((state) => state.compare.products);
 
-  // const handleImageClick = (productId: string, image: string) => {
-  //   setCurrentImages((prevImages) => ({
-  //     ...prevImages,
-  //     [productId]: image,
-  //   }));
-  // };
+  const { t } = useTranslation();
 
   return (
     <Box sx={compareSliderBox}>
@@ -56,7 +50,11 @@ const CompareSlider: FC = () => {
               <Grid key={elem.id} size={compareGridSize}>
                 <Box sx={compareItemsCardBox}>
                   <Stack direction="row" alignItems="center">
-                    <HeaderContactsSearch isLoading={isLoading} />
+                    <HeaderContactsSearch
+                      color="#B71C1C"
+                      addCompare
+                      isLoading={isLoading}
+                    />
                   </Stack>
 
                   <Box sx={compareImagebox}>
@@ -86,12 +84,12 @@ const CompareSlider: FC = () => {
             <Grid container>
               <Grid size={compareGridSize}>
                 <Box sx={compareItemsCardBox}>
-                  <input
-                    type="text"
-                    placeholder="Gözleg"
-                    className="compareSearchInput"
+                  <HeaderContactsSearch
+                    color="#B71C1C"
+                    addCompare
+                    isLoading={isLoading}
                   />
-                  <Box sx={compareImagebox}>Deňeşdirmek üçin haryt goşun</Box>
+                  <Box sx={compareImagebox}>{t("home.addToCompare")}</Box>
                 </Box>
               </Grid>
             </Grid>

@@ -53,7 +53,7 @@ const MainSwiper: React.FC<{ banners: any[] }> = ({ banners }) => {
                   <SwiperSlide
                     key={`small_banners_image_key${index}`}
                     style={{ height: "100%" }}
-                    onClick={() => navigate(banner.link)}
+                    onClick={() =>banner.link!=='categories?brandId=undefined'? navigate(banner.link): ''}
                   >
                     <LazyLoadImage
                       src={`${BASE_URL}images/${getTitle(

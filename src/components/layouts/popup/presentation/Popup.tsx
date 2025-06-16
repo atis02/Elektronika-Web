@@ -129,9 +129,6 @@ const PopupComponent: React.FC = () => {
                 src={`${BASE_URL_IMG}public/${popupData.image}`}
                 alt={popupData.description}
                 placeholderSrc={blurHashToBase64(popupData.id) || ""}
-                // placeholderSrc={
-                //   popupData.blurhash ? blurHashToBase64(popupData.blurhash) : blurHashToBase64(popupData.id)||null
-                // }
                 effect="blur"
                 style={{
                   maxWidth: "600px",

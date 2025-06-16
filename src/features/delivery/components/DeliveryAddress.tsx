@@ -90,7 +90,6 @@ const DeliveryAddress: FC<DeliveryTypeProps> = ({
 
     handleInputChange(newEvent);
   };
-  console.log(errors);
 
   return (
     <>

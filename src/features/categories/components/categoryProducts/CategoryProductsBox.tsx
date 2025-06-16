@@ -1,8 +1,12 @@
-import { FC, useEffect, useRef } from "react";
+import { FC } from "react";
 import { AnimatePresence } from "framer-motion";
 import { Product } from "../../../../components/redux/interface";
 import { ProductCart } from "../../../home/components/discountedGoods/components/ProductCart";
 import ProductViewModel from "../../../products/presentation/ProductViewModel";
+import { Button, Stack } from "@mui/material";
+import { mainColor } from "../../../home/components/goodOfWeek/style/weekGoodsStyle";
+import { MoreHorizOutlined } from "@mui/icons-material";
+import { useTranslation } from "react-i18next";
 
 interface CategoryProductsBoxProps {
   products: Product[] | undefined;
@@ -15,28 +19,35 @@ const CategoryProductsBox: FC<CategoryProductsBoxProps> = ({
   loadMore,
   hasMore,
 }) => {
-  const loaderRef = useRef<HTMLDivElement | null>(null);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      if (
-        window.innerHeight + document.documentElement.scrollTop + 300 >=
-          document.documentElement.offsetHeight &&
-        hasMore &&
-        !ProductViewModel.loading
-      ) {
-        loadMore();
-      }
-    };
-
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [hasMore, ProductViewModel.loading]);
-
+  const { t } = useTranslation();
+  const handleAddMore = () => {
+    if (hasMore && !ProductViewModel.loading) {
+      loadMore();
+    }
+  };
   return (
     <AnimatePresence>
       <ProductCart displayedProducts={products || []} />
-      {hasMore && <div ref={loaderRef} style={{ height: "50px" }} />}
+      <Stack alignItems="center">
+        <Button
+          sx={{
+            bgcolor: mainColor,
+            color: "#fff",
+            gap: 1,
+            textTransform: "revert",
+            "&.Mui-disabled": {
+              bgcolor: "lightgray",
+              color: "#464646",
+            },
+          }}
+          onClick={handleAddMore}
+          disabled={products && products.length > 12}
+        >
+          {t("home.addMore")}
+
+          <MoreHorizOutlined />
+        </Button>
+      </Stack>
     </AnimatePresence>
   );
 };

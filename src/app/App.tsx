@@ -4,7 +4,6 @@ import { Suspense, useState, useEffect } from "react";
 import ScrollToTop from "../language/utils/ScrollToTop ";
 import CustomSkeletonLoader from "../components/skeleton/CustomSkeletonLoader";
 import { Toaster } from "react-hot-toast";
-
 import Home from "../features/home/presentation/Home";
 import Categories from "../features/categories/presentation/Categories";
 import Products from "../features/products/presentation/Products";

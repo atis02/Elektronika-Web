@@ -19,7 +19,6 @@ const Layout: FC = () => {
     (state) => state.compare.isOpenFastCompare
   );
   useEffect(() => {
-    // Simulate loading
     setTimeout(() => {
       setIsLoading(false);
     }, 1000);
@@ -61,7 +60,6 @@ const Layout: FC = () => {
         <>
           <Navbar />
           <ScrollingText />
-          {/* <Header isLoading={isLoading} /> */}
         </>
       )}
 

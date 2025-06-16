@@ -74,7 +74,11 @@
     "brand":"Brand",
     "setFilters":"Select by parameters and filters",
         "feedback":"Write feedback...",
-    "addButton":"Add"
+    "addButton":"Add",
+    "noProduct":"Not found",
+    "addMore":"Add More",
+    "addToCompare":"Add Product for compare"
+
   },
   "howRegister":{
     "how-to-register":"How to register on the site.",
@@ -90,7 +94,8 @@
     "apps":"Mobile Apps",
     "socialLinks":"Social links",
     "address":"Ashgabat, Bitarap Turkmenistan Avenue, 183",
-    "links":"Additional"
+    "links":"Additional",
+    "phoneNumber":"Phone number"
 
   },
   "aboutDelivery":"Delivery information.",

@@ -38,22 +38,21 @@ const Categories: FC = observer(() => {
   const [firstLoading, setFirstLoading] = useState(true);
 
   const loadProducts = async (reset = false) => {
+    console.log("loadProducts called. reset:", reset);
     const currentPage = reset ? 1 : page;
-
     ProductViewModel.setCurrentPage(currentPage);
-    ProductViewModel.setLimit(20);
-
+    ProductViewModel.setLimit(12);
     const newProducts = await ProductViewModel.fetchFilteredProducts();
-
     if (reset) {
-      setFiltered(newProducts); // перезаписываем данные
-      setPage(2); // следующая будет вторая страница
+      setFiltered(newProducts);
+      setPage(2);
+      setHasMore(true);
     } else {
       setFiltered((prev) => [...prev, ...newProducts]);
       setPage((prev) => prev + 1);
     }
 
-    if (newProducts.length < 20) {
+    if (newProducts.length < 12) {
       setHasMore(false);
     }
   };
@@ -65,6 +64,7 @@ const Categories: FC = observer(() => {
       segmentId: searchParams.get("segmentId") || undefined,
       brandId: searchParams.get("brandId") || undefined,
       statusId: searchParams.get("statusId") || undefined,
+      nameTm: searchParams.get("nameTm") || undefined,
       minPrice: 1,
       maxPrice: 200000,
       sortBy: "createdAt",
@@ -102,7 +102,7 @@ const Categories: FC = observer(() => {
         queryParams.append("statusId", String(filters.statusId));
       if (filters.valueTm !== "all")
         queryParams.append("valueTm", String(filters.valueTm));
-
+      if (filters.nameTm) queryParams.append("nameTm", String(filters.nameTm));
       const url = `${BASE_URL}product/all?${queryParams.toString()}`;
 
       const response = await axios.get(url);

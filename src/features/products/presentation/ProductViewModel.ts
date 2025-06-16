@@ -17,6 +17,7 @@ interface Filters {
   sortOrder: string | null | undefined;
   statusId: string | null | undefined;
   valueTm?: string | null | undefined;
+  nameTm: string | null | undefined;
 }
 interface Brands {
   id: string;
@@ -52,6 +53,7 @@ class ProductViewModel {
     maxPrice: 0,
     statusId: null,
     valueTm: null,
+    nameTm: null,
     sortBy: "createdAt",
     sortOrder: "ASC",
   };
@@ -74,6 +76,10 @@ class ProductViewModel {
   setLimit = (limit: number) => {
     this.limit = limit;
   };
+  setProducts(products: Product[]) {
+    this.products = products;
+  }
+
   clearFilters = () => {
     this.filters = {
       categoryId: null,
@@ -84,6 +90,7 @@ class ProductViewModel {
       maxPrice: null,
       statusId: null,
       valueTm: null,
+      nameTm: null,
       sortBy: "createdAt",
       sortOrder: "DESC",
     };
@@ -120,7 +127,8 @@ class ProductViewModel {
         queryParams.append("sortOrder", String(this.filters.sortOrder));
       if (this.filters.statusId)
         queryParams.append("statusId", String(this.filters.statusId));
-
+      if (this.filters.nameTm)
+        queryParams.append("nameTm", String(this.filters.nameTm));
       const url = `${BASE_URL}product/all?${queryParams.toString()}`;
 
       const response = await axios.get(url);

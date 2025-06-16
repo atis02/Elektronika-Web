@@ -17,16 +17,12 @@ const DiscountGoodBox: FC = () => {
     setLoading(true);
     try {
       const response = await axios.get(
-        `${BASE_URL}product/all?limit=20&page=${page}`
+        `${BASE_URL}product/all?limit=4&page=${page}&statusId=58fb28c0-1c92-40e7-84d1-4ee1c1fb83b6`
       );
 
       if (page === 1) {
         const products = response.data?.products;
-        const discountedProducts = products.filter(
-          (product: any) => product.discount_priceTMT > 0
-        );
-
-        setDiscountedProducts(discountedProducts);
+        setDiscountedProducts(products);
       } else {
         setDiscountedProducts((prevItems) => [
           ...prevItems,
@@ -90,6 +86,7 @@ const DiscountGoodBox: FC = () => {
       <GridProducts
         titleBase={"home.discountedGoods"}
         displayedProducts={discountedProducts}
+        id="58fb28c0-1c92-40e7-84d1-4ee1c1fb83b6"
       />
     </Stack>
   );

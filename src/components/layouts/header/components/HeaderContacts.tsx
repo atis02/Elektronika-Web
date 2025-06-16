@@ -6,14 +6,21 @@ import {
   InputAdornment,
   CircularProgress,
   Divider,
+  IconButton,
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import { BASE_URL, BASE_URL_IMG } from "../../../../api/instance";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { addProduct } from "../../../redux/ProductSlice";
+import { useDispatch } from "react-redux";
+import { useAppSelector } from "../../../redux/customHook";
+import { AddCircleOutlineOutlined } from "@mui/icons-material";
 
 interface HeaderContactsProps {
   isLoading: boolean;
+  color?: string;
+  addCompare?: boolean;
 }
 interface SearchedProducts {
   products: {
@@ -25,7 +32,10 @@ interface SearchedProducts {
   }[];
 }
 
-const HeaderContactsSearch: FC<HeaderContactsProps> = () => {
+const HeaderContactsSearch: FC<HeaderContactsProps> = ({
+  color = "#fff",
+  addCompare = false,
+}) => {
   const [searchValue, setSearchValue] = useState("");
   const [result, setResult] = useState<SearchedProducts | undefined>(undefined);
   const [debouncedValue, setDebouncedValue] = useState("");
@@ -33,7 +43,10 @@ const HeaderContactsSearch: FC<HeaderContactsProps> = () => {
   const [isSearchOpen, setIsSearchOpen] = useState(false); // Контроль видимости результатов
   const navigate = useNavigate();
   const searchRef = useRef<HTMLDivElement>(null);
+  const compareProducts = useAppSelector((state) => state.compare.products);
+
   const { t, i18n } = useTranslation();
+  const dispatch = useDispatch();
   useEffect(() => {
     const timeout = setTimeout(() => {
       setDebouncedValue(searchValue);
@@ -114,9 +127,15 @@ const HeaderContactsSearch: FC<HeaderContactsProps> = () => {
         InputProps={{
           startAdornment: (
             <InputAdornment position="start">
-              <SearchIcon sx={{ color: "#fff" }} />
+              <SearchIcon sx={{ color: color }} />
             </InputAdornment>
           ),
+        }}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" && searchValue.trim()) {
+            navigate(`/categories?nameTm=${searchValue.trim()}`);
+            setIsSearchOpen(false);
+          }
         }}
         sx={{
           "& .MuiOutlinedInput-root": {
@@ -124,7 +143,7 @@ const HeaderContactsSearch: FC<HeaderContactsProps> = () => {
               borderColor: "#f7f7f7",
             },
             "& input": {
-              color: "#e3e3e3",
+              color: color,
             },
             "& fieldset": {
               borderColor: "#e3e3e3",
@@ -134,7 +153,7 @@ const HeaderContactsSearch: FC<HeaderContactsProps> = () => {
             },
           },
           "& input::placeholder": {
-            color: "#fff",
+            color: color,
             opacity: 1,
           },
         }}
@@ -159,7 +178,7 @@ const HeaderContactsSearch: FC<HeaderContactsProps> = () => {
               <CircularProgress />
             </Stack>
           ) : result?.products?.length ? (
-            result.products.map((elem) => (
+            result.products.map((elem: any) => (
               <Stack key={elem.id}>
                 <Stack
                   direction="row"
@@ -167,7 +186,7 @@ const HeaderContactsSearch: FC<HeaderContactsProps> = () => {
                   spacing={2}
                   sx={{ cursor: "pointer" }}
                   onClick={() => {
-                    navigate(`/product/${elem.id}`);
+                   !addCompare&& navigate(`/product/${elem.id}`);
                     setIsSearchOpen(false);
                   }}
                 >
@@ -182,12 +201,40 @@ const HeaderContactsSearch: FC<HeaderContactsProps> = () => {
                   <Typography sx={style3}>
                     {getTitle(elem.nameTm, elem.nameRu, elem.nameEn)}
                   </Typography>
+                  {addCompare && (
+                    <IconButton
+                      onClick={() => dispatch(addProduct(elem))}
+                      sx={{
+                        backgroundColor: compareProducts.some(
+                          (comp: any) => comp.id === elem.id
+                        )
+                          ? "#C3000E"
+                          : "transparent",
+                        color: compareProducts.some(
+                          (comp: any) => comp.id === elem.id
+                        )
+                          ? "#fff"
+                          : color,
+                        "&:hover": {
+                          backgroundColor: compareProducts.some(
+                            (comp: any) => comp.id === elem.id
+                          )
+                            ? "#C3000E"
+                            : "#f0f0f0",
+                        },
+                        mt: 0,
+                        p: 0,
+                      }}
+                    >
+                      <AddCircleOutlineOutlined />
+                    </IconButton>
+                  )}
                 </Stack>
                 <Divider />
               </Stack>
             ))
           ) : (
-            <Typography color="#464646">Haryt tapylmady</Typography>
+            <Typography color="#464646">{t("home.noProduct")}</Typography>
           )}
         </Stack>
       )}

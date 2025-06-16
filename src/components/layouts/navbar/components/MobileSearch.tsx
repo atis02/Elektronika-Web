@@ -67,7 +67,7 @@ const MobileSearch: FC<HeaderContactsProps> = ({ isLoading }) => {
   const handleSearch = async (query: string) => {
     if (!query.trim()) return;
 
-    setLoading(true); // Без try, чтобы не вызвать баг в useEffect
+    setLoading(true);
     try {
       const response = await fetch(`${BASE_URL}product/all?nameTm=${query}`);
       const data = await response.json();

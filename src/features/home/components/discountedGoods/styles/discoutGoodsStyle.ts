@@ -35,6 +35,7 @@ export const auctionTextBox = {
   display: "flex",
   alignItems: "center",
   justifyContent: "center",
+  zIndex:100
 };
 export const auctionTextBoxWarranty = {
   width: "45px",

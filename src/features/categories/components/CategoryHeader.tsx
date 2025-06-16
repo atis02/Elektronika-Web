@@ -50,6 +50,9 @@ const CategoryHeader: FC<CategoryHeaderProps> = ({
       valueTm: searchParams.get("valueTm")
         ? searchParams.get("valueTm")
         : "all",
+      nameTm: searchParams.get("nameTm")
+        ? searchParams.get("nameTm")
+        : undefined,
       minPrice: 100,
       maxPrice: 200000,
       sortBy: sortBy,

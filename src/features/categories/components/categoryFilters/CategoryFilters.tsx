@@ -2,7 +2,6 @@ import { FC, useState } from "react";
 import { Button, Stack, useMediaQuery, useTheme } from "@mui/material";
 import PriceFilter from "./PriceFilter";
 import BrendFilter from "./BrendFilter";
-import TypeFilter from "./TypeFilter";
 import CategoryHeader from "../CategoryHeader";
 import Sidebar from "../../../home/components/sidebar/presentation/Sidebar";
 import { t } from "i18next";
@@ -23,9 +22,9 @@ const CategoryFilters: FC<CategoryFiltersProps> = ({
   handleCategorySelect,
 }) => {
   const [brendFilter, setBrendFilter] = useState<string | null>(null);
-  const [typeFilter, setTypeFilter] = useState<{
-    [key: string]: string | null;
-  }>({});
+  // const [typeFilter, setTypeFilter] = useState<{
+  //   [key: string]: string | null;
+  // }>({});
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const [searchParams] = useSearchParams();
@@ -33,7 +32,7 @@ const CategoryFilters: FC<CategoryFiltersProps> = ({
 
   const handleClearAll = () => {
     setBrendFilter(null);
-    setTypeFilter({});
+    // setTypeFilter({});
     setSelectedSort("alphabet-ASC");
     const filters = {
       categoryId: searchParams.get("categoryId")
@@ -94,13 +93,13 @@ const CategoryFilters: FC<CategoryFiltersProps> = ({
             onCategorySelect={onCategorySelect}
           />
         </Stack>
-        <Stack spacing={2}>
+        {/* <Stack spacing={2}>
           <TypeFilter
             value={typeFilter}
             setValue={setTypeFilter}
             onCategorySelect={handleCategorySelect}
           />
-        </Stack>
+        </Stack> */}
       </Stack>
       <Stack
         direction="row"
