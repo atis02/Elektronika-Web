@@ -21,7 +21,7 @@ export const compareImagebox = {
 
   display: "flex",
   alignItems: "center",
-  height: "180px",
+  height: "240px",
   justifyContent: "center",
   width: "100%",
   background: "#f7f7f7",

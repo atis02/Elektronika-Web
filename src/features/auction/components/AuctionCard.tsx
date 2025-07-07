@@ -23,7 +23,7 @@ import useDrawer from "../../../components/layouts/navbar/components/useDrawer";
 import Login from "../../../components/login/Login";
 import { useTranslation } from "react-i18next";
 import { Product } from "../../../components/redux/interface";
-import { formatNumber } from "../../../components/utils/allutils";
+import { formatNumber, getSuccessMessage } from "../../../components/utils/allutils";
 
 interface MyData {
   id: string;
@@ -102,8 +102,8 @@ const AuctionCard: FC = () => {
     } else {
       try {
         if (registeredUser().length === 0) {
-          toast.error("Ulgama giriň!");
-          openDrawer();
+          toast.error(t('loginError.login'));
+          openDrawer(); 
         } else {
           const token = localStorage.getItem("tokenOfElectronics");
 
@@ -122,7 +122,7 @@ const AuctionCard: FC = () => {
               if (
                 resp.data.message === "User successfully joined the auction"
               ) {
-                toast.success("Üstünlikli!");
+                toast.success(getSuccessMessage());
                 navigate(`/auction-detail/${auction.id}`);
               }
             });
@@ -134,7 +134,8 @@ const AuctionCard: FC = () => {
         ) {
           toast.error("Siz eýýäm gatnaşyjy!");
         } else if (error.response?.data?.message === "User not found") {
-          toast.error("Ulanyjy Registrasiýa etmeli!");
+                    toast.error(t('loginError.mustRegister'));
+
           openDrawer();
         } else {
           toast.error(error.response?.data?.message || "Ýalňyşlyk ýüze çykdy");

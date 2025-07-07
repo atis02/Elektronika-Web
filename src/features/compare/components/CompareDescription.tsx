@@ -18,7 +18,23 @@ import { formatNumber } from "../../../components/utils/allutils";
 
 const CompareDescription: FC = () => {
   const compareProducts = useAppSelector((state) => state.compare.products);
-  const {t} = useTranslation()
+  const { t, i18n } = useTranslation();
+  const getTitles = (
+    nameTm: string | undefined | null,
+    nameRu: string | undefined | null,
+    nameEn: string | undefined | null
+  ) => {
+    const currentLanguage = i18n.language;
+
+    switch (currentLanguage) {
+      case "ru":
+        return nameRu || nameEn || nameTm || ""; // Fallback to other languages or empty string
+      case "tm":
+        return nameTm || nameEn || nameRu || "";
+      default:
+        return nameEn || nameRu || nameTm || "";
+    }
+  };
 
   return (
     <Stack direction="row">
@@ -83,7 +99,8 @@ const CompareDescription: FC = () => {
                         fontSize={16}
                         fontWeight={600}
                       >
-                        {formatNumber(item.sellPrice - item.discount_priceTMT)} TMT
+                        {formatNumber(item.sellPrice - item.discount_priceTMT)}{" "}
+                        TMT
                       </Typography>
                     </Stack>
                     <Button
@@ -97,42 +114,44 @@ const CompareDescription: FC = () => {
                       }}
                       onClick={() => BasketViewModel.addToBasket(item)}
                     >
-                      {t('home.addToCart')}
+                      {t("home.addToCart")}
                     </Button>
                   </TableCell>
                 </TableRow>
                 {/* Second row with description */}
-                <TableRow sx={{ height: "120px" }}>
-                  <TableCell
-                    align="justify"
-                    sx={{
-                      border: "1px solid #ddd",
-                      // display: "flex",
-                      justifyContent: "flex-start",
-                      alignItems: "start",
-                      wordWrap: "break-word",
-                      minHeight: "170px",
-                      maxHeight: "500px",
-                      overflowY: "auto",
-                    }}
-                  >
-                    <Typography
-                      // fontFamily="Open Sans"
-                      whiteSpace="pre-wrap"
-                      textTransform="capitalize"
-                      fontSize={14}
-                      component="div"
-                      fontWeight={600}
+                {item.descriptionTm !== "" && (
+                  <TableRow sx={{ height: "120px" }}>
+                    <TableCell
+                      align="justify"
+                      sx={{
+                        border: "1px solid #ddd",
+                        // display: "flex",
+                        justifyContent: "flex-start",
+                        alignItems: "start",
+                        wordWrap: "break-word",
+                        minHeight: "170px",
+                        maxHeight: "500px",
+                        overflowY: "auto",
+                      }}
                     >
-                      Beýan:
-                    </Typography>
-                    <MultiLangTypography
-                      title_en={item.descriptionEn || "def"}
-                      title_ru={item.descriptionRu || "def"}
-                      title_tm={item.descriptionTm || "def"}
-                    />
-                  </TableCell>
-                </TableRow>
+                      <Typography
+                        // fontFamily="Open Sans"
+                        whiteSpace="pre-wrap"
+                        textTransform="capitalize"
+                        fontSize={14}
+                        component="div"
+                        fontWeight={600}
+                      >
+                        {t("compare.desc")}:
+                      </Typography>
+                      <MultiLangTypography
+                        title_en={item.descriptionEn}
+                        title_ru={item.descriptionRu}
+                        title_tm={item.descriptionTm}
+                      />
+                    </TableCell>
+                  </TableRow>
+                )}
                 {Array.isArray(item.properties) &&
                   item.properties.length > 0 &&
                   item.properties.map((elem) => (
@@ -149,9 +168,10 @@ const CompareDescription: FC = () => {
                           overflowY: "auto",
                           gap: 1,
                           flexWrap: "wrap",
+                          p:0
                         }}
                       >
-                        <Typography
+                        {/* <Typography
                           whiteSpace="pre-wrap"
                           textTransform="capitalize"
                           fontSize={15}
@@ -160,12 +180,46 @@ const CompareDescription: FC = () => {
                           fontStyle="italic"
                         >
                           {elem.key}:
-                        </Typography>
-                        <MultiLangTypography
+                        </Typography> */}
+                        <Box
+                          dangerouslySetInnerHTML={{
+                            __html: getTitles(
+                              elem.valueTm,
+                              elem.valueRu,
+                              elem.valueEn
+                            ),
+                          }}
+                          sx={{
+                            fontWeight: 500,
+                            width: "100%",
+                            wordBreak: "break-word",
+                            overflowWrap: "break-word",
+                            whiteSpace: "normal",
+
+                            // Чтобы таблицы не выходили за границы
+                            "& table": {
+                              width: "100%",
+                              borderCollapse: "collapse",
+                            },
+                            "& td": {
+                              border: "1px solid #ddd",
+                              padding: "4px",
+                              wordBreak: "break-word",
+                            },
+                            "& div": {
+                              display: "block",
+                            },
+                            "& br": {
+                              display: "block",
+                            },
+                          }}
+                        />
+
+                        {/* <MultiLangTypography
                           title_en={elem.value}
                           title_ru={elem.value}
                           title_tm={elem.value}
-                        />
+                        /> */}
                       </TableCell>
                     </TableRow>
                   ))}

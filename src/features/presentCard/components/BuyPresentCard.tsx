@@ -15,6 +15,7 @@ import { BASE_URL } from "../../../api/instance";
 import { addStoreDiscountGoodButton } from "../../home/components/discountedGoods/styles/discoutGoodsStyle";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { getSuccessMessage } from "../../../components/utils/allutils";
 
 const BuyPresentCard: FC = () => {
   const { t } = useTranslation();
@@ -76,14 +77,14 @@ const BuyPresentCard: FC = () => {
         .post(`${BASE_URL}certificate/newCertificate`, body)
         .then((resp) => {
           if (resp.data.message == "Sertifikat döredildi!") {
-            toast.success("Sertifikat üstünlikli döredildi!");
+            toast.success(getSuccessMessage());
             navigate("/present-card");
           } else {
-            toast.success("Ýalňyşlyk!");
+           toast.error(t('loginError.error'));
           }
         });
     } catch (error) {
-      toast.success("Ýalňyşlyk!");
+     toast.error(t('errorError.login'));
     }
   };
 

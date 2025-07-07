@@ -1,11 +1,9 @@
 import { FC } from "react";
 import Grid from "@mui/material/Grid2";
-import { Box, Container, Stack, Typography } from "@mui/material";
+import { Box, Container, Typography } from "@mui/material";
 import {
-  size1_4,
-  size4_1,
+  size4_1Copy,
 } from "../../../components/layouts/header/utils/gridSize";
-import Sidebar from "../../home/components/sidebar/presentation/Sidebar";
 import CompareSlider from "../components/CompareSlider";
 import CompareDescription from "../components/CompareDescription";
 import { useTranslation } from "react-i18next";
@@ -16,7 +14,7 @@ const Compare: FC = () => {
     <>
       <Container>
         <Grid container width="100%" minHeight="70vh" mt={2} spacing={2} my={4}>
-          <Grid
+          {/* <Grid
             size={size1_4}
             sx={{
               display: { lg: "block", md: "block", sm: "none", xs: "none" },
@@ -27,9 +25,9 @@ const Compare: FC = () => {
                 <Sidebar />
               </Box>
             </Stack>
-          </Grid>
+          </Grid> */}
 
-          <Grid size={size4_1}>
+          <Grid size={size4_1Copy}>
             <Typography
               textAlign={"center"}
               my={{ lg: 1, md: 2, sm: 2, xs: 0 }}

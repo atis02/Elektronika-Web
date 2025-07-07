@@ -45,7 +45,7 @@ const CompareSlider: FC = () => {
       <Grid container sx={{ justifyContent: "space-between" }}>
         {compareProducts.length > 0 ? (
           compareProducts.map((elem) => {
-            const selectedImage = elem.imageOne; // Default to the first image if none selected
+            const selectedImage = elem.imageOne;
             return (
               <Grid key={elem.id} size={compareGridSize}>
                 <Box sx={compareItemsCardBox}>
@@ -63,9 +63,9 @@ const CompareSlider: FC = () => {
                         `${BASE_URL_IMG}public/${selectedImage}` ||
                         "/images/logo2.png"
                       }
-                      // src={selectedImage}
                       className="compareSliderImage"
                       alt="compare current image"
+                      
                     />
                     <Stack position="absolute" top={1} right={1}>
                       <IconButton

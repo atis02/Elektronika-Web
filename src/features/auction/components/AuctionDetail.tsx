@@ -32,7 +32,7 @@ import { Link, useParams } from "react-router-dom";
 import AuctionTimer from "./CounDownAuction";
 import toast from "react-hot-toast";
 import { useTranslation } from "react-i18next";
-import { formatNumber } from "../../../components/utils/allutils";
+import { formatNumber, getSuccessMessage } from "../../../components/utils/allutils";
 
 interface Product {
   imageOne: string;
@@ -139,7 +139,7 @@ const AuctionDetail: FC = () => {
     if (isStarted)
       try {
         if (alreadyJoined.length == 0) {
-          toast.error("Ulgama giriň!");
+          toast.error(t('loginError.login'));
           openDrawer();
         } else {
           const body = {
@@ -157,11 +157,11 @@ const AuctionDetail: FC = () => {
             })
             .then((resp) => {
               if (resp.data.message == "Auction price updated successfully") {
-                toast.success("Üstünlikli!");
+                toast.success(getSuccessMessage());
                 fetchData();
                 setBid(0);
               } else {
-                toast.success("Ýalňyşlyk!");
+                toast.error(t('loginError.error'));;
               }
             });
         }

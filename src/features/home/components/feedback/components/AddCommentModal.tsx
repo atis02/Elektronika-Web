@@ -5,6 +5,7 @@ import axios from "axios";
 import { BASE_URL } from "../../../../../api/instance";
 import toast from "react-hot-toast";
 import { useTranslation } from "react-i18next";
+import { getSuccessMessage } from "../../../../../components/utils/allutils";
 
 interface AddCommentModalProps {
   onClose: () => void;
@@ -35,7 +36,7 @@ const AddCommentModal: React.FC<AddCommentModalProps> = ({
           };
           await axios.post(`${BASE_URL}comment/add`, body).then((resp) => {
             if (resp.data.message == "Komment döredildi!") {
-              toast.success("Üstünlikli!");
+              toast.success(getSuccessMessage());
               onClose();
               setComment("");
             }
@@ -45,7 +46,7 @@ const AddCommentModal: React.FC<AddCommentModalProps> = ({
         toast.error("Haryt sargyt etmezden teswir ýazmak mümkin däl!");
       }
     } else {
-      toast.error("Ulgama giriň!");
+      toast.error(t('loginError.login'));
     }
   };
   return (

@@ -28,6 +28,7 @@ const Categories: FC = observer(() => {
   const [filtered, setFiltered] = useState<Product[]>(
     ProductViewModel.products
   );
+  
   const [page, setPage] = useState(1);
   const [openFilters, setOpenFilters] = useState<boolean>(false);
   const { t } = useTranslation();
@@ -129,7 +130,6 @@ const Categories: FC = observer(() => {
   };
   const filteredProductsByProperty = (value: string) => {
     const products = ProductViewModel.products;
-    console.log(value);
 
     if (!products.length) {
       return setFiltered([]);

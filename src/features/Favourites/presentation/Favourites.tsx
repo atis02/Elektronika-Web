@@ -44,7 +44,7 @@ const HowToOrder: FC = () => {
               <Typography fontSize={18}>{t("favourite.empty")}</Typography>
             </Stack>
           ) : (
-            <ProductCart displayedProducts={favorites} />
+            <ProductCart size={2.3} displayedProducts={favorites} />
           )}
         </div>
       </Box>

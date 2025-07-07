@@ -25,6 +25,7 @@ type Props = {
   sendOTP: () => void;
   loading: boolean;
   isEmail?: boolean;
+  login?:()=>void
 };
 
 const VerifyDrawer: FC<Props> = observer(
@@ -37,6 +38,7 @@ const VerifyDrawer: FC<Props> = observer(
     sendOTP,
     loading,
     isEmail,
+    login
   }) => {
     const [otp, setOtp] = useState("");
     const [error, setError] = useState<string | null>(null);
@@ -51,6 +53,7 @@ const VerifyDrawer: FC<Props> = observer(
           setError(null);
           setSuccesfullyVerficated(true);
           setOtp("");
+          login&&login()
         } else {
           setError("Invalid OTP. Please try again.");
           setOtp("");

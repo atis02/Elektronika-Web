@@ -1,5 +1,5 @@
 import { FC } from "react";
-import { Box, Button, Modal, Stack } from "@mui/material";
+import { Box,  IconButton, Modal, Stack } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import HelpWidget from "./HelpWidget";
 
@@ -32,9 +32,9 @@ const Help: FC<ModalProps> = ({ open, handleClose }) => {
       <Box sx={style}>
         <Stack direction="row" justifyContent="space-between">
           <Stack></Stack>
-          <Button onClick={handleClose}>
+          <IconButton sx={{zIndex:100}} onClick={handleClose}>
             <CloseIcon sx={{ color: "#B71C1C" }} />
-          </Button>
+          </IconButton>
         </Stack>
         <Stack>
           {/* <HeaderContactsSearch isLoading={isLoading} /> */}

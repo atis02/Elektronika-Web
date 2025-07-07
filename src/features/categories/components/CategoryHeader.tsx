@@ -7,7 +7,7 @@ import {
   Typography,
 } from "@mui/material";
 import { deliveryNavigateTitle } from "../../delivery/styles/deliveryStyle";
-import { Link, useSearchParams } from "react-router-dom";
+import {  useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
 interface CategoryHeaderProps {
@@ -32,7 +32,7 @@ const CategoryHeader: FC<CategoryHeaderProps> = ({
   };
 
   const updateFilters = (sortValue: string) => {
-    const [sortBy, sortOrder] = sortValue.split("-"); // Split combined value
+    const [sortBy, sortOrder] = sortValue.split("-");
 
     const filters = {
       categoryId: searchParams.get("categoryId")
@@ -64,11 +64,7 @@ const CategoryHeader: FC<CategoryHeaderProps> = ({
   return (
     <>
       <Stack direction="row" alignItems="center" spacing={0.4}>
-        <Typography sx={deliveryNavigateTitle}>
-          <Link to="/" style={{ textDecoration: "none", color: "#777777" }}>
-            {t("home.mainPage")}
-          </Link>
-        </Typography>
+        
         <Typography sx={deliveryNavigateTitle}>{categoryTitle}</Typography>
       </Stack>
       <Stack mt="5px" direction="row" alignItems="center" spacing={2}>

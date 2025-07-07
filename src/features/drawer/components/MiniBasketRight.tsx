@@ -24,7 +24,7 @@ const MiniBasketRight: FC = () => {
       if (!exist) {
         navigate("/basket");
       } else {
-        toast.error("Ammarda haryt az mukdarda");
+        toast.error(t('loginError.notEnoughProduct'));
       }
     } else {
       console.log("No basket data found in localStorage.");

@@ -1,11 +1,10 @@
-import { FC, useState, useRef } from "react";
+import { FC, useState } from "react";
 import {
   Drawer,
   Box,
   Typography,
   Stack,
   Button,
-  Checkbox,
   IconButton,
   TextField,
   Snackbar,
@@ -22,7 +21,7 @@ import { BASE_URL } from "../../api/instance";
 import ButtonWithTimer from "./ButtonWithTimer";
 import { useTranslation } from "react-i18next";
 import VerifyDrawer from "./VerifyDrawer";
-
+import { getSuccessMessage } from "../utils/allutils";
 interface LoginProps {
   isOpen: boolean;
   onClose: () => void;
@@ -34,14 +33,10 @@ const Login: FC<LoginProps> = observer(({ isOpen, onClose }) => {
     "email" | "phoneNumber"
   >("phoneNumber");
   const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
+  const [lastName] = useState("");
   const [email, setEmail] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
-  // const [password, setPassword] = useState("");
-  const [file, setFile] = useState<File | null>(null);
-  const [selectedFileName, setSelectedFileName] = useState<string | null>(null);
-  const [isNotify, setIsNotify] = useState<boolean>(false);
-  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [file] = useState<File | null>(null);
   const [isOtpVerificationOpen, setIsOtpVerificationOpen] = useState(false);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState<string | null>(null);
@@ -63,21 +58,7 @@ const Login: FC<LoginProps> = observer(({ isOpen, onClose }) => {
     return storedUser ? JSON.parse(storedUser) || [] : [];
   };
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const selectedFile = e.target.files?.[0];
-    if (selectedFile) {
-      setFile(selectedFile);
-      setSelectedFileName(selectedFile.name);
-    } else {
-      setFile(null);
-      setSelectedFileName(null);
-    }
-  };
 
-  const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setIsNotify(e.target.checked);
-  };
-  console.log(isEmail(email));
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -85,14 +66,12 @@ const Login: FC<LoginProps> = observer(({ isOpen, onClose }) => {
     setSnackbarOpen(false);
     if (!isTurkmenPhoneNumber(`+993${phoneNumber}`) && !isEmail(email)) {
       setError(true);
-      return toast.error("Telefon belgisi nädogry!");
+      return toast.error(t('loginError.phoneNumberError')); 
     }
     if (successfullyVerificated !== true) {
       setError(true);
-      return toast.error("Telefon belgi ýa-da email tassykla!");
+      return toast.error(t('loginError.phoneNumberEmailVerifyError'));
     }
-    console.log(email);
-
     try {
       await UserViewModel.registerUser({
         file,
@@ -103,7 +82,7 @@ const Login: FC<LoginProps> = observer(({ isOpen, onClose }) => {
       });
 
       if (UserViewModel.registrationSuccess) {
-        toast.success("Üstünlikli!");
+        toast.success(getSuccessMessage());
         setActiveTab("login");
         setSnackbarSeverity("success");
         setSnackbarOpen(true);
@@ -141,11 +120,11 @@ const Login: FC<LoginProps> = observer(({ isOpen, onClose }) => {
     setSnackbarOpen(false);
     if (!isTurkmenPhoneNumber(`+993${phoneNumber}`) && !isEmail(email)) {
       setError(true);
-      return toast.error("Telefon belgisi nädogry!");
+      return toast.error(t('loginError.phoneNumberError')); 
     }
     if (successfullyVerificated !== true) {
       setError(true);
-      return toast.error("Telefon belgi ýa-da email tassykla!");
+      return toast.error(t('loginError.phoneNumberEmailVerifyError'));
     }
     try {
       if (phoneNumber === "") {
@@ -159,7 +138,7 @@ const Login: FC<LoginProps> = observer(({ isOpen, onClose }) => {
       }
 
       if (UserViewModel.registrationSuccess) {
-        toast.success("Üstünlikli giriş!");
+        toast.success(getSuccessMessage());
         setSnackbarSeverity("success");
         setSnackbarOpen(true);
         onClose();
@@ -175,9 +154,6 @@ const Login: FC<LoginProps> = observer(({ isOpen, onClose }) => {
       setSnackbarSeverity("error");
       setSnackbarOpen(true);
     }
-  };
-  const handleButtonClick = () => {
-    fileInputRef.current?.click();
   };
 
   const handleSnackbarClose = () => {
@@ -202,7 +178,7 @@ const Login: FC<LoginProps> = observer(({ isOpen, onClose }) => {
           })
           .then((resp) => {
             if (resp.data.message == "OTP generated successfully!") {
-              toast.success("Tassyklaýyş kody ugradyldy!");
+              toast.success(t('loginError.otpSent')); 
               setIsOtpVerificationOpen(true);
             }
           });
@@ -222,7 +198,7 @@ const Login: FC<LoginProps> = observer(({ isOpen, onClose }) => {
           })
           .then((resp) => {
             if (resp.data.message == "OTP generated successfully!") {
-              toast.success("Tassyklaýyş kody ugradyldy!");
+              toast.success(t('loginError.otpSent')); 
               setIsOtpVerificationOpen(true);
               setLoading(false);
             }
@@ -554,20 +530,6 @@ const Login: FC<LoginProps> = observer(({ isOpen, onClose }) => {
                     fullWidth
                     required
                   />
-                  <TextField
-                    type="text"
-                    label={t("order.surname")}
-                    value={lastName}
-                    onChange={(e) => setLastName(e.target.value)}
-                    sx={{
-                      background: "#F5F5F5",
-                      "& fieldset": {
-                        border: "none",
-                      },
-                    }}
-                    fullWidth
-                    required
-                  />
                   <Stack>
                     <Stack direction="row" width={"100%"} spacing={2} mb={4}>
                       <Button
@@ -716,59 +678,6 @@ const Login: FC<LoginProps> = observer(({ isOpen, onClose }) => {
                     )}
                   </Stack>
                 </Stack>
-                <input
-                  type="file"
-                  id="file-upload"
-                  style={{ display: "none" }}
-                  onChange={handleFileChange}
-                  ref={fileInputRef}
-                />
-                <Button
-                  fullWidth
-                  variant="outlined"
-                  component="span"
-                  onClick={handleButtonClick}
-                  sx={{
-                    mt: 1,
-                    textTransform: "none",
-                    background: "#F5F5F5",
-                    color: "#2E2F38",
-                    "&.MuiButton-outlined": {
-                      borderColor: "#929292",
-                    },
-                    "&:hover .MuiOutlinedInput-notchedOutline": {
-                      borderColor: "#929292",
-                    },
-                    "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-                      borderColor: "tranparent",
-                    },
-                  }}
-                >
-                  {selectedFileName || t("login.imageUpload")}
-                </Button>
-                {selectedFileName && (
-                  <Typography variant="caption" ml={1}>
-                    {selectedFileName}
-                  </Typography>
-                )}
-                <Stack
-                  direction="row"
-                  justifyContent="center"
-                  alignItems="center"
-                  my={2}
-                >
-                  <Checkbox
-                    sx={{
-                      transform: "scale(0.8)",
-                      padding: "0px",
-                    }}
-                    checked={isNotify}
-                    onChange={handleCheckboxChange}
-                  />
-                  <Typography fontSize="14px">
-                    {t("login.wantTogetNotify")}
-                  </Typography>
-                </Stack>
                 <Button
                   type={"submit"}
                   variant="contained"
@@ -781,6 +690,7 @@ const Login: FC<LoginProps> = observer(({ isOpen, onClose }) => {
                     width: "100%",
                     height: "50px",
                     borderRadius: "4px",
+                    mt:2
                   }}
                 >
                   {UserViewModel.loading
@@ -826,6 +736,7 @@ const Login: FC<LoginProps> = observer(({ isOpen, onClose }) => {
         </Alert>
       </Snackbar>
       <VerifyDrawer
+      login={()=>handleLogin}
         setSuccesfullyVerficated={setSuccesfullyVerficated}
         isOpen={isOtpVerificationOpen}
         onClose={handleOtpVerificationClose}

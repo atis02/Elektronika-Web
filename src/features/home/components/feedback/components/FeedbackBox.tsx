@@ -17,6 +17,7 @@ import AddCommentModal from "./AddCommentModal";
 import useDrawer from "../../../../../components/layouts/navbar/components/useDrawer";
 import Login from "../../../../../components/login/Login";
 import toast from "react-hot-toast";
+import { useTranslation } from "react-i18next";
 
 interface Comment {
   id: number;
@@ -47,6 +48,7 @@ const Feedbacks: FC = () => {
     `${BASE_URL}comment/all`,
     fetcher
   );
+  const {t} =useTranslation()
   if (error) return <div>Error loading feedbacks.</div>;
   if (isLoading) return <div>Loading feedbacks...</div>;
   if (!data?.length) return;
@@ -79,7 +81,7 @@ const Feedbacks: FC = () => {
       setOpenCommentModal(true);
     } else {
       openDrawer();
-      toast.error("Ulgama giriň!");
+      toast.error(t('loginError.login'));
     }
   };
   return (

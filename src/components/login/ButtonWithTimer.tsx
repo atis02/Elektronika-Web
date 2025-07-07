@@ -74,6 +74,7 @@ const ButtonWithTimer: React.FC<ButtonWithTimerProps> = ({
           color: timer == null ? "#000" : "gray",
           height: 30,
           textTransform: "revert",
+          mt:1
         }}
         disabled={
           sendAgain == true

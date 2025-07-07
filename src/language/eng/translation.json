@@ -30,6 +30,16 @@
     "sendOTP":"Send verification code",
     "resend":"Resend code "
   },
+      "loginError":{
+    "phoneNumberError":"Invalid phone number!",
+    "phoneNumberEmailVerifyError":"Verify phone number or email!",
+    "otpSent":"The OTP has been sent!",
+        "login":"Login to your account!",
+    "mustRegister":"Register for continue!",
+    "error":"Error!",
+    "notEnoughProduct":"not Enough product in stock!",
+    "emptyCart":"Empty Cart!"
+  },
   "basket":{
     "noProduct":"Empty basket",
     "basket":"Basket",
@@ -77,8 +87,8 @@
     "addButton":"Add",
     "noProduct":"Not found",
     "addMore":"Add More",
-    "addToCompare":"Add Product for compare"
-
+    "addToCompare":"Add Product for compare",
+    "success":"Success"
   },
   "howRegister":{
     "how-to-register":"How to register on the site.",
@@ -130,14 +140,15 @@
   "curer":"Courier",
   "curerDesc":"Free in Ashgabat",
   "selfDeliver":"Pickup",
-  "selfDeliverDesc":"182, Bitarap Türkmenistan street, “Elektonika dünýäsi”"
-
+  "selfDeliverDesc":"182, Bitarap Türkmenistan street, “Elektonika dünýäsi”",
+  "enterDetails":"Enter details!"
 },
 "compare":{
   "productTitle":"Compare Products",
   "fourItem":"The product has been added for comparison. You can only add up to 4 products.",
   "addProduct":"Add Product to compare",
-  "compareProduct":"Compare Products"
+  "compareProduct":"Compare Products",
+  "desc":"Description"
 },
 "auction":{
   "noAuction":"Auction not found",

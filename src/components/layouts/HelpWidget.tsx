@@ -12,7 +12,7 @@ const HelpWidget = () => {
         zIndex: 1000,
       }}
     >
-      <Box display="flex" alignItems="center" mb={2} mt={-5}>
+      <Box display="flex" alignItems="center" width='80%' mb={2} mt={-5}>
         <Avatar
           src="/images/tmbot.png"
           alt="E"

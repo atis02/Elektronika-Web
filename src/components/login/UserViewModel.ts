@@ -2,6 +2,7 @@ import { makeAutoObservable } from "mobx";
 import axios from "axios";
 import { BASE_URL } from "../../api/instance";
 import toast from "react-hot-toast";
+import { getSuccessMessage } from "../utils/allutils";
 
 interface RegistrationData {
   file?: File | null;
@@ -183,7 +184,7 @@ class UserViewModel {
 
       if (res.status >= 200 && res.status < 300) {
         // window.localStorage.setItem("token", this.user.token);
-        toast.success("Üstünlikli!");
+        toast.success(getSuccessMessage());
         return true;
       }
       // }
@@ -204,7 +205,7 @@ class UserViewModel {
       const res = await axios.post(`${BASE_URL}otp/checkEmail`, { otp: otp });
 
       if (res.status >= 200 && res.status < 300) {
-        toast.success("Üstünlikli!");
+        toast.success(getSuccessMessage());
         return true;
       }
       return false;

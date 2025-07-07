@@ -120,6 +120,8 @@ export const ProductCart: FC<Props> = ({ size = 3, displayedProducts }) => {
                 direction="row"
                 justifyContent={isMobile||product.discount_priceTMT>0 ? "space-between" : "flex-end"}
               >
+                {console.log(product)
+                }
                 {product.discount_priceTMT>0&&(
                   <Box sx={auctionTextBox}>
                   <Stack direction="row" pl={5}>
@@ -190,7 +192,7 @@ export const ProductCart: FC<Props> = ({ size = 3, displayedProducts }) => {
                 sx={addStoreDiscountGoodButton}
                 onClick={() => {
                   product.productQuantity <= 0
-                    ? toast.error("Ammarda haryt az mukdarda")
+                    ? toast.error(t('loginError.notEnoughProduct'))
                     : (BasketViewModel.addToBasket(product),
                       toggleDrawer(true));
                 }}

@@ -21,15 +21,15 @@ import { BASE_URL, BASE_URL_IMG } from "../../../api/instance";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import toast from "react-hot-toast";
-import { t } from "i18next";
 import { formatNumber } from "../../../components/utils/allutils";
+import { useTranslation } from "react-i18next";
 
 const BasketLeft: FC = observer(() => {
   const { items, totalPrice } = BasketViewModel;
 
   const navigate = useNavigate();
   const basketDataLocalStroge = localStorage.getItem("basket");
-
+const {t} = useTranslation()
   useEffect(() => {
     const body = {
       ids: items.map((item) => item.product.id),
@@ -98,10 +98,8 @@ const BasketLeft: FC = observer(() => {
       ) {
         BasketViewModel.increaseQuantity(id);
       } else {
-        toast.error("Ammarda haryt mukdary az!");
+        toast.error(t('loginError.notEnoughProduct'));
       }
-
-      // Update state after the logic check
     } catch (error) {
       console.error("Error fetching product:", error);
     }

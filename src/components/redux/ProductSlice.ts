@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { Product } from "./interface";
 import toast from "react-hot-toast";
+import { getSuccessMessage } from "../utils/allutils";
 
 interface CompareState {
   products: Product[];
@@ -24,7 +25,7 @@ const compareSlice = createSlice({
       if (!state.products.find((product) => product.id === action.payload.id)) {
         state.products.push(action.payload);
         localStorage.setItem("compareProducts", JSON.stringify(state.products));
-        toast.success("Üstünlikli!");
+        toast.success(getSuccessMessage());
 
       }
       state.isOpenFastCompare = true;
@@ -34,13 +35,13 @@ const compareSlice = createSlice({
         (product) => product.id !== action.payload
       );
       localStorage.setItem("compareProducts", JSON.stringify(state.products));
-      toast.success("Üstünlikli!");
+      toast.success(getSuccessMessage());
 
     },
     clearProducts: (state) => {
       state.products = [];
       localStorage.removeItem("compareProducts");
-      toast.success("Üstünlikli!");
+      toast.success(getSuccessMessage());
       state.isOpenFastCompare = false;
 
     },

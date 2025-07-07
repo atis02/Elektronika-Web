@@ -142,7 +142,7 @@ const FullDescriptionProduct: FC = observer(() => {
       setOpenCommentModal(true);
     } else {
       openDrawer();
-      toast.error("Ulgama giriň!");
+      toast.error(t('loginError.login'));
     }
   };
   const handleToggleFavorite = (product: any) => {
@@ -386,14 +386,14 @@ const FullDescriptionProduct: FC = observer(() => {
                             : auctionDetailProportiesBox
                         }
                       >
-                        <Stack
+                        {/* <Stack
                           direction="row"
                           width="100%"
                           height="100%"
                           alignItems="center"
-                          justifyContent="space-between"
+                          // justifyContent="space-between"
                           spacing={3}
-                        >
+                        > */}
                           {/* <Typography>
                             {getTitles(
                               property.valueTm,
@@ -402,11 +402,11 @@ const FullDescriptionProduct: FC = observer(() => {
                             )}
                             {property.valueTm}
                           </Typography> */}
-                          <div dangerouslySetInnerHTML={{ __html:  getTitles(
+                          <Stack dangerouslySetInnerHTML={{ __html:  getTitles(
                               property.valueTm,
                               property.valueRu,
                               property.valueEn
-                            ) }} style={{fontWeight:500}} />
+                            ) }} style={{ fontWeight:500,width:'100%'}} />
 
                           {/* <Stack direction="row" gap={1}>
                             {property.propertyValue?.map(
@@ -424,7 +424,7 @@ const FullDescriptionProduct: FC = observer(() => {
                               )
                             )}
                           </Stack> */}
-                        </Stack>
+                        {/* </Stack> */}
                       </Box>
                     ))}
                 </Stack>
@@ -453,7 +453,7 @@ const FullDescriptionProduct: FC = observer(() => {
                   sx={{ ...addStoreDiscountGoodButton, width: "235px" }}
                   onClick={() => {
                     selectedProduct.productQuantity <= 0
-                      ? toast.error("Ammarda haryt az mukdarda")
+                      ? toast.error(t('loginError.notEnoughProduct'))
                       : BasketViewModel.addToBasket(selectedProduct);
                   }}
                 >

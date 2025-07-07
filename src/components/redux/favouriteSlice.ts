@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import toast from "react-hot-toast";
 import { Product } from "./interface";
+import { getSuccessMessage } from "../utils/allutils";
 
 // interface Product {
 //   id: number;
@@ -31,18 +32,18 @@ const favoritesSlice = createSlice({
         state.favorites.push(product);
       }
       localStorage.setItem("favorites", JSON.stringify(state.favorites));
-      toast.success("Üstünlikli!");
+      toast.success(getSuccessMessage());
     },
     removeProduct: (state, action: PayloadAction<Product>) => {
       const product = action.payload;
       state.favorites = state.favorites.filter((fav) => fav.id !== product.id);
       localStorage.setItem("favorites", JSON.stringify(state.favorites));
-      toast.success("Üstünlikli!");
+      toast.success(getSuccessMessage());
     },
     clearAllFav: (state) => {
       state.favorites = [];
       localStorage.removeItem("favorites");
-      toast.success("Üstünlikli!");
+      toast.success(getSuccessMessage());
     },
   },
 });

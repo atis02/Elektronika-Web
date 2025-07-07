@@ -99,7 +99,7 @@ const MiniBasket: FC = observer(() => {
       ) {
         BasketViewModel.increaseQuantity(id);
       } else {
-        toast.error("Ammarda haryt mukdary az!");
+        toast.error(t('loginError.notEnoughProduct'));
       }
 
       // Update state after the logic check
@@ -169,9 +169,11 @@ const MiniBasket: FC = observer(() => {
             <Stack
               direction="row"
               alignItems="center"
-              justifyContent="space-around"
-              // spacing={4}
+              justifyContent="space-between"
+
             >
+              <Stack width={120} alignItems='center'>
+
               <img
                 style={{ width: "70px", height: 60, objectFit: "contain" }}
                 src={
@@ -179,8 +181,9 @@ const MiniBasket: FC = observer(() => {
                   "/images/logo2.png"
                 }
                 alt="basket pictures"
-              />
-              <Typography sx={{ fontSize: "14px" }}>
+                />
+                </Stack>
+              <Typography sx={{ fontSize: "14px",width:'50%' }} noWrap>
                 {getTitle(
                   item.product?.nameTm,
                   item.product?.nameRu,

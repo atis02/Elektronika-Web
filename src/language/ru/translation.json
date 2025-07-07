@@ -80,7 +80,9 @@
     "addButton":"Добавить",
     "noProduct":"Ничего не найдено",
     "addMore":"Посмотреть ещё",
-    "addToCompare":"Добавьте продукт для сравнения"
+    "addToCompare":"Добавьте продукт для сравнения",
+    "success":"Успешно"
+
   },
   "basket":{
     "noProduct":"Ваша корзина пустa",
@@ -113,6 +115,16 @@
     "imageUpload":"Загрузите фотографию",
     "sendOTP":"Отправить код подтверждение",
     "resend":"Отправить заново "
+  },
+    "loginError":{
+    "phoneNumberError":"Некорректный номер!",
+    "phoneNumberEmailVerifyError":"Подтвердите почту или телефон номера!",
+    "otpSent":"Код подтверждение отправлено!",
+        "login":"Войдите в аккаунт!",
+    "mustRegister":"Регистрируйтесь чтобы продолжить!",
+    "error":"Ошибка!",
+    "notEnoughProduct":"Недостаточно товара на складе!",
+    "emptyCart":"Пустая корзина!"
   },
   "howRegister":{
     "how-to-register":"Как зарегистрироваться",
@@ -149,13 +161,15 @@
   "curer":"Услуга Курьера",
   "curerDesc":"Бесплатно в Ашхабаде ",
   "selfDeliver":"Самовывоз",
-  "selfDeliverDesc":"182, Bitarap Türkmenistan проспект, “Elektonika dünýäsi”"
+  "selfDeliverDesc":"182, Bitarap Türkmenistan проспект, “Elektonika dünýäsi”",
+  "enterDetails":"Введите данные!"
 },
 "compare":{
   "productTitle":"Сравнение товара",
   "fourItem":"Товар добавлен для сравнения. Вы можете добавить только 4 товара.",
   "addProduct":"Добавьте товар для сравнения",
-  "compareProduct":"Сравнение товаров"
+  "compareProduct":"Сравнение товаров",
+  "desc":"Описание"
 },
 "favourite":{
   "empty":"Нет избранных товаров.",

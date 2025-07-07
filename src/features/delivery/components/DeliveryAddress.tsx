@@ -43,10 +43,7 @@ const DeliveryAddress: FC<DeliveryTypeProps> = ({
     let digitsOnly = e.target.value.replace(/\D/g, "");
 
     if (!digitsOnly.startsWith("993")) {
-      const currentPrefix = digitsOnly.substring(0, 3);
-      if (currentPrefix !== "993") {
-        digitsOnly = "993" + digitsOnly.substring(3);
-      }
+      digitsOnly = "993" + digitsOnly;
     }
 
     const MAX_TOTAL_DIGITS = 11;
@@ -72,13 +69,14 @@ const DeliveryAddress: FC<DeliveryTypeProps> = ({
       }
     }
 
-    const localRegex = /^[6-7][0-9]\d{6}$/;
-    const isLocalNumberValid = localRegex.test(localNumber);
+    const fullPhoneNumberRegex = /^\+993\s?[6-7]\d(?:\s?\d){6}$/;
 
-    // Обновляем errors через setErrors
+    const isPhoneNumberValid =
+      formattedValue.trim() !== "+" && fullPhoneNumberRegex.test(formattedValue);
+
     setErrors((prev) => ({
       ...prev,
-      customerPhoneNumber: !isLocalNumberValid,
+      customerPhoneNumber: !isPhoneNumberValid,
     }));
 
     const newEvent = {

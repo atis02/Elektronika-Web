@@ -348,7 +348,7 @@ const SidebarLinks: FC<SidebarLinksProps> = ({
                               sm: "20%",
                               xs: "10%",
                             },
-                            zIndex: 1000,
+                            zIndex: 10000,
                             p: 1,
                             mt: 2,
                           }}
@@ -520,8 +520,9 @@ const SidebarLinks: FC<SidebarLinksProps> = ({
                                                     <Stack
                                                       direction="row"
                                                       alignItems="center"
-                                                      justifyContent="center"
+                                                      justifyContent="flex-start"
                                                       height="100%"
+                                                      width="100%"
                                                       sx={{
                                                         bgcolor:
                                                           selected.segmentId ===

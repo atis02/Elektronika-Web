@@ -7,7 +7,6 @@ import { Button, Stack } from "@mui/material";
 import { mainColor } from "../../../home/components/goodOfWeek/style/weekGoodsStyle";
 import { MoreHorizOutlined } from "@mui/icons-material";
 import { useTranslation } from "react-i18next";
-
 interface CategoryProductsBoxProps {
   products: Product[] | undefined;
   loadMore: () => void;
@@ -25,6 +24,7 @@ const CategoryProductsBox: FC<CategoryProductsBoxProps> = ({
       loadMore();
     }
   };
+  
   return (
     <AnimatePresence>
       <ProductCart displayedProducts={products || []} />
@@ -41,7 +41,7 @@ const CategoryProductsBox: FC<CategoryProductsBoxProps> = ({
             },
           }}
           onClick={handleAddMore}
-          disabled={products && products.length > 12}
+          disabled={ProductViewModel.products?.length < 12}
         >
           {t("home.addMore")}
 

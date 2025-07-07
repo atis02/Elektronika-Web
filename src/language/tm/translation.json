@@ -23,7 +23,7 @@
 
     "how_to_register":"Nädip hasaba alynmaly",
     "search":"Gözleg...",
-"dosearch":"Gözleg",
+    "dosearch":"Gözleg",
     "clearFilter":"Arassala"
   },
   "auction":{
@@ -75,6 +75,17 @@
     "resend":"Gaýtadan ugratmak ",
     "sendOTPAgain":"Täzeden ugrat"
   },
+  "loginError":{
+    "phoneNumberError":"Telefon belgisi nädogry!",
+    "phoneNumberEmailVerifyError":"Telefon belgi ýa-da email tassykla!",
+    "otpSent":"Tassyklaýyş kody ugradyldy!",
+    "login":"Ulgama giriň!",
+    "mustRegister":"Ulanyjy Registrasiýa etmeli!",
+    "error":"Ýalňyşlyk!",
+    "notEnoughProduct":"Ammarda haryt mukdary az!",
+    "emptyCart":"Sebediňiz boş!"
+    
+  },
   "home":{
     "sameProducts":"Meňzeş harytlar",
 
@@ -98,9 +109,11 @@
     "addButton":"Goşmak",
     "noProduct":"Haryt tapylmady",
     "addMore":"Ýene-de görkez",
-    "addToCompare":"Deňeşdirmek üçin haryt goşuň"
+    "addToCompare":"Deňeşdirmek üçin haryt goşuň",
+    "success":"Üstünlikli"
 
   },
+  
   "basket":{
     "noProduct":"Sebediňiz boş",
     "basket":"Sebet",
@@ -151,13 +164,15 @@
   "curer":"Kurýer hyzmaty",
   "curerDesc":"Aşgabat şäher içinde mugt",
   "selfDeliver":"Baryp almak",
-  "selfDeliverDesc":"182, Bitarap Türkmenistan şaýoly, “Elektonika dünýäsi”"
+  "selfDeliverDesc":"182, Bitarap Türkmenistan şaýoly, “Elektonika dünýäsi”",
+  "enterDetails":"Maglumatlary giriz!"
 },
 "compare":{
   "productTitle":"Harydy deňeşdirmek",
   "fourItem":"Haryt deňeşdirmek üçin goşuldy. Siz diňe 4 sany haryt goşup bilýäňiz.",
   "addProduct":"Deňeşdirmek üçin haryt goşun",
-  "compareProduct":"Harytlary deňeşdirmek"
+  "compareProduct":"Harytlary deňeşdirmek",
+  "desc":"Beýan"
 },
 "favourite":{
   "empty":"Halan harytlaryňyzyň sanawy boş.",

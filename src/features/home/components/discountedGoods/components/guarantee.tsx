@@ -15,7 +15,7 @@ export const Guarantee: FC<Props> = ({ product }) => {
         ...auctionTextBoxWarranty,
         flexDirection: "column",
         position: "relative",
-        zIndex: 100,
+        zIndex: 10,
         mr: -1,
       }}
     >
